@@ -1,0 +1,14 @@
+@startuml use-case-diagram
+
+:User: -- (UC1: Turn OASIS device on)
+:User: -- (UC2: Turn OASIS device off)
+:User: -- (UC3: Select a session)
+:User: -- (UC4: Start the session) 
+(UC3: Select a session) ..> (UC4: Start the session): <<includes>>
+(UC4: Start the session) ..> (UC5: Adjust Intensity): <<extends>>
+:User: -- (UC5: Adjust Intensity)
+:User: -- (UC6: Record a session)
+(UC4: Start the session) ..> (UC6: Record a session): <<includes>>
+:User: -- (UC7: View recorded sessions)
+
+@enduml
