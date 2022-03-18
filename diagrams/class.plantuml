@@ -1,0 +1,24 @@
+@startuml oasis
+skinparam classAttributeIconSize 0
+
+Group --> "0..4" Session
+MainWindow --> "1" Controller
+Controller --> "3" Group 
+Controller --> "*" Record
+
+class Controller {
+}
+class MainWindow {
+}
+class Group {
+}
+class Session {
+  - pulseType : bool 
+  - duration : int
+}
+class Record {
+  - sessionType : enum
+  - duration : int
+  - intensityLevel: int
+}
+@enduml
