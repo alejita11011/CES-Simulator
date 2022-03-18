@@ -1,24 +1,65 @@
 @startuml oasis
 skinparam classAttributeIconSize 0
 
-Group --> "0..4" Session
-MainWindow --> "1" Controller
-Controller --> "3" Group 
-Controller --> "*" Record
-
-class Controller {
-}
+QObject <|-- QWidget
+QWidget <|-- QMainWindow
+QMainWindow <|-- MainWindow
+MainWindow --> "1" Controller : " - controller"
 class MainWindow {
 }
+
+QObject <|-- Controller
+Controller --> "3" Group : " - groups"
+Controller --> "*" Record : " - history"
+Battery "1" <-- Controller : " - battery"
+EarClips "0..1" <-- Controller : " - earClips"
+Controller --> "1" QTimer : " - idleTimeout"
+Controller --> "0..1" Session : " - currentSession"
+Controller --> "0..1" QTimer : " - remainingSessionTime"
+Controller --> "0..1" QTimer : " - nextBatteryDecrement"
+class Controller {
+  + runConnectionTest() : bool
+  + startSession() : void
+  + endSession() : void
+  + changeBattery(Battery*) : void
+  + setEarClips(EarClips*) : void
+  - recordSession() : void
+}
+
+Group --> "0..4" Session : " - sessions"
 class Group {
 }
+
+Session --> "1" SessionType : " - sessionType"
 class Session {
   - pulseType : bool 
+  - frequency : int
   - duration : int
 }
+
+Record --> "1" SessionType : " - sessionType"
 class Record {
-  - sessionType : enum
   - duration : int
   - intensityLevel: int
 }
+
+enum SessionType {
+  SUB_DELTA
+  DELTA
+  THETA
+  ALPHA
+}
+
+QObject <|-- Battery
+class Battery {
+  - percentage : int
+  + deplete(int) : void
+}
+
+QObject <|-- EarClips
+class EarClips {
+  - isLeftClipConnected : bool
+  - isRightClipConnected : bool
+}
+
 @enduml
