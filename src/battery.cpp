@@ -7,6 +7,11 @@ Battery::Battery(QObject *parent) : QObject(parent)
 
 void Battery::deplete(int amnt)
 {
+    if ((percentage - amnt) <= 0)
+    {
+        percentage = 0;
+        return;
+    }
     percentage = percentage - amnt;
 }
 

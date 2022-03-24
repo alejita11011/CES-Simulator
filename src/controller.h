@@ -12,7 +12,7 @@ class Controller : public QObject
 {
     Q_OBJECT
 public:
-    explicit Controller(QObject *parent = nullptr, Battery *b = nullptr);
+    explicit Controller(Battery *b, QObject *parent = nullptr);
     ~Controller();
     Record* recordSession(); // TODO move to private
     void setEarClips(EarClips *);
