@@ -17,9 +17,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     controller.cpp \
+    group.cpp \
     main.cpp \
     mainwindow.cpp \
-    record.cpp
+    record.cpp \
+    session.cpp
 
 HEADERS += \
     group.h \

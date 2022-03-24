@@ -2,10 +2,14 @@
 #define GROUP_H
 
 #include "session.h"
+#include <QList>
 
 class Group {
+public:
+    Group();
+    ~Group();
 private:
-    Session *sessions;
+    QList<Session> sessions;
 };
 
 #endif // GROUP_H
