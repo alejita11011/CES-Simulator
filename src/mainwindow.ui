@@ -165,6 +165,12 @@ background-color: rgb(243, 243, 243);
 color: rgb(0, 0, 0);
 selection-background-color: rgb(122, 0, 0)</string>
     </property>
+    <property name="spacing">
+     <number>2</number>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
@@ -258,7 +264,7 @@ color: rgb(255, 255, 255);</string>
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>27</height>
     </rect>
    </property>
   </widget>
