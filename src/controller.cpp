@@ -1,7 +1,9 @@
 #include "controller.h"
 
-Controller::Controller(QObject *parent) : QObject(parent)
+Controller::Controller(QObject *parent, Battery *b) : QObject(parent)
 {
+    earClips       = nullptr;
+    currentBattery = b;
 }
 
 Controller::~Controller()
@@ -20,4 +22,15 @@ Record* Controller::recordSession()
     history.append(record);
     emit newRecord(record);
     return record;
+}
+
+void Controller::setEarClips(EarClips *e)
+{
+    earClips = e;
+}
+
+void Controller::changeBattery(Battery *b)
+{
+    delete currentBattery;
+    currentBattery = b;
 }

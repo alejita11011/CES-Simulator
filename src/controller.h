@@ -5,20 +5,26 @@
 #include <QObject>
 #include "record.h"
 #include "sessiontype.h"
+#include "earclips.h"
+#include "battery.h"
 
 class Controller : public QObject
 {
     Q_OBJECT
 public:
-    explicit Controller(QObject *parent = nullptr);
+    explicit Controller(QObject *parent = nullptr, Battery *b = nullptr);
     ~Controller();
     Record* recordSession(); // TODO move to private
+    void setEarClips(EarClips*);
+    void changeBattery(Battery *);
 
 signals:
     void newRecord(Record* record);
 
 private:
     QList<Record*> history;
+    EarClips *earClips;
+    Battery *currentBattery;
 };
 
 #endif // CONTROLLER_H
