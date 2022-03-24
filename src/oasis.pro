@@ -22,9 +22,11 @@ SOURCES += \
     record.cpp
 
 HEADERS += \
+    group.h \
     controller.h \
     mainwindow.h \
     record.h \
+    session.h \
     sessiontype.h
 
 FORMS += \
