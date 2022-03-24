@@ -15,7 +15,7 @@ public:
     explicit Controller(QObject *parent = nullptr, Battery *b = nullptr);
     ~Controller();
     Record* recordSession(); // TODO move to private
-    void setEarClips(EarClips*);
+    void setEarClips(EarClips *);
     void changeBattery(Battery *);
 
 signals:
