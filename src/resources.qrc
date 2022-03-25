@@ -4,5 +4,29 @@
         <file>images/powerButton.jpg</file>
         <file>images/selectButton.jpg</file>
         <file>images/upButton.jpg</file>
+        <file>images/20-off.png</file>
+        <file>images/20-on.png</file>
+        <file>images/45-off.png</file>
+        <file>images/45-on.png</file>
+        <file>images/alpha-off.png</file>
+        <file>images/alpha-on.png</file>
+        <file>images/beta-off.png</file>
+        <file>images/beta-on.png</file>
+        <file>images/delta-off.png</file>
+        <file>images/delta-on.png</file>
+        <file>images/l-off.png</file>
+        <file>images/l-on.png</file>
+        <file>images/longpulse-off.png</file>
+        <file>images/longpulse-on.png</file>
+        <file>images/r-off.png</file>
+        <file>images/r-on.png</file>
+        <file>images/shortpulse-off.png</file>
+        <file>images/shortpulse-on.png</file>
+        <file>images/subdelta-off.png</file>
+        <file>images/subdelta-on.png</file>
+        <file>images/theta-off.png</file>
+        <file>images/theta-on.png</file>
+        <file>images/ud-off.png</file>
+        <file>images/ud-on.png</file>
     </qresource>
 </RCC>
