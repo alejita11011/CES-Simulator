@@ -4,29 +4,29 @@
         <file>images/powerButton.jpg</file>
         <file>images/selectButton.jpg</file>
         <file>images/upButton.jpg</file>
-        <file>images/20-off.png</file>
-        <file>images/20-on.png</file>
-        <file>images/45-off.png</file>
-        <file>images/45-on.png</file>
-        <file>images/alpha-off.png</file>
-        <file>images/alpha-on.png</file>
-        <file>images/beta-off.png</file>
-        <file>images/beta-on.png</file>
-        <file>images/delta-off.png</file>
-        <file>images/delta-on.png</file>
-        <file>images/l-off.png</file>
-        <file>images/l-on.png</file>
-        <file>images/longpulse-off.png</file>
-        <file>images/longpulse-on.png</file>
-        <file>images/r-off.png</file>
-        <file>images/r-on.png</file>
-        <file>images/shortpulse-off.png</file>
-        <file>images/shortpulse-on.png</file>
-        <file>images/subdelta-off.png</file>
-        <file>images/subdelta-on.png</file>
-        <file>images/theta-off.png</file>
-        <file>images/theta-on.png</file>
-        <file>images/ud-off.png</file>
-        <file>images/ud-on.png</file>
+        <file>images/off/20.png</file>
+        <file>images/off/45.png</file>
+        <file>images/off/alpha.png</file>
+        <file>images/off/beta.png</file>
+        <file>images/off/delta.png</file>
+        <file>images/off/L.png</file>
+        <file>images/off/longpulse.png</file>
+        <file>images/off/R.png</file>
+        <file>images/off/shortpulse.png</file>
+        <file>images/off/subdelta.png</file>
+        <file>images/off/theta.png</file>
+        <file>images/off/ud.png</file>
+        <file>images/on/20.png</file>
+        <file>images/on/45.png</file>
+        <file>images/on/alpha.png</file>
+        <file>images/on/beta.png</file>
+        <file>images/on/delta.png</file>
+        <file>images/on/L.png</file>
+        <file>images/on/longpulse.png</file>
+        <file>images/on/R.png</file>
+        <file>images/on/shortpulse.png</file>
+        <file>images/on/subdelta.png</file>
+        <file>images/on/theta.png</file>
+        <file>images/on/ud.png</file>
     </qresource>
 </RCC>
