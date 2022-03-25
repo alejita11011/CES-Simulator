@@ -153,10 +153,15 @@ radius: 1.35, stop: 0 #fff, stop: 1 #bbb
     <property name="geometry">
      <rect>
       <x>140</x>
-      <y>140</y>
-      <width>231</width>
-      <height>301</height>
+      <y>230</y>
+      <width>201</width>
+      <height>211</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>7</pointsize>
+     </font>
     </property>
     <property name="styleSheet">
      <string notr="true">border-bottom-right-radius: 12px;
@@ -176,9 +181,9 @@ selection-background-color: rgb(122, 0, 0)</string>
     <property name="geometry">
      <rect>
       <x>380</x>
-      <y>140</y>
-      <width>160</width>
-      <height>301</height>
+      <y>230</y>
+      <width>141</width>
+      <height>211</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -257,6 +262,166 @@ color: rgb(255, 255, 255);</string>
      </item>
     </layout>
    </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>150</y>
+      <width>201</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="LightableWidget" name="subDeltaSession" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/images/off/subdelta.png);</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="LightableWidget" name="deltaSession" native="true">
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/images/off/delta.png);</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="LightableWidget" name="alphaSession" native="true">
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/images/off/alpha.png);</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="LightableWidget" name="thetaSession" native="true">
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/images/off/theta.png);</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>110</y>
+      <width>141</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="LightableWidget" name="twentyMinGroup" native="true">
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/images/off/20.png);</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="LightableWidget" name="fourtyFiveMinGroup" native="true">
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/images/off/45.png);</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="LightableWidget" name="userDefinedGroup" native="true">
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/images/off/ud.png);</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>110</y>
+      <width>141</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="LightableWidget" name="shortPulse" native="true">
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/images/off/shortpulse.png);</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Fixed</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>9</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="LightableWidget" name="longPulse" native="true">
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/images/off/longpulse.png);</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_4">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>150</y>
+      <width>141</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="LightableWidget" name="leftConnected" native="true">
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/images/off/L.png);</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="LightableWidget" name="rightConnected" native="true">
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/images/off/R.png);</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="LightableWidget" name="widget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>70</y>
+      <width>120</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 0, 0);</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -264,12 +429,20 @@ color: rgb(255, 255, 255);</string>
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>27</height>
+     <height>17</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>LightableWidget</class>
+   <extends>QWidget</extends>
+   <header>lightablewidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

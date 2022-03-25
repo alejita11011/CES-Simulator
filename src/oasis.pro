@@ -17,12 +17,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     controller.cpp \
+    lightablewidget.cpp \
     main.cpp \
     mainwindow.cpp \
     record.cpp
 
 HEADERS += \
     controller.h \
+    lightablewidget.h \
     mainwindow.h \
     record.h \
     sessiontype.h

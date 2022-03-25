@@ -5,9 +5,11 @@
 #include <QListWidgetItem>
 #include <QString>
 #include <QChar>
-class Controller;
+#include <QMap>
 #include "controller.h"
 #include "record.h"
+#include "lightablewidget.h"
+#include "sessiontype.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -24,6 +26,12 @@ public:
 private:
     Ui::MainWindow *ui;
     Controller *controller;
+    // A map from group name to the LightableWidget associated with a Group
+    QMap<QString, LightableWidget *> groupWidgets;
+    // A map from SessionType to the LightableWidget associated with a session type
+    QMap<SessionType, LightableWidget *> sessionWidgets;
+
+    // Formats a number of seconds in ##m##s format
     QString formatSeconds(int seconds);
 
 private slots:
