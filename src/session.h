@@ -5,15 +5,15 @@
 
 class Session {
 public:
-    Session(bool pulseType, int frequency, int duration, SessionType type);
+    Session(bool pulseType, float frequency, int duration, SessionType type);
     bool getPulseType();
-    int getFrequency();
+    float getFrequency();
     int getDuration();
     SessionType getType();
 
 private:
     bool pulsetype;
-    int frequency;  // Maybe this should be a float
+    float frequency;  // Maybe this should be a float
     int duration;
     SessionType type;
 };
