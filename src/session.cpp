@@ -1,13 +1,13 @@
 #include "session.h"
 
-Session::Session(bool pulseType, int frequency, int duration, SessionType type) {
+Session::Session(bool pulseType, float frequency, int duration, SessionType type) {
     this->pulsetype = pulseType;
     this->frequency = frequency;
     this->duration  = duration;
     this->type      = type;
 }
 
-int Session::getFrequency() {
+float Session::getFrequency() {
     return this->frequency;
 }
 

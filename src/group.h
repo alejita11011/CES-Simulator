@@ -3,13 +3,18 @@
 
 #include "session.h"
 #include <QList>
+#include <QString>
+
 
 class Group {
 public:
-    Group();
+    Group(QList<Session *> sessions, QString name);
+    QString getName();
+    QList<Session *> getSessions();
     ~Group();
 private:
-    QList<Session> sessions;
+    QList<Session *> sessions;
+    QString name;
 };
 
 #endif // GROUP_H

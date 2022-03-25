@@ -1,11 +1,25 @@
 #include "group.h"
 
-Group::Group()
+Group::Group(QList<Session *> sessions, QString name)
 {
-    // Intialize the sessions
-    this->sessions
+    this->name = name;
+    this->sessions = sessions;
+}
+
+QString Group::getName()
+{
+    return this->name;
+}
+
+QList<Session *> Group::getSessions()
+{
+    return this->sessions;
 }
 
 Group::~Group()
 {
+    for (Session* session: this->sessions)
+    {
+        delete session;
+    }
 }
