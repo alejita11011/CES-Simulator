@@ -8,7 +8,6 @@
 #include <QMap>
 #include "controller.h"
 #include "record.h"
-#include "lightablewidget.h"
 #include "sessiontype.h"
 
 QT_BEGIN_NAMESPACE
