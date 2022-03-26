@@ -16,3 +16,21 @@ void Battery::deplete(int amnt)
 }
 
 int Battery::getBatteryLevel() {   return percentage;   }
+
+bool Battery::isLow()
+{
+    if (percentage <= 50)
+    {
+        return true;
+    }
+    return false;
+}
+
+bool Battery::isCriticallyLow()
+{
+    if(percentage <= 10)
+    {
+        return true;
+    }
+    return false;
+}
