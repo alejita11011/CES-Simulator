@@ -21,8 +21,6 @@ MainWindow::MainWindow(QWidget *parent)
     sessionWidgets[SessionType::ALPHA] = ui->alphaSession;
     sessionWidgets[SessionType::THETA] = ui->thetaSession;
 
-    controller = new Controller(); // TODO singleton
-
 
     connect(controller, SIGNAL(newRecord(Record*)), this, SLOT(handleNewRecord(Record*)));
     connect(ui->PowerButton, SIGNAL(clicked()), this, SLOT(handlePowerPressed()));
