@@ -29,6 +29,9 @@ MainWindow::MainWindow(QWidget *parent)
     controller->recordSession();
     controller->recordSession();
     controller->recordSession();
+
+    //Initilize timer
+    controller->initializeTimer(ui->listWidget);
     ui->listWidget->setCurrentRow(0);
 
     handleGroupSelected();
@@ -84,6 +87,10 @@ void MainWindow::setLitUp(QWidget *widget, bool litUp)
     widget->setStyleSheet(styleSheet.replace(litUp ? "/off/" : "/on/", litUp ? "/on/" : "/off/"));
 }
 
+//REVIEW
+void MainWindow::on_PowerButton_clicked()
+{
+    controller->deviceShutDown(ui->listWidget);
 
 void MainWindow::handlePowerPressed()
 {

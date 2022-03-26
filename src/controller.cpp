@@ -25,6 +25,24 @@ Record* Controller::recordSession()
     return record;
 }
 
+//Initialize timer
+void Controller::initializeTimer(QListWidget *display){
+    mTimer = new QTimer(this);
+   // connect(mTimer, SIGNAL(timeout()), this, SLOT(deviceShutDown(display)));
+    connect(mTimer, &QTimer::timeout, [this, display]() { deviceShutDown(display); });
+    mTimer->start(50000);
+}
+
+//Reset timer
+void Controller::resetTimeout(int ms){
+    //Resets timer to given time
+    mTimer->start(ms);
+}
+
+void Controller::deviceShutDown(QListWidget *display){
+    //TODO
+    display->setStyleSheet("background-color:black;");
+  
 void Controller::setEarClips(EarClips *e)
 {
     if (earClips != nullptr)
@@ -43,4 +61,5 @@ void Controller::changeBattery(Battery *b)
 void Controller::togglePower()
 {
     power = !power;
+
 }

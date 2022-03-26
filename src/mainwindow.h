@@ -39,7 +39,12 @@ private:
 
 private slots:
     void handleNewRecord(Record* record);
-    void handlePowerPressed();
+    
+    void on_PowerButton_clicked(); //REVIEW
+
+    void handlePowerPressed(); //REVIEW
+
     void handleGroupSelected(/* Group *group */);
+
 };
 #endif // MAINWINDOW_H

@@ -2,6 +2,8 @@
 #define CONTROLLER_H
 
 #include <QList>
+#include <QListWidget>
+#include <QTimer>
 #include <QObject>
 #include "record.h"
 #include "sessiontype.h"
@@ -22,14 +24,25 @@ public:
     void changeBattery(Battery *);
     void togglePower();
 
+    //Create Timer
+    void initializeTimer(QListWidget* display);
+
+    //Reset Timeout timer
+    void resetTimeout(int ms);
+
+    //Shutdown OASIS device
+    void deviceShutDown(QListWidget* display ); // TODO
+
 signals:
     void newRecord(Record* record);
 
 private:
     QList<Record*> history;
+    QTimer* mTimer;
     EarClips *earClips;
     Battery *currentBattery;
     bool power; //true == power on, false == power off
+
 };
 
 #endif // CONTROLLER_H
