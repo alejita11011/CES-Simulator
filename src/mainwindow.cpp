@@ -7,9 +7,23 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    controller = new Controller(); // TODO singleton
+
+    Battery *battery     = new Battery();
+    controller           = new Controller(battery); // TODO singleton
+    EarClips *earClips   = new EarClips();
+
+
+    groupWidgets["twenty"] = ui->twentyMinGroup;
+    groupWidgets["fourty"] = ui->fourtyFiveMinGroup;
+    groupWidgets["user"] = ui->userDefinedGroup;
+    sessionWidgets[SessionType::SUB_DELTA] = ui->subDeltaSession;
+    sessionWidgets[SessionType::DELTA] = ui->deltaSession;
+    sessionWidgets[SessionType::ALPHA] = ui->alphaSession;
+    sessionWidgets[SessionType::THETA] = ui->thetaSession;
+
 
     connect(controller, SIGNAL(newRecord(Record*)), this, SLOT(handleNewRecord(Record*)));
+    connect(ui->PowerButton, SIGNAL(clicked()), this, SLOT(handlePowerPressed()));
 
     // Initialize context
     this->context["sessionSelection"] = false;
@@ -22,7 +36,15 @@ MainWindow::MainWindow(QWidget *parent)
     controller->recordSession();
     controller->recordSession();
     controller->recordSession();
+
+    //Initilize timer
+    controller->initializeTimer(ui->listWidget);
     ui->listWidget->setCurrentRow(0);
+
+    handleGroupSelected();
+    setLitUp(ui->leftConnected, true);
+    setLitUp(ui->rightConnected, true);
+    setLitUp(ui->shortPulse, true);
 }
 
 MainWindow::~MainWindow()
@@ -55,5 +77,31 @@ void MainWindow::handleNewRecord(Record *record)
             .arg(record->getIntensity());
 
     new QListWidgetItem(itemText, ui->listWidget);
-//    ui->listWidget->addItem(&QListWidgetItem(itemText));
+}
+
+void MainWindow::handleGroupSelected(/* Group *group */)
+{
+    setLitUp(ui->fourtyFiveMinGroup, true);
+    setLitUp(ui->subDeltaSession, true);
+    setLitUp(ui->deltaSession, true);
+    setLitUp(ui->alphaSession, true);
+    setLitUp(ui->thetaSession, true);
+}
+
+void MainWindow::setLitUp(QWidget *widget, bool litUp)
+{
+    QString styleSheet = widget->styleSheet();
+    widget->setStyleSheet(styleSheet.replace(litUp ? "/off/" : "/on/", litUp ? "/on/" : "/off/"));
+}
+
+//REVIEW
+void MainWindow::on_PowerButton_clicked()
+{
+    controller->deviceShutDown(ui->listWidget);
+
+void MainWindow::handlePowerPressed()
+{
+    controller->togglePower();
+    // TO_DO
+    // turn off GUI
 }
