@@ -1,5 +1,12 @@
 #include "session.h"
 
+/**
+ * @brief Session::Session
+ * @param pulseType
+ * @param frequency
+ * @param duration
+ * @param type
+ */
 Session::Session(bool pulseType, float frequency, int duration, SessionType type) {
     this->pulsetype = pulseType;
     this->frequency = frequency;

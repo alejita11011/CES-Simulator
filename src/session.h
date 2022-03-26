@@ -13,7 +13,7 @@ public:
 
 private:
     bool pulsetype;
-    float frequency;  // Maybe this should be a float
+    float frequency;
     int duration;
     SessionType type;
 };
