@@ -17,6 +17,8 @@ public:
     explicit Battery(QObject *parent = nullptr);
     void deplete(int);
     int getBatteryLevel();
+    bool isLow();
+    bool isCriticallyLow();
 
 signals:
 
