@@ -7,6 +7,8 @@
 #include <QObject>
 #include "record.h"
 #include "sessiontype.h"
+#include "session.h"
+#include "group.h"
 
 class Controller : public QObject
 {
