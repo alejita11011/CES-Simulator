@@ -19,6 +19,8 @@ MainWindow::MainWindow(QWidget *parent)
     this->context["recordingSession"] = false;
     this->context["navigatingHistory"] = false;
 
+    qDebug().nospace() << "--> " << qPrintable(QString::number(this->context["session"]));
+
     // Just for testing
     controller->recordSession();
     controller->recordSession();
