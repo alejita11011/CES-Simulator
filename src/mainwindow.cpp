@@ -7,9 +7,9 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    battery    = new Battery();
-    controller = new Controller(battery); // TODO singleton
-    earClips   = new EarClips();
+    Battery *battery     = new Battery();
+    controller           = new Controller(battery); // TODO singleton
+    EarClips *earClips   = new EarClips();
 
     connect(controller, SIGNAL(newRecord(Record*)), this, SLOT(handleNewRecord(Record*)));
     connect(ui->PowerButton, SIGNAL(clicked()), this, SLOT(handlePowerPressed()));

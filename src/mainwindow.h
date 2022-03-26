@@ -27,8 +27,6 @@ private:
     Ui::MainWindow *ui;
     Controller *controller;
     QString formatSeconds(int seconds);
-    EarClips *earClips;
-    Battery *battery;
 
 private slots:
     void handleNewRecord(Record* record);
