@@ -25,6 +25,7 @@ private:
     Ui::MainWindow *ui;
     Controller *controller;
     QString formatSeconds(int seconds);
+    QMap<QString, bool> context;
 
 private slots:
     void handleNewRecord(Record* record);

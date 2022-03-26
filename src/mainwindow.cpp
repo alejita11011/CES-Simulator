@@ -11,6 +11,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(controller, SIGNAL(newRecord(Record*)), this, SLOT(handleNewRecord(Record*)));
 
+    // Initialize context
+    this->context["on"] = false;
+    this->context["sessionSelection"] = false;
+    this->context["connectionTest"] = false;
+    this->context["session"] = false;
+    this->context["recordingSession"] = false;
+    this->context["navigatingHistory"] = false;
+
     // Just for testing
     controller->recordSession();
     controller->recordSession();
