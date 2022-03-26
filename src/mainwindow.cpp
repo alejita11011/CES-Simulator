@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     earClips   = new EarClips();
 
     connect(controller, SIGNAL(newRecord(Record*)), this, SLOT(handleNewRecord(Record*)));
+    connect(ui->PowerButton, SIGNAL(clicked()), this, SLOT(handlePowerPressed()));
 
     // Just for testing
     controller->recordSession();
@@ -51,4 +52,12 @@ void MainWindow::handleNewRecord(Record *record)
 
     new QListWidgetItem(itemText, ui->listWidget);
 //    ui->listWidget->addItem(&QListWidgetItem(itemText));
+}
+
+
+void MainWindow::handlePowerPressed()
+{
+    controller->togglePower();
+    // TO_DO
+    // turn off GUI
 }

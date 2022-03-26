@@ -4,6 +4,7 @@ Controller::Controller(Battery *b, QObject *parent) : QObject(parent)
 {
     earClips       = nullptr;
     currentBattery = b;
+    power          = false;
 }
 
 Controller::~Controller()
@@ -37,4 +38,9 @@ void Controller::changeBattery(Battery *b)
 {
     delete currentBattery;
     currentBattery = b;
+}
+
+void Controller::togglePower()
+{
+    power = !power;
 }

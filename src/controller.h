@@ -17,6 +17,7 @@ public:
     Record* recordSession(); // TODO move to private
     void setEarClips(EarClips *);
     void changeBattery(Battery *);
+    void togglePower();
 
 signals:
     void newRecord(Record* record);
@@ -25,6 +26,7 @@ private:
     QList<Record*> history;
     EarClips *earClips;
     Battery *currentBattery;
+    bool power; //true == power on, false == power off
 };
 
 #endif // CONTROLLER_H
