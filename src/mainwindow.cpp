@@ -25,6 +25,13 @@ MainWindow::MainWindow(QWidget *parent)
     connect(controller, SIGNAL(newRecord(Record*)), this, SLOT(handleNewRecord(Record*)));
     connect(ui->PowerButton, SIGNAL(clicked()), this, SLOT(handlePowerPressed()));
 
+    // Initialize context
+    this->context["sessionSelection"] = false;
+    this->context["connectionTest"] = false;
+    this->context["session"] = false;
+    this->context["recordingSession"] = false;
+    this->context["navigatingHistory"] = false;
+
     // Just for testing
     controller->recordSession();
     controller->recordSession();

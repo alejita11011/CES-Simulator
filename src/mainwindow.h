@@ -35,7 +35,11 @@ private:
 
     // Formats a number of seconds in ##m##s format
     QString formatSeconds(int seconds);
+
+    QMap<QString, bool> context;
+
     void setLitUp(QWidget *widget, bool litUp);
+
 
 private slots:
     void handleNewRecord(Record* record);
