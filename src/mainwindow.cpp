@@ -8,6 +8,11 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    Battery *battery     = new Battery();
+    controller           = new Controller(battery); // TODO singleton
+    EarClips *earClips   = new EarClips();
+
+
     groupWidgets["twenty"] = ui->twentyMinGroup;
     groupWidgets["fourty"] = ui->fourtyFiveMinGroup;
     groupWidgets["user"] = ui->userDefinedGroup;
@@ -16,9 +21,9 @@ MainWindow::MainWindow(QWidget *parent)
     sessionWidgets[SessionType::ALPHA] = ui->alphaSession;
     sessionWidgets[SessionType::THETA] = ui->thetaSession;
 
-    controller = new Controller(); // TODO singleton
 
     connect(controller, SIGNAL(newRecord(Record*)), this, SLOT(handleNewRecord(Record*)));
+    connect(ui->PowerButton, SIGNAL(clicked()), this, SLOT(handlePowerPressed()));
 
     // Just for testing
     controller->recordSession();
@@ -77,4 +82,12 @@ void MainWindow::setLitUp(QWidget *widget, bool litUp)
 {
     QString styleSheet = widget->styleSheet();
     widget->setStyleSheet(styleSheet.replace(litUp ? "/off/" : "/on/", litUp ? "/on/" : "/off/"));
+}
+
+
+void MainWindow::handlePowerPressed()
+{
+    controller->togglePower();
+    // TO_DO
+    // turn off GUI
 }
