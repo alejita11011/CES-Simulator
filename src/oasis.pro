@@ -16,7 +16,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    battery.cpp \
     controller.cpp \
+    earclips.cpp \
     group.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -24,8 +26,10 @@ SOURCES += \
     session.cpp
 
 HEADERS += \
+    battery.h \
     group.h \
     controller.h \
+    earclips.h \
     mainwindow.h \
     record.h \
     session.h \

@@ -7,16 +7,22 @@
 #include <QObject>
 #include "record.h"
 #include "sessiontype.h"
+#include "earclips.h"
+#include "battery.h"
 #include "session.h"
 #include "group.h"
+
 
 class Controller : public QObject
 {
     Q_OBJECT
 public:
-    explicit Controller(QObject *parent = nullptr);
+    explicit Controller(Battery *b, QObject *parent = nullptr);
     ~Controller();
     Record* recordSession(); // TODO move to private
+    void setEarClips(EarClips *);
+    void changeBattery(Battery *);
+    void togglePower();
 
     //Create Timer
     void initializeTimer(QListWidget* display);
@@ -32,9 +38,10 @@ signals:
 
 private:
     QList<Record*> history;
-
     QTimer* mTimer;
-
+    EarClips *earClips;
+    Battery *currentBattery;
+    bool power; //true == power on, false == power off
 
 };
 

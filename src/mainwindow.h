@@ -8,7 +8,10 @@
 #include <QMap>
 #include "controller.h"
 #include "record.h"
+#include "earclips.h"
+#include "battery.h"
 #include "sessiontype.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -36,8 +39,10 @@ private:
 
 private slots:
     void handleNewRecord(Record* record);
+    
+    void on_PowerButton_clicked(); //REVIEW
 
-    void on_PowerButton_clicked();
+    void handlePowerPressed(); //REVIEW
 
     void handleGroupSelected(/* Group *group */);
 
