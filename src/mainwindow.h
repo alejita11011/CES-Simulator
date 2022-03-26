@@ -28,5 +28,6 @@ private:
 
 private slots:
     void handleNewRecord(Record* record);
+    void on_PowerButton_clicked();
 };
 #endif // MAINWINDOW_H

@@ -15,6 +15,9 @@ MainWindow::MainWindow(QWidget *parent)
     controller->recordSession();
     controller->recordSession();
     controller->recordSession();
+
+    //Initilize timer
+    controller->initializeTimer(ui->listWidget);
     ui->listWidget->setCurrentRow(0);
 }
 
@@ -49,4 +52,10 @@ void MainWindow::handleNewRecord(Record *record)
 
     new QListWidgetItem(itemText, ui->listWidget);
 //    ui->listWidget->addItem(&QListWidgetItem(itemText));
+}
+
+
+void MainWindow::on_PowerButton_clicked()
+{
+    controller->deviceShutDown(ui->listWidget);
 }
