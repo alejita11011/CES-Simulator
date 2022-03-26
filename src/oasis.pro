@@ -19,16 +19,20 @@ SOURCES += \
     battery.cpp \
     controller.cpp \
     earclips.cpp \
+    group.cpp \
     main.cpp \
     mainwindow.cpp \
-    record.cpp
+    record.cpp \
+    session.cpp
 
 HEADERS += \
     battery.h \
+    group.h \
     controller.h \
     earclips.h \
     mainwindow.h \
     record.h \
+    session.h \
     sessiontype.h
 
 FORMS += \

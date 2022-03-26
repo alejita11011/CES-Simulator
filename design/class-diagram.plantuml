@@ -28,6 +28,7 @@ class Controller {
 
 Group --> "0..4" Session : " - sessions"
 class Group {
+  - name: QString
 }
 
 Session --> "1" SessionType : " - sessionType"

@@ -7,6 +7,9 @@
 #include "sessiontype.h"
 #include "earclips.h"
 #include "battery.h"
+#include "session.h"
+#include "group.h"
+
 
 class Controller : public QObject
 {
