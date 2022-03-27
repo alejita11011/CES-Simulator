@@ -7,15 +7,15 @@
 class Record
 {
 public:
-    Record(const int duration, const int intensity, const SessionType sessionType);
+    Record(const int durationSeconds, const int intensity, const SessionType sessionType);
     QDateTime getStartTime();
-    int getDuration();
+    int getDurationSeconds();
     int getIntensity();
     SessionType getSessionType();
 
 private:
     const QDateTime startTime;
-    const int duration;
+    const int durationSeconds;
     const int intensity;
     const SessionType sessionType;
 };

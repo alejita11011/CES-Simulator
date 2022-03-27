@@ -7,12 +7,9 @@
  * @param duration
  * @param type
  */
-Session::Session(bool pulseType, float frequency, int duration, SessionType type)
+Session::Session(const bool pulseType, const float frequency, const int presetDurationSeconds, const SessionType type) :
+    pulseType(pulseType), frequency(frequency), presetDurationSeconds(presetDurationSeconds), type(type)
 {
-    this->pulsetype = pulseType;
-    this->frequency = frequency;
-    this->duration  = duration;
-    this->type      = type;
 }
 
 float Session::getFrequency()
@@ -20,14 +17,14 @@ float Session::getFrequency()
     return this->frequency;
 }
 
-int Session::getDuration()
+int Session::getPresetDurationSeconds()
 {
-    return this->duration;
+    return this->presetDurationSeconds;
 }
 
 bool Session::getPulseType()
 {
-    return this->pulsetype;
+    return this->pulseType;
 }
 
 SessionType Session::getType()

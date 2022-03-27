@@ -9,14 +9,14 @@
 class Group
 {
 public:
-    Group(QList<Session *> sessions, QString name);
+    Group(const QList<Session *> sessions, const QString name);
     QString getName();
     QList<Session *> getSessions();
     ~Group();
 
 private:
-    QList<Session *> sessions;
-    QString name;
+    const QList<Session *> sessions;
+    const QString name;
 };
 
 #endif // GROUP_H

@@ -5,10 +5,8 @@
  * @param sessions
  * @param name
  */
-Group::Group(QList<Session *> sessions, QString name)
+Group::Group(const QList<Session *> sessions, const QString name) : sessions(sessions), name(name)
 {
-    this->name = name;
-    this->sessions = sessions;
 }
 
 QString Group::getName()
