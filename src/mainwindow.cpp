@@ -7,7 +7,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
+    this->setStyleSheet(
+         "MainWindow{background-image:url(:images/CES.png); background-position: center;}" );
     Battery *battery     = new Battery();
     controller           = new Controller(battery); // TODO singleton
     EarClips *earClips   = new EarClips();
@@ -98,6 +99,7 @@ void MainWindow::setLitUp(QWidget *widget, bool litUp)
 void MainWindow::on_PowerButton_clicked()
 {
     controller->deviceShutDown(ui->listWidget);
+}
 
 void MainWindow::handlePowerPressed()
 {

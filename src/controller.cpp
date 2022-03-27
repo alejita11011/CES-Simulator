@@ -39,10 +39,12 @@ void Controller::resetTimeout(int ms){
     mTimer->start(ms);
 }
 
-void Controller::deviceShutDown(QListWidget *display){
+void Controller::deviceShutDown(QListWidget *display)
+{
     //TODO
     display->setStyleSheet("background-color:black;");
-  
+}
+
 void Controller::setEarClips(EarClips *e)
 {
     if (earClips != nullptr)
