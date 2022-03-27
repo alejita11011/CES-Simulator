@@ -6,12 +6,14 @@
 #include <QString>
 
 
-class Group {
+class Group
+{
 public:
     Group(QList<Session *> sessions, QString name);
     QString getName();
     QList<Session *> getSessions();
     ~Group();
+
 private:
     QList<Session *> sessions;
     QString name;

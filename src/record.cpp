@@ -5,18 +5,22 @@ Record::Record(const int duration, const int intensity, const SessionType sessio
 {
 }
 
-QDateTime Record::getStartTime() {
+QDateTime Record::getStartTime()
+{
     return startTime;
 }
 
-int Record::getDuration() {
+int Record::getDuration()
+{
     return duration;
 }
 
-int Record::getIntensity() {
+int Record::getIntensity()
+{
     return intensity;
 }
 
-SessionType Record::getSessionType() {
+SessionType Record::getSessionType()
+{
     return sessionType;
 }
