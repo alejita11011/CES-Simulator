@@ -41,8 +41,7 @@ private:
     QTimer* mTimer;
     EarClips *earClips;
     Battery *currentBattery;
-    bool power; //true == power on, false == power off
-
+    bool isPowerOn;
 };
 
 #endif // CONTROLLER_H

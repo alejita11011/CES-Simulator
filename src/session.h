@@ -3,7 +3,8 @@
 
 #include "sessiontype.h"
 
-class Session {
+class Session
+{
 public:
     Session(bool pulseType, float frequency, int duration, SessionType type);
     bool getPulseType();

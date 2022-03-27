@@ -6,13 +6,8 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    // UI setup
     ui->setupUi(this);
-
-    Battery *battery     = new Battery();
-    controller           = new Controller(battery); // TODO singleton
-    EarClips *earClips   = new EarClips();
-
-
     groupWidgets["twenty"] = ui->twentyMinGroup;
     groupWidgets["fourty"] = ui->fourtyFiveMinGroup;
     groupWidgets["user"] = ui->userDefinedGroup;
@@ -21,8 +16,11 @@ MainWindow::MainWindow(QWidget *parent)
     sessionWidgets[SessionType::ALPHA] = ui->alphaSession;
     sessionWidgets[SessionType::THETA] = ui->thetaSession;
 
+    Battery *battery     = new Battery();
+    controller           = new Controller(battery); // TODO singleton
+    EarClips *earClips   = new EarClips();
 
-    connect(controller, SIGNAL(newRecord(Record*)), this, SLOT(handleNewRecord(Record*)));
+    connect(controller, SIGNAL(newRecord(Record *)), this, SLOT(handleNewRecord(Record *)));
     connect(ui->PowerButton, SIGNAL(clicked()), this, SLOT(handlePowerPressed()));
 
     // Initialize context
@@ -32,13 +30,14 @@ MainWindow::MainWindow(QWidget *parent)
     this->context["recordingSession"] = false;
     this->context["navigatingHistory"] = false;
 
+    // Initialize timer
+    // TODO move to constructor
+    controller->initializeTimer(ui->listWidget);
+
     // Just for testing
     controller->recordSession();
     controller->recordSession();
     controller->recordSession();
-
-    //Initilize timer
-    controller->initializeTimer(ui->listWidget);
     ui->listWidget->setCurrentRow(0);
 
     handleGroupSelected();
@@ -56,11 +55,13 @@ MainWindow::~MainWindow()
 QString MainWindow::formatSeconds(int seconds)
 {
     int minutes = seconds / 60;
-    if (minutes == 0) {
+    if (minutes == 0)
+    {
         return QString("%1s").arg(seconds);
     }
     int remainingSeconds = seconds % 60;
-    if (remainingSeconds == 0) {
+    if (remainingSeconds == 0)
+    {
         return QString("%1m").arg(minutes);
     }
     return QString("%1m%2s")
@@ -98,6 +99,7 @@ void MainWindow::setLitUp(QWidget *widget, bool litUp)
 void MainWindow::on_PowerButton_clicked()
 {
     controller->deviceShutDown(ui->listWidget);
+}
 
 void MainWindow::handlePowerPressed()
 {
