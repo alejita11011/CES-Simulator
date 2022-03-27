@@ -7,8 +7,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->setStyleSheet(
-         "MainWindow{background-image:url(:images/CES.png); background-position: center;}" );
     Battery *battery     = new Battery();
     controller           = new Controller(battery); // TODO singleton
     EarClips *earClips   = new EarClips();

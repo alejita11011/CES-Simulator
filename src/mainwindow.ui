@@ -17,6 +17,10 @@
    <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">background-image: url(:/images/CES.png);
+background-position: center;</string>
+   </property>
    <widget class="QPushButton" name="PowerButton">
     <property name="geometry">
      <rect>
