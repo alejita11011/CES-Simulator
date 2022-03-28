@@ -8,6 +8,11 @@ MainWindow::MainWindow(QWidget *parent)
 {
     // UI setup
     ui->setupUi(this);
+
+    Battery *battery     = new Battery();
+    controller           = new Controller(battery); // TODO singleton
+    EarClips *earClips   = new EarClips();
+
     groupWidgets["twenty"] = ui->twentyMinGroup;
     groupWidgets["fourty"] = ui->fourtyFiveMinGroup;
     groupWidgets["user"] = ui->userDefinedGroup;

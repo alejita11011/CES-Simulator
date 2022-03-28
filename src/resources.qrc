@@ -26,5 +26,6 @@
         <file>images/on/subdelta.png</file>
         <file>images/on/theta.png</file>
         <file>images/on/ud.png</file>
+        <file>images/CES.png</file>
     </qresource>
 </RCC>
