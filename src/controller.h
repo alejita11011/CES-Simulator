@@ -17,7 +17,7 @@ class Controller : public QObject
 {
     Q_OBJECT
 public:
-    explicit Controller(Battery *b, QObject *parent = nullptr);
+    explicit Controller(Battery *b, QList<Group *> groups, QObject *parent = nullptr);
     ~Controller();
     Record* recordSession(); // TODO move to private
     void setEarClips(EarClips *);
@@ -42,6 +42,7 @@ private:
     EarClips *earClips;
     Battery *currentBattery;
     bool isPowerOn;
+    QList<Group *> groups;
 };
 
 #endif // CONTROLLER_H

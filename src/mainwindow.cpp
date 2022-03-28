@@ -8,21 +8,34 @@ MainWindow::MainWindow(QWidget *parent)
 {
     // UI setup
     ui->setupUi(this);
-
-    Battery *battery     = new Battery();
-    controller           = new Controller(battery); // TODO singleton
-    EarClips *earClips   = new EarClips();
-
-    groupWidgets["twenty"] = ui->twentyMinGroup;
-    groupWidgets["fourty"] = ui->fourtyFiveMinGroup;
+    groupWidgets["20min"] = ui->twentyMinGroup;
+    groupWidgets["45min"] = ui->fourtyFiveMinGroup;
     groupWidgets["user"] = ui->userDefinedGroup;
     sessionWidgets[SessionType::SUB_DELTA] = ui->subDeltaSession;
     sessionWidgets[SessionType::DELTA] = ui->deltaSession;
     sessionWidgets[SessionType::ALPHA] = ui->alphaSession;
     sessionWidgets[SessionType::THETA] = ui->thetaSession;
 
+    // Create Sessions
+    Group *twenty = new Group({new Session(true, 0.5, 20, SessionType::SUB_DELTA),
+                            new Session(false, 2.5, 20, SessionType::DELTA),
+                            new Session(false, 6, 20, SessionType::THETA),
+                            new Session(false, 9, 20, SessionType::ALPHA)},
+                           "20min");
+
+    Group *fourtyFive = new Group({new Session(true, 0.5, 45, SessionType::SUB_DELTA),
+                                   new Session(false, 2.5, 45, SessionType::DELTA),
+                                   new Session(false, 6, 45, SessionType::THETA),
+                                   new Session(false, 9, 45, SessionType::ALPHA),},
+                                  "45min");
+
+    Group *user = new Group({},"user");
+
+    // Create the groups
+    QList<Group *> groups = {twenty, fourtyFive, user};
+
     Battery *battery     = new Battery();
-    controller           = new Controller(battery); // TODO singleton
+    controller           = new Controller(battery, groups); // TODO singleton
     EarClips *earClips   = new EarClips();
 
     connect(controller, SIGNAL(newRecord(Record *)), this, SLOT(handleNewRecord(Record *)));
@@ -78,7 +91,7 @@ void MainWindow::handleNewRecord(Record *record)
 {
     QString itemText = QString("%1 (%2)\n%3-session of intensity %4")
             .arg(record->getStartTime().toString("hh:mm:ss ap"))
-            .arg(formatSeconds(record->getDuration()))
+            .arg(formatSeconds(record->getDurationSeconds()))
             .arg(ToString(record->getSessionType()))
             .arg(record->getIntensity());
 

@@ -6,17 +6,17 @@
 class Session
 {
 public:
-    Session(bool pulseType, float frequency, int duration, SessionType type);
-    bool getPulseType();
+    Session(const bool pulseType, const float frequency, const int presetDurationSeconds, const SessionType type);
+    bool isShortPulse();
     float getFrequency();
-    int getDuration();
+    int getPresetDurationSeconds();
     SessionType getType();
 
 private:
-    bool pulsetype;
-    float frequency;
-    int duration;
-    SessionType type;
+    const bool shortPulse;
+    const float frequency;
+    const int presetDurationSeconds;
+    const SessionType type;
 };
 
 #endif // SESSION_H
