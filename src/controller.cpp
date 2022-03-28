@@ -14,6 +14,11 @@ Controller::~Controller()
     {
         delete record;
     }
+
+    for (Group* group: groups)
+    {
+        delete group;
+    }
 }
 
 Record* Controller::recordSession()
