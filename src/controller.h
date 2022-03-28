@@ -28,9 +28,6 @@ public:
 
     void togglePower();
 
-    //Create Timer
-    void initializeTimer();
-
     //Reset Timeout timer
     void resetTimeout(int ms);
 

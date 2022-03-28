@@ -33,13 +33,6 @@ Record* Controller::recordSession()
     return record;
 }
 
-//Initialize timer
-void Controller::initializeTimer()
-{
-    shutDownTimer = new QTimer(this);
-    connect(shutDownTimer, &QTimer::timeout, [this]() { emit powerOnOff(); });
-    shutDownTimer->start(5000);
-}
 
 //Reset timer
 void Controller::resetTimeout(int ms)
