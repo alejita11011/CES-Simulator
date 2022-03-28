@@ -1,11 +1,14 @@
 #include "controller.h"
 
-Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QObject(parent)
+Controller::Controller(Battery *b, QList<Group *> groups, QTimer *shTimer, QObject *parent) : QObject(parent)
 {
     earClips       = nullptr;
     currentBattery = b;
     isPowerOn      = false;
     this->groups   = groups;
+    shutDownTimer = shTimer;
+    connect(shutDownTimer, &QTimer::timeout, [this]() { emit powerOnOff(); });
+    shutDownTimer->start(5000);
 }
 
 Controller::~Controller()
@@ -31,25 +34,27 @@ Record* Controller::recordSession()
 }
 
 //Initialize timer
-void Controller::initializeTimer(QListWidget *display)
+void Controller::initializeTimer()
 {
-    mTimer = new QTimer(this);
-    // connect(mTimer, SIGNAL(timeout()), this, SLOT(deviceShutDown(display)));
-    connect(mTimer, &QTimer::timeout, [this, display]() { deviceShutDown(display); });
-    mTimer->start(50000);
+    shutDownTimer = new QTimer(this);
+    connect(shutDownTimer, &QTimer::timeout, [this]() { emit powerOnOff(); });
+    shutDownTimer->start(5000);
 }
 
 //Reset timer
 void Controller::resetTimeout(int ms)
 {
     //Resets timer to given time
-    mTimer->start(ms);
+    shutDownTimer->start(ms);
+
 }
 
-void Controller::deviceShutDown(QListWidget *display)
-{
-    //TODO
-    display->setStyleSheet("background-color:black;");
+bool Controller::getPowerStatus(){
+    return isPowerOn;
+}
+
+void Controller::togglePower(){
+    isPowerOn = !isPowerOn;
 }
 
 void Controller::setEarClips(EarClips *e)
@@ -65,9 +70,4 @@ void Controller::changeBattery(Battery *b)
 {
     delete currentBattery;
     currentBattery = b;
-}
-
-void Controller::togglePower()
-{
-    isPowerOn = !isPowerOn;
 }

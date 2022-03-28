@@ -44,9 +44,9 @@ private:
 private slots:
     void handleNewRecord(Record* record);
     
-    void on_PowerButton_clicked(); //REVIEW
+    //void on_PowerButton_clicked(); //REVIEW
 
-    void handlePowerPressed(); //REVIEW
+    void handlePowerClicked(); //REVIEW
 
     void handleGroupSelected(/* Group *group */);
 
