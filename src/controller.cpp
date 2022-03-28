@@ -4,12 +4,13 @@ Controller::Controller(Battery *b, QObject *parent) : QObject(parent)
 {
     earClips       = nullptr;
     currentBattery = b;
-    power          = false;
+    isPowerOn      = false;
 }
 
 Controller::~Controller()
 {
-    for (Record* record : history) {
+    for (Record* record : history)
+    {
         delete record;
     }
 }
@@ -17,8 +18,6 @@ Controller::~Controller()
 Record* Controller::recordSession()
 {
     // TODO use actual Session
-
-//    Record* record = new Record(20 * 60, 5, SessionType::ALPHA);
     Record* record = new Record(65, 5, SessionType::ALPHA);
     history.append(record);
     emit newRecord(record);
@@ -26,15 +25,17 @@ Record* Controller::recordSession()
 }
 
 //Initialize timer
-void Controller::initializeTimer(QListWidget *display){
+void Controller::initializeTimer(QListWidget *display)
+{
     mTimer = new QTimer(this);
-   // connect(mTimer, SIGNAL(timeout()), this, SLOT(deviceShutDown(display)));
+    // connect(mTimer, SIGNAL(timeout()), this, SLOT(deviceShutDown(display)));
     connect(mTimer, &QTimer::timeout, [this, display]() { deviceShutDown(display); });
     mTimer->start(50000);
 }
 
 //Reset timer
-void Controller::resetTimeout(int ms){
+void Controller::resetTimeout(int ms)
+{
     //Resets timer to given time
     mTimer->start(ms);
 }
@@ -62,6 +63,5 @@ void Controller::changeBattery(Battery *b)
 
 void Controller::togglePower()
 {
-    power = !power;
-
+    isPowerOn = !isPowerOn;
 }

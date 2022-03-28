@@ -28,7 +28,7 @@ bool Battery::isLow()
 
 bool Battery::isCriticallyLow()
 {
-    if(percentage <= 10)
+    if (percentage <= 10)
     {
         return true;
     }
