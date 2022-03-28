@@ -8,8 +8,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     // UI setup
     ui->setupUi(this);
-    groupWidgets["twenty"] = ui->twentyMinGroup;
-    groupWidgets["fourty"] = ui->fourtyFiveMinGroup;
+    groupWidgets["20min"] = ui->twentyMinGroup;
+    groupWidgets["45min"] = ui->fourtyFiveMinGroup;
     groupWidgets["user"] = ui->userDefinedGroup;
     sessionWidgets[SessionType::SUB_DELTA] = ui->subDeltaSession;
     sessionWidgets[SessionType::DELTA] = ui->deltaSession;
@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
                                    new Session(false, 9, 45, SessionType::ALPHA),},
                                   "45min");
 
-    Group *user = new Group({},"userDesignated");
+    Group *user = new Group({},"user");
 
     // Create the groups
     QList<Group *> groups = {twenty, fourtyFive, user};

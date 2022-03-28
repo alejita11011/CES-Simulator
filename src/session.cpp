@@ -2,13 +2,13 @@
 
 /**
  * @brief Session::Session
- * @param pulseType if false, it is a short pulse. If true, it is a long pulse
+ * @param isShortPulse
  * @param frequency
  * @param duration
  * @param type
  */
-Session::Session(const bool pulseType, const float frequency, const int presetDurationSeconds, const SessionType type) :
-    pulseType(pulseType), frequency(frequency), presetDurationSeconds(presetDurationSeconds), type(type)
+Session::Session(const bool shortPulse, const float frequency, const int presetDurationSeconds, const SessionType type) :
+    shortPulse(shortPulse), frequency(frequency), presetDurationSeconds(presetDurationSeconds), type(type)
 {
 }
 
@@ -22,9 +22,9 @@ int Session::getPresetDurationSeconds()
     return this->presetDurationSeconds;
 }
 
-bool Session::getPulseType()
+bool Session::isShortPulse()
 {
-    return this->pulseType;
+    return this->shortPulse;
 }
 
 SessionType Session::getType()
