@@ -2,7 +2,7 @@
 
 /**
  * @brief Session::Session
- * @param pulseType
+ * @param pulseType if false, it is a short pulse. If true, it is a long pulse
  * @param frequency
  * @param duration
  * @param type

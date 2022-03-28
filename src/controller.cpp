@@ -1,10 +1,11 @@
 #include "controller.h"
 
-Controller::Controller(Battery *b, QObject *parent) : QObject(parent)
+Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QObject(parent)
 {
     earClips       = nullptr;
     currentBattery = b;
     isPowerOn      = false;
+    this->groups   = groups;
 }
 
 Controller::~Controller()
