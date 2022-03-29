@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     // UI setup
     ui->setupUi(this);
+    this->setStyleSheet("MainWindow{background-image: url(:/images/CES.png); background-position: center;}");
     groupWidgets["20min"] = ui->twentyMinGroup;
     groupWidgets["45min"] = ui->fourtyFiveMinGroup;
     groupWidgets["user"] = ui->userDefinedGroup;
@@ -38,8 +39,10 @@ MainWindow::MainWindow(QWidget *parent)
     controller           = new Controller(battery, groups); // TODO singleton
     EarClips *earClips   = new EarClips();
 
+    connect(controller, SIGNAL(sessionProgress(int, SessionType)), this, SLOT(handleSessionProgress(int, SessionType)));
     connect(controller, SIGNAL(newRecord(Record *)), this, SLOT(handleNewRecord(Record *)));
     connect(ui->PowerButton, SIGNAL(clicked()), this, SLOT(handlePowerPressed()));
+    connect(ui->SelectButton, SIGNAL(clicked()), controller, SLOT(handleSelectClicked()));
 
     // Initialize context
     this->context["sessionSelection"] = false;
@@ -50,13 +53,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Initialize timer
     // TODO move to constructor
-    controller->initializeTimer(ui->listWidget);
+    //controller->initializeTimer(ui->listWidget);
 
     // Just for testing
-    controller->recordSession();
-    controller->recordSession();
-    controller->recordSession();
-    ui->listWidget->setCurrentRow(0);
 
     handleGroupSelected();
     setLitUp(ui->leftConnected, true);
@@ -105,6 +104,14 @@ void MainWindow::handleGroupSelected(/* Group *group */)
     setLitUp(ui->deltaSession, true);
     setLitUp(ui->alphaSession, true);
     setLitUp(ui->thetaSession, true);
+}
+
+//Displays session progress on device screen
+void MainWindow::handleSessionProgress(int elapsedSeconds, SessionType sessionType)
+{
+    ui->sessionProgressValues->raise();
+    ui->sessionProgressValues->clear();
+    ui->sessionProgressValues->setText(formatSeconds(elapsedSeconds) + "\n" + ToString(sessionType));
 }
 
 void MainWindow::setLitUp(QWidget *widget, bool litUp)

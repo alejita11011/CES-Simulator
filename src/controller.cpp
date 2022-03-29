@@ -1,4 +1,5 @@
 #include "controller.h"
+#include <QDebug>
 
 Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QObject(parent)
 {
@@ -6,10 +7,15 @@ Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QOb
     currentBattery = b;
     isPowerOn      = false;
     this->groups   = groups;
+    currentSession = nullptr;
+    remainingSessionTime = nullptr;
+    qDebug() << "Controller constructor\n";
+    startTimer(1000);
 }
 
 Controller::~Controller()
 {
+    //killTimer();
     for (Record* record : history)
     {
         delete record;
@@ -21,10 +27,39 @@ Controller::~Controller()
     }
 }
 
-Record* Controller::recordSession()
+//Start selected session
+void Controller::handleSelectClicked()
 {
+    //If context is SESSION
+    currentSession = new Session(true, 0.5, 45, SessionType::SUB_DELTA); // HARDCODED SELECTED SESSION
+    //Set timer to session duration
+    remainingSessionTime = new QTimer(this);
+    connect(remainingSessionTime, &QTimer::timeout, [this]() { recordSession(currentSession); });
+    remainingSessionTime->start(currentSession->getPresetDurationSeconds()*1000);
+
+
+}
+
+void Controller::timerEvent(QTimerEvent *event)
+{
+    qDebug() << "Timer Event\n";
+    //If context is SESSION and currentSESSION is not null
+    if(currentSession != nullptr)
+    {
+        int runningSeconds = remainingSessionTime->remainingTime() / 1000;
+        SessionType sessionType = currentSession->getType();
+        emit sessionProgress(runningSeconds, sessionType);
+    }
+
+}
+
+Record* Controller::recordSession(Session *session)
+{
+    //Get time spent for a session
+    int sessionTime = session->getPresetDurationSeconds() - (remainingSessionTime->remainingTime() / 1000 );
     // TODO use actual Session
-    Record* record = new Record(65, 5, SessionType::ALPHA);
+    Record* record = new Record(sessionTime, 5, session->getType());
+    remainingSessionTime->stop();
     history.append(record);
     emit newRecord(record);
     return record;

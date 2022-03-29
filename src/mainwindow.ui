@@ -18,8 +18,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
-    <string notr="true">background-image: url(:/images/CES.png);
-background-position: center;</string>
+    <string notr="true"/>
    </property>
    <widget class="QPushButton" name="PowerButton">
     <property name="geometry">
@@ -170,7 +169,7 @@ radius: 1.35, stop: 0 #fff, stop: 1 #bbb
     <property name="styleSheet">
      <string notr="true">border-bottom-right-radius: 12px;
 border-bottom-left-radius: 12px;
-background-color: rgb(243, 243, 243);
+background-color: rgb(170, 170, 255);
 color: rgb(0, 0, 0);
 selection-background-color: rgb(122, 0, 0)</string>
     </property>
@@ -187,7 +186,7 @@ selection-background-color: rgb(122, 0, 0)</string>
       <x>420</x>
       <y>270</y>
       <width>141</width>
-      <height>231</height>
+      <height>272</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -413,6 +412,45 @@ color: rgb(255, 255, 255);</string>
      </item>
     </layout>
    </widget>
+   <widget class="QLabel" name="sessionProgressValues">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>270</y>
+      <width>211</width>
+      <height>231</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Nimbus Sans L</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <italic>true</italic>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:rgb(255, 255, 255)</string>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <zorder>sessionProgressValues</zorder>
+   <zorder>PowerButton</zorder>
+   <zorder>IntensityDown</zorder>
+   <zorder>IntesityUp</zorder>
+   <zorder>SelectButton</zorder>
+   <zorder>listWidget</zorder>
+   <zorder>verticalLayoutWidget</zorder>
+   <zorder>horizontalLayoutWidget</zorder>
+   <zorder>horizontalLayoutWidget_2</zorder>
+   <zorder>horizontalLayoutWidget_3</zorder>
+   <zorder>horizontalLayoutWidget_4</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -420,7 +458,7 @@ color: rgb(255, 255, 255);</string>
      <x>0</x>
      <y>0</y>
      <width>941</width>
-     <height>22</height>
+     <height>30</height>
     </rect>
    </property>
   </widget>

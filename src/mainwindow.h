@@ -50,5 +50,7 @@ private slots:
 
     void handleGroupSelected(/* Group *group */);
 
+    void handleSessionProgress(int elapsedSeconds, SessionType sessionType);
+
 };
 #endif // MAINWINDOW_H

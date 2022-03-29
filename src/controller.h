@@ -19,7 +19,7 @@ class Controller : public QObject
 public:
     explicit Controller(Battery *b, QList<Group *> groups, QObject *parent = nullptr);
     ~Controller();
-    Record* recordSession(); // TODO move to private
+
     void setEarClips(EarClips *);
     void changeBattery(Battery *);
     void togglePower();
@@ -35,14 +35,24 @@ public:
 
 signals:
     void newRecord(Record* record);
+    void sessionProgress(int runningSeconds, SessionType type);
+
+private slots:
+    void handleSelectClicked();
 
 private:
     QList<Record*> history;
+    QTimer *clock;
     QTimer* mTimer;
+    QTimer *remainingSessionTime;
+    Session *currentSession;
     EarClips *earClips;
     Battery *currentBattery;
     bool isPowerOn;
     QList<Group *> groups;
+
+    Record* recordSession(Session *session);
+    void timerEvent(QTimerEvent *event);
 };
 
 #endif // CONTROLLER_H
