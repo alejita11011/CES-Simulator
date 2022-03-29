@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     sessionWidgets[SessionType::ALPHA] = ui->alphaSession;
     sessionWidgets[SessionType::THETA] = ui->thetaSession;
 
+
     // Create Sessions
     Group *twenty = new Group({new Session(true, 0.5, 20, SessionType::SUB_DELTA),
                             new Session(false, 2.5, 20, SessionType::DELTA),
@@ -35,28 +36,26 @@ MainWindow::MainWindow(QWidget *parent)
     // Create the groups
     QList<Group *> groups = {twenty, fourtyFive, user};
 
+    //Create battery
     Battery *battery     = new Battery();
-    controller           = new Controller(battery, groups); // TODO singleton
+
+    //Create shut down timer
+    QTimer *shutDownTimer = new QTimer(this);
+    //connect(shutDownTimer, &QTimer::timeout, [this, display]() { deviceShutDown(display); });
+
+    //Create controller
+    controller           = new Controller(battery, groups, shutDownTimer); // TODO singleton
+
+    //Create earClips
     EarClips *earClips   = new EarClips();
 
     connect(controller, SIGNAL(sessionProgress(int, SessionType)), this, SLOT(handleSessionProgress(int, SessionType)));
     connect(controller, SIGNAL(newRecord(Record *)), this, SLOT(handleNewRecord(Record *)));
-    connect(ui->PowerButton, SIGNAL(clicked()), this, SLOT(handlePowerPressed()));
+    connect(controller, SIGNAL(powerOnOff()), this, SLOT(handlePowerClicked()));
+    connect(ui->PowerButton, SIGNAL(clicked()), this, SLOT(handlePowerClicked()));
     connect(ui->SelectButton, SIGNAL(clicked()), controller, SLOT(handleSelectClicked()));
 
-    // Initialize context
-    this->context["sessionSelection"] = false;
-    this->context["connectionTest"] = false;
-    this->context["session"] = false;
-    this->context["recordingSession"] = false;
-    this->context["navigatingHistory"] = false;
-
-    // Initialize timer
-    // TODO move to constructor
-    //controller->initializeTimer(ui->listWidget);
-
     // Just for testing
-
     handleGroupSelected();
     setLitUp(ui->leftConnected, true);
     setLitUp(ui->rightConnected, true);
@@ -121,14 +120,17 @@ void MainWindow::setLitUp(QWidget *widget, bool litUp)
 }
 
 //REVIEW
-void MainWindow::on_PowerButton_clicked()
-{
-    controller->deviceShutDown(ui->listWidget);
-}
-
-void MainWindow::handlePowerPressed()
+void MainWindow::handlePowerClicked()
 {
     controller->togglePower();
-    // TO_DO
-    // turn off GUI
+
+    if(controller->getPowerStatus()){
+        //Shut down device
+        ui->powerOnOffView->raise();
+
+    }else if( controller->getPowerStatus() == false){
+        //Turn on device
+        ui->listWidget->raise();
+    }
 }
+

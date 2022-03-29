@@ -36,17 +36,15 @@ private:
     // Formats a number of seconds in ##m##s format
     QString formatSeconds(int seconds);
 
-    QMap<QString, bool> context;
-
     void setLitUp(QWidget *widget, bool litUp);
 
 
 private slots:
     void handleNewRecord(Record* record);
     
-    void on_PowerButton_clicked(); //REVIEW
+    //void on_PowerButton_clicked(); //REVIEW
 
-    void handlePowerPressed(); //REVIEW
+    void handlePowerClicked(); //REVIEW
 
     void handleGroupSelected(/* Group *group */);
 

@@ -17,21 +17,39 @@ class Controller : public QObject
 {
     Q_OBJECT
 public:
-    explicit Controller(Battery *b, QList<Group *> groups, QObject *parent = nullptr);
+    explicit Controller(Battery *b, QList<Group *> groups, QTimer *shTimer, QObject *parent = nullptr);
     ~Controller();
 
     void setEarClips(EarClips *);
     void changeBattery(Battery *);
-    void togglePower();
 
-    //Create Timer
-    void initializeTimer(QListWidget* display);
+    //Get power status
+    bool getPowerStatus();
+
+    void togglePower();
 
     //Reset Timeout timer
     void resetTimeout(int ms);
 
-    //Shutdown OASIS device
-    void deviceShutDown(QListWidget* display ); // TODO
+
+    /**
+     * @brief getContext
+     * @param context
+     * @return boolean - state of the context passed as parameter
+     */
+    bool getContext(QString context);
+
+    /**
+     * @brief Set the indicated context to true while making sure that other contexts are false.
+     * @param context
+     * @return Whether the setter was successul or not
+     */
+    bool setContext(QString context);
+
+    /**
+     * @brief Make all contexts false (device is off)
+     */
+    void resetContext();
 
 signals:
     void newRecord(Record* record);
@@ -41,18 +59,20 @@ private slots:
     void handleSelectClicked();
 
 private:
+    QMap<QString, bool> context;
     QList<Record*> history;
+    QList<Group *> groups;
     QTimer *clock;
-    QTimer* mTimer;
+    QTimer* shutDownTimer;
     QTimer *remainingSessionTime;
     Session *currentSession;
     EarClips *earClips;
     Battery *currentBattery;
     bool isPowerOn;
-    QList<Group *> groups;
 
-    Record* recordSession(Session *session);
     void timerEvent(QTimerEvent *event);
+    Record* recordSession(Session *session);
+    void powerOnOff();
 };
 
 #endif // CONTROLLER_H

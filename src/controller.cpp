@@ -1,7 +1,8 @@
 #include "controller.h"
 #include <QDebug>
+#include <QtGlobal>
 
-Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QObject(parent)
+Controller::Controller(Battery *b, QList<Group *> groups, QTimer *shTimer, QObject *parent) : QObject(parent)
 {
     earClips       = nullptr;
     currentBattery = b;
@@ -9,8 +10,20 @@ Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QOb
     this->groups   = groups;
     currentSession = nullptr;
     remainingSessionTime = nullptr;
-    qDebug() << "Controller constructor\n";
+
+    // Initialize context
+    this->context["sessionSelection"] = false;
+    this->context["connectionTest"] = false;
+    this->context["session"] = false;
+    this->context["recordingSession"] = false;
+    this->context["navigatingHistory"] = false;
+
+    // Timers
     startTimer(1000);
+
+    shutDownTimer = shTimer;
+    connect(shutDownTimer, &QTimer::timeout, [this]() { emit powerOnOff(); });
+    shutDownTimer->start(5000);
 }
 
 Controller::~Controller()
@@ -25,6 +38,48 @@ Controller::~Controller()
     {
         delete group;
     }
+}
+
+bool Controller::getContext(QString context)
+{
+    return this->context[context];
+}
+
+bool Controller::setContext(QString context)
+{
+    QList<QString> contexts = this->context.keys();
+
+    // Check that the context exists
+    if (!contexts.contains(context))
+    {
+        return false;
+    }
+
+    // Remove false value
+    for (const QString &currentContext : qAsConst(contexts))
+    {
+        // There should only be one true value at any given time.
+        // So, we can stop once we find it.
+        if (this->context[currentContext] == true)
+        {
+            this->context[currentContext] = false;
+            break;
+        }
+    }
+
+    this->context[context] = true;
+
+    return true;
+}
+
+void Controller::resetContext()
+{
+     QList<QString> contexts = this->context.keys();
+
+     for (const QString &context : contexts)
+     {
+         this->context[context] = false;
+     }
 }
 
 //Start selected session
@@ -65,26 +120,20 @@ Record* Controller::recordSession(Session *session)
     return record;
 }
 
-//Initialize timer
-void Controller::initializeTimer(QListWidget *display)
-{
-    mTimer = new QTimer(this);
-    // connect(mTimer, SIGNAL(timeout()), this, SLOT(deviceShutDown(display)));
-    connect(mTimer, &QTimer::timeout, [this, display]() { deviceShutDown(display); });
-    mTimer->start(50000);
-}
 
 //Reset timer
 void Controller::resetTimeout(int ms)
 {
     //Resets timer to given time
-    mTimer->start(ms);
+    shutDownTimer->start(ms);
 }
 
-void Controller::deviceShutDown(QListWidget *display)
-{
-    //TODO
-    display->setStyleSheet("background-color:black;");
+bool Controller::getPowerStatus(){
+    return isPowerOn;
+}
+
+void Controller::togglePower(){
+    isPowerOn = !isPowerOn;
 }
 
 void Controller::setEarClips(EarClips *e)
@@ -100,9 +149,4 @@ void Controller::changeBattery(Battery *b)
 {
     delete currentBattery;
     currentBattery = b;
-}
-
-void Controller::togglePower()
-{
-    isPowerOn = !isPowerOn;
 }
