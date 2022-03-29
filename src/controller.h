@@ -33,6 +33,19 @@ public:
     //Shutdown OASIS device
     void deviceShutDown(QListWidget* display ); // TODO
 
+    /**
+     * @brief getContext
+     * @param context
+     * @return boolean - state of the context passed as parameter
+     */
+    bool getContext(QString context);
+
+    /**
+     * @brief Set the indicated context to true while making sure that other contexts are false
+     * @param context
+     */
+    void setContext(QString context);
+
 signals:
     void newRecord(Record* record);
 
