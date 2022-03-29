@@ -41,10 +41,11 @@ public:
     bool getContext(QString context);
 
     /**
-     * @brief Set the indicated context to true while making sure that other contexts are false
-     * @param context
+     * @brief Set the indicated context to true while making sure that other contexts are false.
+     * @param context - If parameter is not a valid context
+     * @return Whether the setter was successul or not
      */
-    void setContext(QString context);
+    bool setContext(QString context);
 
 signals:
     void newRecord(Record* record);

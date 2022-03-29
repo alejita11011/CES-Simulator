@@ -34,9 +34,15 @@ bool Controller::getContext(QString context)
     return this->context[context];
 }
 
-void Controller::setContext(QString context)
+bool Controller::setContext(QString context)
 {
     QList<QString> contexts = this->context.keys();
+
+    // Check that the context exists
+    if (!contexts.contains(context))
+    {
+        return false;
+    }
 
     // Remove false value
     for (const QString &currentContext : qAsConst(contexts))
@@ -51,6 +57,8 @@ void Controller::setContext(QString context)
     }
 
     this->context[context] = true;
+
+    return true;
 }
 
 Record* Controller::recordSession()
