@@ -6,6 +6,13 @@ Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QOb
     currentBattery = b;
     isPowerOn      = false;
     this->groups   = groups;
+
+    // Initialize context
+    this->context["sessionSelection"] = false;
+    this->context["connectionTest"] = false;
+    this->context["session"] = false;
+    this->context["recordingSession"] = false;
+    this->context["navigatingHistory"] = false;
 }
 
 Controller::~Controller()

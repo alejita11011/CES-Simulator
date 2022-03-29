@@ -43,6 +43,7 @@ private:
     Battery *currentBattery;
     bool isPowerOn;
     QList<Group *> groups;
+    QMap<QString, bool> context;
 };
 
 #endif // CONTROLLER_H
