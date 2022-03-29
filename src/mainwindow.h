@@ -40,15 +40,15 @@ private:
 
 
 private slots:
-    void handleNewRecord(Record* record);
-    
-    //void on_PowerButton_clicked(); //REVIEW
-
-    void handlePowerClicked(); //REVIEW
+    void handleNewRecord(Record* record);  
 
     void handleGroupSelected(/* Group *group */);
 
     void handleSessionProgress(int elapsedSeconds, SessionType sessionType);
+
+    void handlePowerOff();
+
+    void handlePowerOn();
 
 };
 #endif // MAINWINDOW_H

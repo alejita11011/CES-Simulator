@@ -440,7 +440,7 @@ color: rgb(255, 255, 255);</string>
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QGraphicsView" name="powerOnOffView">
+   <widget class="QGraphicsView" name="powerOffView">
     <property name="geometry">
      <rect>
       <x>180</x>
@@ -454,7 +454,6 @@ color: rgb(255, 255, 255);</string>
     </property>
    </widget>
    <zorder>sessionProgressValues</zorder>
-   <zorder>powerOnOffView</zorder>
    <zorder>PowerButton</zorder>
    <zorder>IntensityDown</zorder>
    <zorder>IntesityUp</zorder>
@@ -465,6 +464,7 @@ color: rgb(255, 255, 255);</string>
    <zorder>horizontalLayoutWidget_2</zorder>
    <zorder>horizontalLayoutWidget_3</zorder>
    <zorder>horizontalLayoutWidget_4</zorder>
+   <zorder>powerOffView</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

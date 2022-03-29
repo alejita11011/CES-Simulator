@@ -39,27 +39,23 @@ MainWindow::MainWindow(QWidget *parent)
     //Create battery
     Battery *battery     = new Battery();
 
-    //Create shut down timer
-    QTimer *shutDownTimer = new QTimer(this);
-    //connect(shutDownTimer, &QTimer::timeout, [this, display]() { deviceShutDown(display); });
 
     //Create controller
-    controller           = new Controller(battery, groups, shutDownTimer); // TODO singleton
+    controller           = new Controller(battery, groups); // TODO singleton
 
     //Create earClips
     EarClips *earClips   = new EarClips();
 
     connect(controller, SIGNAL(sessionProgress(int, SessionType)), this, SLOT(handleSessionProgress(int, SessionType)));
     connect(controller, SIGNAL(newRecord(Record *)), this, SLOT(handleNewRecord(Record *)));
-    connect(controller, SIGNAL(powerOnOff()), this, SLOT(handlePowerClicked()));
-    connect(ui->PowerButton, SIGNAL(clicked()), this, SLOT(handlePowerClicked()));
+
+    //When shutdown timer reaches 0 OR user turns off device
+    connect(controller, SIGNAL(powerOff()), this, SLOT(handlePowerOff()));
+    //User turns on device
+    connect(controller, SIGNAL(powerOn()), this, SLOT(handlePowerOn()));
+    connect(ui->PowerButton, SIGNAL(clicked()), controller, SLOT(handlePowerClicked()));
     connect(ui->SelectButton, SIGNAL(clicked()), controller, SLOT(handleSelectClicked()));
 
-    // Just for testing
-    handleGroupSelected();
-    setLitUp(ui->leftConnected, true);
-    setLitUp(ui->rightConnected, true);
-    setLitUp(ui->shortPulse, true);
 }
 
 MainWindow::~MainWindow()
@@ -119,18 +115,15 @@ void MainWindow::setLitUp(QWidget *widget, bool litUp)
     widget->setStyleSheet(styleSheet.replace(litUp ? "/off/" : "/on/", litUp ? "/on/" : "/off/"));
 }
 
-//REVIEW
-void MainWindow::handlePowerClicked()
+
+void MainWindow::handlePowerOn()
 {
-    controller->togglePower();
+    ui->listWidget->raise();
+}
 
-    if(controller->getPowerStatus()){
-        //Shut down device
-        ui->powerOnOffView->raise();
-
-    }else if( controller->getPowerStatus() == false){
-        //Turn on device
-        ui->listWidget->raise();
-    }
+void MainWindow::handlePowerOff()
+{
+    ui->powerOffView->raise();
+    //Turn off lights
 }
 

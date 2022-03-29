@@ -17,7 +17,7 @@ class Controller : public QObject
 {
     Q_OBJECT
 public:
-    explicit Controller(Battery *b, QList<Group *> groups, QTimer *shTimer, QObject *parent = nullptr);
+    explicit Controller(Battery *b, QList<Group *> groups, QObject *parent = nullptr);
     ~Controller();
 
     void setEarClips(EarClips *);
@@ -54,10 +54,12 @@ public:
 signals:
     void newRecord(Record* record);
     void sessionProgress(int runningSeconds, SessionType type);
-    void powerOnOff();
+    void powerOff();
+    void powerOn();
 
 private slots:
     void handleSelectClicked();
+    void handlePowerClicked();
 
 private:
     QMap<QString, bool> context;

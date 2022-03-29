@@ -2,7 +2,7 @@
 #include <QDebug>
 #include <QtGlobal>
 
-Controller::Controller(Battery *b, QList<Group *> groups, QTimer *shTimer, QObject *parent) : QObject(parent)
+Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QObject(parent)
 {
     earClips       = nullptr;
     currentBattery = b;
@@ -20,10 +20,9 @@ Controller::Controller(Battery *b, QList<Group *> groups, QTimer *shTimer, QObje
 
     // Timers
     startTimer(1000);
+    shutDownTimer =  new QTimer(this);
+    connect(shutDownTimer, &QTimer::timeout, [this]() { emit powerOff(); });
 
-    shutDownTimer = shTimer;
-    connect(shutDownTimer, &QTimer::timeout, [this]() { emit powerOnOff(); });
-    //shutDownTimer->start(5000);
 }
 
 Controller::~Controller()
@@ -86,26 +85,45 @@ void Controller::resetContext()
 void Controller::handleSelectClicked()
 {
     //If context is SESSION
-    currentSession = new Session(true, 0.5, 45, SessionType::SUB_DELTA); // HARDCODED SELECTED SESSION
-    //Set timer to session duration
-    remainingSessionTime = new QTimer(this);
-    connect(remainingSessionTime, &QTimer::timeout, [this]() { recordSession(currentSession); });
-    remainingSessionTime->start(currentSession->getPresetDurationSeconds()*1000);
+    if(getContext("session"))
+    {
+        currentSession = new Session(true, 0.5, 45, SessionType::SUB_DELTA); // HARDCODED SELECTED SESSION
+        //Set timer to session duration
+        remainingSessionTime = new QTimer(this);
+        connect(remainingSessionTime, &QTimer::timeout, [this]() { recordSession(currentSession); });
+        remainingSessionTime->start(currentSession->getPresetDurationSeconds()*1000);
 
+    }
 
 }
 
 void Controller::timerEvent(QTimerEvent *event)
 {
     qDebug() << "Timer Event\n";
-    //If context is SESSION and currentSESSION is not null
-    if(currentSession != nullptr)
+    //If context is SESSION and currentSession is not null
+    if(getContext("session") && currentSession != nullptr)
     {
         int runningSeconds = remainingSessionTime->remainingTime() / 1000;
         SessionType sessionType = currentSession->getType();
         emit sessionProgress(runningSeconds, sessionType);
     }
 
+}
+
+//REVIEW
+void Controller::handlePowerClicked()
+{
+    togglePower();
+
+    if(isPowerOn){
+        //Turn on device
+        emit powerOn();
+        shutDownTimer->start(5000);
+    }else{
+        //Turn off device
+        emit powerOff();
+        shutDownTimer->stop();
+    }
 }
 
 Record* Controller::recordSession(Session *session)
