@@ -17,21 +17,20 @@ class Controller : public QObject
 {
     Q_OBJECT
 public:
-    explicit Controller(Battery *b, QList<Group *> groups, QObject *parent = nullptr);
+    explicit Controller(Battery *b, QList<Group *> groups, QTimer *shTimer, QObject *parent = nullptr);
     ~Controller();
     Record* recordSession(); // TODO move to private
     void setEarClips(EarClips *);
     void changeBattery(Battery *);
-    void togglePower();
 
-    //Create Timer
-    void initializeTimer(QListWidget* display);
+    //Get power status
+    bool getPowerStatus();
+
+    void togglePower();
 
     //Reset Timeout timer
     void resetTimeout(int ms);
 
-    //Shutdown OASIS device
-    void deviceShutDown(QListWidget* display ); // TODO
 
     /**
      * @brief getContext
@@ -54,10 +53,11 @@ public:
 
 signals:
     void newRecord(Record* record);
+    void powerOnOff();
 
 private:
     QList<Record*> history;
-    QTimer* mTimer;
+    QTimer* shutDownTimer;
     EarClips *earClips;
     Battery *currentBattery;
     bool isPowerOn;
