@@ -54,6 +54,7 @@ public:
 signals:
     void newRecord(Record* record);
     void sessionProgress(int runningSeconds, SessionType type);
+    void powerOnOff();
 
 private slots:
     void handleSelectClicked();
@@ -72,7 +73,7 @@ private:
 
     void timerEvent(QTimerEvent *event);
     Record* recordSession(Session *session);
-    void powerOnOff();
+
 };
 
 #endif // CONTROLLER_H

@@ -413,6 +413,14 @@ color: rgb(255, 255, 255);</string>
     </layout>
    </widget>
    <widget class="QLabel" name="sessionProgressValues">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>270</y>
+      <width>211</width>
+      <height>231</height>
+     </rect>
+    </property>
     <property name="font">
      <font>
       <family>Nimbus Sans L</family>

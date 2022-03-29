@@ -23,7 +23,7 @@ Controller::Controller(Battery *b, QList<Group *> groups, QTimer *shTimer, QObje
 
     shutDownTimer = shTimer;
     connect(shutDownTimer, &QTimer::timeout, [this]() { emit powerOnOff(); });
-    shutDownTimer->start(5000);
+    //shutDownTimer->start(5000);
 }
 
 Controller::~Controller()
