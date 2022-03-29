@@ -61,6 +61,16 @@ bool Controller::setContext(QString context)
     return true;
 }
 
+void Controller::resetContext()
+{
+     QList<QString> contexts = this->context.keys();
+
+     for (const QString &context : contexts)
+     {
+         this->context[context] = false;
+     }
+}
+
 Record* Controller::recordSession()
 {
     // TODO use actual Session

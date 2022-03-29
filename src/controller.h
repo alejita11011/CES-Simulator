@@ -42,10 +42,15 @@ public:
 
     /**
      * @brief Set the indicated context to true while making sure that other contexts are false.
-     * @param context - If parameter is not a valid context
+     * @param context
      * @return Whether the setter was successul or not
      */
     bool setContext(QString context);
+
+    /**
+     * @brief Make all contexts false (device is off)
+     */
+    void resetContext();
 
 signals:
     void newRecord(Record* record);
