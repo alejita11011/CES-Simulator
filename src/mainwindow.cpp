@@ -61,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->context["recordingSession"] = false;
     this->context["navigatingHistory"] = false;
 
+
     // Just for testing
     controller->recordSession();
     controller->recordSession();
