@@ -38,6 +38,31 @@ MainWindow::MainWindow(QWidget *parent)
     controller           = new Controller(battery, groups); // TODO singleton
     EarClips *earClips   = new EarClips();
 
+    // Testing setter and getter
+    controller->setContext("sessionSelection");
+
+    qDebug().nospace() << "--> " << controller->getContext("sessionSelection");
+    qDebug().nospace() << "--> " << controller->getContext("connectionTest");
+    qDebug().nospace() << "--> " << controller->getContext("session");
+    qDebug().nospace() << "--> " << controller->getContext("recordingSession");
+    qDebug().nospace() << "--> " << controller->getContext("navigatingHistory");
+
+    controller->setContext("recordingSession");
+    qDebug().nospace() << "--> " << controller->getContext("sessionSelection");
+    qDebug().nospace() << "--> " << controller->getContext("connectionTest");
+    qDebug().nospace() << "--> " << controller->getContext("session");
+    qDebug().nospace() << "--> " << controller->getContext("recordingSession");
+    qDebug().nospace() << "--> " << controller->getContext("navigatingHistory");
+
+    controller->resetContext();
+    qDebug().nospace() << "--> " << controller->getContext("sessionSelection");
+    qDebug().nospace() << "--> " << controller->getContext("connectionTest");
+    qDebug().nospace() << "--> " << controller->getContext("session");
+    qDebug().nospace() << "--> " << controller->getContext("recordingSession");
+    qDebug().nospace() << "--> " << controller->getContext("navigatingHistory");
+
+
+
     connect(controller, SIGNAL(newRecord(Record *)), this, SLOT(handleNewRecord(Record *)));
     connect(ui->PowerButton, SIGNAL(clicked()), this, SLOT(handlePowerPressed()));
 
