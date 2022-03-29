@@ -1,4 +1,5 @@
 #include "controller.h"
+#include <QtGlobal>
 
 Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QObject(parent)
 {
@@ -26,6 +27,30 @@ Controller::~Controller()
     {
         delete group;
     }
+}
+
+bool Controller::getContext(QString context)
+{
+    return this->context[context];
+}
+
+void Controller::setContext(QString context)
+{
+    QList<QString> contexts = this->context.keys();
+
+    // Remove false value
+    for (const QString &currentContext : qAsConst(contexts))
+    {
+        // There should only be one true value at any given time.
+        // So, we can stop once we find it.
+        if (this->context[currentContext] == true)
+        {
+            this->context[currentContext] = false;
+            break;
+        }
+    }
+
+    this->context[context] = true;
 }
 
 Record* Controller::recordSession()
