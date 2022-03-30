@@ -15,8 +15,9 @@ Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QOb
     this->context["sessionSelection"] = false;
     this->context["connectionTest"] = false;
     this->context["session"] = false;
-    this->context["recordingSession"] = false;
+    this->context["promptRecordSession"] = false;
     this->context["navigatingHistory"] = false;
+
 
     // Timers
     startTimer(1000);
@@ -93,6 +94,16 @@ void Controller::handleSelectClicked()
         connect(remainingSessionTime, &QTimer::timeout, [this]() { recordSession(currentSession); });
         remainingSessionTime->start(currentSession->getPresetDurationSeconds()*1000);
 
+    }else if(getContext("promptRecordSession")){
+        //User wants to record the current session
+        recordSession(currentSession);
+        delete currentSession;
+        delete remainingSessionTime;
+        currentSession = nullptr;
+        remainingSessionTime = nullptr;
+
+        //Set next context
+        setContext("sessionSelection");
     }
 
 }
@@ -110,9 +121,36 @@ void Controller::timerEvent(QTimerEvent *event)
 
 }
 
+void Controller::stopSession(){
+
+    //Stop timer
+    remainingSessionTime->stop();
+
+    setContext("promptRecordSession");
+    emit sessionEnds();
+
+    //Save session data
+
+   //Set current session to null
+}
+
 //REVIEW
 void Controller::handlePowerClicked()
 {
+    if(getContext("session"))
+    {
+        //The session stops
+
+    }else if(getContext("promptRecordSession")){
+        delete currentSession;
+        delete remainingSessionTime;
+        currentSession = nullptr;
+        remainingSessionTime = nullptr;
+
+        //Set next context
+        setContext("sessionSelection");
+    }
+
     togglePower();
 
     if(isPowerOn){

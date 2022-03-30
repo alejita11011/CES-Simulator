@@ -192,6 +192,9 @@ selection-background-color: rgb(122, 0, 0)</string>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item alignment="Qt::AlignHCenter">
       <widget class="QLabel" name="label_5">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(170, 0, 0);</string>
+       </property>
        <property name="text">
         <string>|8|</string>
        </property>

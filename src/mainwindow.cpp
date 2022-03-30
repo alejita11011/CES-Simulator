@@ -48,7 +48,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(controller, SIGNAL(sessionProgress(int, SessionType)), this, SLOT(handleSessionProgress(int, SessionType)));
     connect(controller, SIGNAL(newRecord(Record *)), this, SLOT(handleNewRecord(Record *)));
-
+    //A session ended
+    connect(controller, SIGNAL(sessionEnds()), this, SLOT(handleEndedSession()));
     //When shutdown timer reaches 0 OR user turns off device
     connect(controller, SIGNAL(powerOff()), this, SLOT(handlePowerOff()));
     //User turns on device
@@ -109,10 +110,22 @@ void MainWindow::handleSessionProgress(int elapsedSeconds, SessionType sessionTy
     ui->sessionProgressValues->setText(formatSeconds(elapsedSeconds) + "\n" + ToString(sessionType));
 }
 
+void MainWindow::handleEndedSession(){
+    //Graphs from 8-1
+    ui->number_8->setStyleSheet("background-color:rgb(170, 0, 0);");
+
+    //Prompt user to record session
+}
+
 void MainWindow::setLitUp(QWidget *widget, bool litUp)
 {
     QString styleSheet = widget->styleSheet();
     widget->setStyleSheet(styleSheet.replace(litUp ? "/off/" : "/on/", litUp ? "/on/" : "/off/"));
+}
+
+void MainWindow::lightUpNumber(int number)
+{
+
 }
 
 

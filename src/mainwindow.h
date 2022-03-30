@@ -46,6 +46,8 @@ private slots:
 
     void handleSessionProgress(int elapsedSeconds, SessionType sessionType);
 
+    void handleEndedSession();
+
     void handlePowerOff();
 
     void handlePowerOn();

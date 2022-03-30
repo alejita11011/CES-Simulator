@@ -54,6 +54,7 @@ public:
 signals:
     void newRecord(Record* record);
     void sessionProgress(int runningSeconds, SessionType type);
+    void sessionEnds();
     void powerOff();
     void powerOn();
 
@@ -74,6 +75,7 @@ private:
     bool isPowerOn;
 
     void timerEvent(QTimerEvent *event);
+    void stopSession();
     Record* recordSession(Session *session);
 
 };
