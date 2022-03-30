@@ -1,28 +1,33 @@
 #include "controller.h"
+#include <QDebug>
 #include <QtGlobal>
 
-Controller::Controller(Battery *b, QList<Group *> groups, QTimer *shTimer, QObject *parent) : QObject(parent)
+int Controller::IDLE_TIMEOUT_MS = 30000;
+
+Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QObject(parent)
 {
     earClips       = nullptr;
     currentBattery = b;
     isPowerOn      = false;
     this->groups   = groups;
+    currentSession = nullptr;
+    elapsedSessionTime = 0;
 
     // Initialize context
     this->context["sessionSelection"] = false;
     this->context["connectionTest"] = false;
-    this->context["session"] = false;
-    this->context["recordingSession"] = false;
-    this->context["navigatingHistory"] = false;
+    this->context["activeSession"] = false;
+    this->context["promptRecordSession"] = false;
 
-    shutDownTimer = shTimer;
-    connect(shutDownTimer, &QTimer::timeout, [this]() { emit powerOnOff(); });
-    shutDownTimer->start(5000);
-
+    // Timers
+    timerId = startTimer(1000);
+    shutDownTimer = new QTimer(this);  // Will be started when device is turned on
+    connect(shutDownTimer, &QTimer::timeout, [this](){ togglePower(); });
 }
 
 Controller::~Controller()
 {
+    killTimer(timerId);
     for (Record* record : history)
     {
         delete record;
@@ -76,30 +81,104 @@ void Controller::resetContext()
      }
 }
 
-Record* Controller::recordSession()
+//Start selected session
+void Controller::handleSelectClicked()
 {
-    // TODO use actual Session
-    Record* record = new Record(65, 5, SessionType::ALPHA);
-    history.append(record);
-    emit newRecord(record);
-    return record;
+    if (getContext("sessionSelection"))
+    {
+        currentSession = new Session(true, 0.5, 10, SessionType::SUB_DELTA); // HARDCODED SELECTED SESSION
+        elapsedSessionTime = 0;
+
+        setContext("activeSession");  // TODO connection test
+
+        emit sessionProgress(currentSession->getPresetDurationSeconds(), currentSession->getType());
+    }
+    else if (getContext("promptRecordSession"))
+    {
+        stopRecordPrompt(true);
+    }
 }
 
-
-//Reset timer
-void Controller::resetTimeout(int ms)
+// Triggered once every second
+void Controller::timerEvent(QTimerEvent *event)
 {
-    //Resets timer to given time
-    shutDownTimer->start(ms);
+    if (getContext("activeSession"))
+    {
+        // Increment elapsed time
+        elapsedSessionTime++;
 
+        // Emit progress of active session
+        int remainingSeconds = currentSession->getPresetDurationSeconds() - elapsedSessionTime;
+        SessionType sessionType = currentSession->getType();
+        emit sessionProgress(remainingSeconds, sessionType);
+
+        if (remainingSeconds == 0)
+        {
+            stopSession();
+        }
+
+        // Constantly refresh shut down timer during active session
+        shutDownTimer->start(IDLE_TIMEOUT_MS);
+    }
 }
 
-bool Controller::getPowerStatus(){
-    return isPowerOn;
+void Controller::stopSession()
+{
+    setContext("promptRecordSession");
+    emit sessionEnds();
+}
+
+void Controller::stopRecordPrompt(bool shouldRecord)
+{
+    if (shouldRecord)
+    {
+        Record* record = new Record(elapsedSessionTime, 5, currentSession->getType());
+        history.append(record);
+        emit newRecord(record);
+    }
+
+    delete currentSession;
+    currentSession = nullptr;
+
+    //Set next context
+    setContext("sessionSelection");
+    emit useSelectionContext();
+}
+
+void Controller::handlePowerClicked()
+{
+    if (getContext("activeSession"))
+    {
+        //The session stops
+        stopSession();
+    }
+    else if (getContext("promptRecordSession"))
+    {
+        stopRecordPrompt(false);
+    }
+    else
+    {
+        togglePower();
+    }
 }
 
 void Controller::togglePower(){
     isPowerOn = !isPowerOn;
+
+    if (isPowerOn)
+    {
+        //Turn on device
+        emit powerOn();
+        shutDownTimer->start(IDLE_TIMEOUT_MS);
+        //FOR TESTING
+        setContext("sessionSelection");
+    }
+    else
+    {
+        //Turn off device
+        emit powerOff();
+        shutDownTimer->stop();
+    }
 }
 
 void Controller::setEarClips(EarClips *e)

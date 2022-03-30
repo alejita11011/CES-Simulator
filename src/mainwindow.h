@@ -6,6 +6,11 @@
 #include <QString>
 #include <QChar>
 #include <QMap>
+#include <QLabel>
+#include <QSet>
+#include <QTime>
+#include <QCoreApplication>
+#include <QEventLoop>
 #include "controller.h"
 #include "record.h"
 #include "earclips.h"
@@ -32,21 +37,30 @@ private:
     QMap<QString, QWidget *> groupWidgets;
     // A map from SessionType to the LightableWidget associated with a session type
     QMap<SessionType, QWidget *> sessionWidgets;
+    // A list of the number labels
+    QList<QLabel *> numberLabels;
 
     // Formats a number of seconds in ##m##s format
     QString formatSeconds(int seconds);
 
     void setLitUp(QWidget *widget, bool litUp);
-
+    void setLitUp(QSet<int> numbers);
+    void delay(int ms);
 
 private slots:
-    void handleNewRecord(Record* record);
-    
-    //void on_PowerButton_clicked(); //REVIEW
-
-    void handlePowerClicked(); //REVIEW
+    void handleNewRecord(Record* record);  
 
     void handleGroupSelected(/* Group *group */);
+
+    void handleSessionProgress(int elapsedSeconds, SessionType sessionType);
+
+    void handleEndedSession();
+
+    void handleResetDisplay();
+
+    void handlePowerOff();
+
+    void handlePowerOn();
 
 };
 #endif // MAINWINDOW_H

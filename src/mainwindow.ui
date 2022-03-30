@@ -167,9 +167,8 @@ radius: 1.35, stop: 0 #fff, stop: 1 #bbb
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-bottom-right-radius: 12px;
-border-bottom-left-radius: 12px;
-background-color: rgb(243, 243, 243);
+     <string notr="true">border-radius: 12px;
+background-color: rgb(170, 170, 255);
 color: rgb(0, 0, 0);
 selection-background-color: rgb(122, 0, 0)</string>
     </property>
@@ -185,85 +184,11 @@ selection-background-color: rgb(122, 0, 0)</string>
      <rect>
       <x>420</x>
       <y>270</y>
-      <width>141</width>
+      <width>71</width>
       <height>272</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item alignment="Qt::AlignHCenter">
-      <widget class="QLabel" name="label_5">
-       <property name="text">
-        <string>|8|</string>
-       </property>
-      </widget>
-     </item>
-     <item alignment="Qt::AlignHCenter">
-      <widget class="QLabel" name="label_6">
-       <property name="text">
-        <string>|7|</string>
-       </property>
-      </widget>
-     </item>
-     <item alignment="Qt::AlignHCenter">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>|6|</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(52, 101, 164);
-color: rgb(255, 255, 255);</string>
-       </property>
-       <property name="text">
-        <string>|5|</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(52, 101, 164);
-color: rgb(255, 255, 255);</string>
-       </property>
-       <property name="text">
-        <string>|4|</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item alignment="Qt::AlignHCenter">
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string>|3|</string>
-       </property>
-      </widget>
-     </item>
-     <item alignment="Qt::AlignHCenter">
-      <widget class="QLabel" name="label_8">
-       <property name="text">
-        <string>|2|</string>
-       </property>
-      </widget>
-     </item>
-     <item alignment="Qt::AlignHCenter">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>|1|</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <layout class="QVBoxLayout" name="numbersLayout"/>
    </widget>
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
@@ -412,7 +337,38 @@ color: rgb(255, 255, 255);</string>
      </item>
     </layout>
    </widget>
-   <widget class="QGraphicsView" name="powerOnOffView">
+   <widget class="QLabel" name="sessionProgressValues">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>270</y>
+      <width>211</width>
+      <height>231</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Nimbus Sans L</family>
+      <pointsize>12</pointsize>
+      <italic>false</italic>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-radius: 12px;
+background-color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QGraphicsView" name="powerOffView">
     <property name="geometry">
      <rect>
       <x>180</x>
@@ -422,10 +378,11 @@ color: rgb(255, 255, 255);</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(0, 0, 0);</string>
+     <string notr="true">border-radius: 12px;
+background-color: rgb(0, 0, 0);</string>
     </property>
    </widget>
-   <zorder>powerOnOffView</zorder>
+   <zorder>sessionProgressValues</zorder>
    <zorder>PowerButton</zorder>
    <zorder>IntensityDown</zorder>
    <zorder>IntesityUp</zorder>
@@ -436,6 +393,7 @@ color: rgb(255, 255, 255);</string>
    <zorder>horizontalLayoutWidget_2</zorder>
    <zorder>horizontalLayoutWidget_3</zorder>
    <zorder>horizontalLayoutWidget_4</zorder>
+   <zorder>powerOffView</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -443,7 +401,7 @@ color: rgb(255, 255, 255);</string>
      <x>0</x>
      <y>0</y>
      <width>941</width>
-     <height>30</height>
+     <height>20</height>
     </rect>
    </property>
   </widget>
