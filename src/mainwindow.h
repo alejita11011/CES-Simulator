@@ -6,6 +6,7 @@
 #include <QString>
 #include <QChar>
 #include <QMap>
+#include <QLabel>
 #include "controller.h"
 #include "record.h"
 #include "earclips.h"

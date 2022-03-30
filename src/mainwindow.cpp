@@ -17,6 +17,13 @@ MainWindow::MainWindow(QWidget *parent)
     sessionWidgets[SessionType::ALPHA] = ui->alphaSession;
     sessionWidgets[SessionType::THETA] = ui->thetaSession;
 
+    // Add number labels
+    for (int i = 8; i >= 1; i++)
+    {
+        QLabel *label = new QLabel(QString("|%1|").arg(i));
+        label->setAlignment(Qt::AlignHCenter);
+        ui->numbersLayout->addWidget(label);
+    }
 
     // Create Sessions
     Group *twenty = new Group({new Session(true, 0.5, 20, SessionType::SUB_DELTA),
@@ -112,7 +119,7 @@ void MainWindow::handleSessionProgress(int elapsedSeconds, SessionType sessionTy
 
 void MainWindow::handleEndedSession(){
     //Graphs from 8-1
-    ui->number_8->setStyleSheet("background-color:rgb(170, 0, 0);");
+//    ui->number_8->setStyleSheet("background-color:rgb(170, 0, 0);");
 
     //Prompt user to record session
 }
@@ -123,10 +130,15 @@ void MainWindow::setLitUp(QWidget *widget, bool litUp)
     widget->setStyleSheet(styleSheet.replace(litUp ? "/off/" : "/on/", litUp ? "/on/" : "/off/"));
 }
 
-void MainWindow::lightUpNumber(int number)
-{
+//void MainWindow::setLitUp(QWidget *widget, bool litUp)
+//{
+//    QString styleSheet = widget->styleSheet();
+//    widget->setStyleSheet(styleSheet.replace(litUp ? "/off/" : "/on/", litUp ? "/on/" : "/off/"));
+//}
+//void MainWindow::lightUpNumber(int number)
+//{
 
-}
+//}
 
 
 void MainWindow::handlePowerOn()
