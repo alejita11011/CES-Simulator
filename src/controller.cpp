@@ -16,7 +16,6 @@ Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QOb
     this->context["connectionTest"] = false;
     this->context["session"] = false;
     this->context["promptRecordSession"] = false;
-    this->context["navigatingHistory"] = false;
 
 
     // Timers
@@ -103,15 +102,16 @@ void Controller::handleSelectClicked()
         currentSession = nullptr;
         remainingSessionTime = nullptr;
 
+        emit resetSelectionContext();
         //Set next context
         setContext("sessionSelection");
     }
 
 }
 
+//Displays the session progress every second
 void Controller::timerEvent(QTimerEvent *event)
 {
-    qDebug() << "Timer Event\n";
     //If context is SESSION and currentSession is not null
     if(getContext("session") && currentSession != nullptr)
     {
@@ -125,10 +125,11 @@ void Controller::timerEvent(QTimerEvent *event)
 
 void Controller::stopSession(){
 
+    elapsedSessionTime = currentSession->getPresetDurationSeconds() - (remainingSessionTime->remainingTime() / 1000 );
     //Stop timer
     remainingSessionTime->stop();
 
-    setContext("promptRecordSession");
+    setContext("promptRecordSession");    
     emit sessionEnds();
 
 }
@@ -146,7 +147,7 @@ void Controller::handlePowerClicked()
         delete remainingSessionTime;
         currentSession = nullptr;
         remainingSessionTime = nullptr;
-
+        emit resetSelectionContext();
         //Set next context
         setContext("sessionSelection");
     }else{
@@ -169,9 +170,10 @@ void Controller::handlePowerClicked()
 Record* Controller::recordSession(Session *session)
 {
     //Get time spent for a session
-    int sessionTime = session->getPresetDurationSeconds() - (remainingSessionTime->remainingTime() / 1000 );
+
+    qDebug() << "Session initial time " << session->getPresetDurationSeconds() << "\nremaining time " << remainingSessionTime->remainingTime();
     // TODO use actual Session
-    Record* record = new Record(sessionTime, 5, session->getType());
+    Record* record = new Record(elapsedSessionTime, 5, session->getType());
     remainingSessionTime->stop();
     history.append(record);
     emit newRecord(record);

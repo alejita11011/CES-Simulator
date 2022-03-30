@@ -26,8 +26,8 @@ MainWindow::MainWindow(QWidget *parent)
         //Add to list
         numberLabels.prepend(label);
     }
-    //Numbers start at grey
-    setLitUp({});
+
+    handlePowerOff();
 
     // Create Sessions
     Group *twenty = new Group({new Session(true, 0.5, 20, SessionType::SUB_DELTA),
@@ -61,6 +61,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(controller, SIGNAL(newRecord(Record *)), this, SLOT(handleNewRecord(Record *)));
     //A session ended
     connect(controller, SIGNAL(sessionEnds()), this, SLOT(handleEndedSession()));
+    //reset Display
+    connect(controller, SIGNAL(resetSelectionContext()), this, SLOT(handleResetDisplay()));
     //When shutdown timer reaches 0 OR user turns off device
     connect(controller, SIGNAL(powerOff()), this, SLOT(handlePowerOff()));
     //User turns on device
@@ -104,7 +106,7 @@ void MainWindow::handleNewRecord(Record *record)
     new QListWidgetItem(itemText, ui->listWidget);
 }
 
-void MainWindow::handleGroupSelected(/* Group *group */)
+void MainWindow::handleGroupSelected(/* Group *group */) // TODO
 {
     setLitUp(ui->fourtyFiveMinGroup, true);
     setLitUp(ui->subDeltaSession, true);
@@ -135,6 +137,16 @@ void MainWindow::handleEndedSession(){
     }
 
     //Prompt user to record session
+    //Check mark : Yes
+    //Power button : No
+    ui->sessionProgressValues->setText("Do you want to record the session?");
+}
+
+void MainWindow::handleResetDisplay()
+{
+    ui->listWidget->raise();
+    setLitUp({});
+    handleGroupSelected();
 }
 
 //https://stackoverflow.com/questions/3752742/how-do-i-create-a-pause-wait-function-using-qt
@@ -193,6 +205,7 @@ void MainWindow::handlePowerOff()
 {
     //Turn off numbers
     setLitUp({});
+    handleGroupSelected();
     ui->powerOffView->raise();
     //Turn off lights
 }

@@ -56,6 +56,8 @@ private slots:
 
     void handleEndedSession();
 
+    void handleResetDisplay();
+
     void handlePowerOff();
 
     void handlePowerOn();

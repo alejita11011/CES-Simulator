@@ -55,6 +55,7 @@ signals:
     void newRecord(Record* record);
     void sessionProgress(int runningSeconds, SessionType type);
     void sessionEnds();
+    void resetSelectionContext();
     void powerOff();
     void powerOn();
 
@@ -73,6 +74,7 @@ private:
     EarClips *earClips;
     Battery *currentBattery;
     bool isPowerOn;
+    int elapsedSessionTime;
 
     void timerEvent(QTimerEvent *event);
     void stopSession();
