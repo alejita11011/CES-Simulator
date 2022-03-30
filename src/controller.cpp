@@ -14,7 +14,7 @@ Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QOb
     // Initialize context
     this->context["sessionSelection"] = false;
     this->context["connectionTest"] = false;
-    this->context["session"] = false;
+    this->context["activeSession"] = false;
     this->context["promptRecordSession"] = false;
 
     // Timers
@@ -87,7 +87,7 @@ void Controller::handleSelectClicked()
         currentSession = new Session(true, 0.5, 10, SessionType::SUB_DELTA); // HARDCODED SELECTED SESSION
         elapsedSessionTime = 0;
 
-        setContext("session");  // TODO connection test
+        setContext("activeSession");  // TODO connection test
 
         emit sessionProgress(currentSession->getPresetDurationSeconds(), currentSession->getType());
     }
@@ -100,7 +100,7 @@ void Controller::handleSelectClicked()
 // Triggered once every second
 void Controller::timerEvent(QTimerEvent *event)
 {
-    if (getContext("session"))
+    if (getContext("activeSession"))
     {
         // Increment elapsed time
         elapsedSessionTime++;
@@ -145,7 +145,7 @@ void Controller::stopRecordPrompt(bool shouldRecord)
 
 void Controller::handlePowerClicked()
 {
-    if (getContext("session"))
+    if (getContext("activeSession"))
     {
         //The session stops
         stopSession();
