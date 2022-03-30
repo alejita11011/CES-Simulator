@@ -88,10 +88,11 @@ void Controller::handleSelectClicked()
     //If context is SESSION
     if(getContext("session"))
     {
-        currentSession = new Session(true, 0.5, 45, SessionType::SUB_DELTA); // HARDCODED SELECTED SESSION
+        currentSession = new Session(true, 0.5, 10, SessionType::SUB_DELTA); // HARDCODED SELECTED SESSION
         //Set timer to session duration
         remainingSessionTime = new QTimer(this);
-        connect(remainingSessionTime, &QTimer::timeout, [this]() { recordSession(currentSession); });
+        //When timer reaches 0
+        connect(remainingSessionTime, &QTimer::timeout, [this]() { stopSession(); });
         remainingSessionTime->start(currentSession->getPresetDurationSeconds()*1000);
 
     }else if(getContext("promptRecordSession")){
@@ -116,6 +117,7 @@ void Controller::timerEvent(QTimerEvent *event)
     {
         int runningSeconds = remainingSessionTime->remainingTime() / 1000;
         SessionType sessionType = currentSession->getType();
+        shutDownTimer->start(50000);
         emit sessionProgress(runningSeconds, sessionType);
     }
 
@@ -129,9 +131,6 @@ void Controller::stopSession(){
     setContext("promptRecordSession");
     emit sessionEnds();
 
-    //Save session data
-
-   //Set current session to null
 }
 
 //REVIEW
@@ -140,6 +139,7 @@ void Controller::handlePowerClicked()
     if(getContext("session"))
     {
         //The session stops
+        stopSession();
 
     }else if(getContext("promptRecordSession")){
         delete currentSession;
@@ -149,18 +149,20 @@ void Controller::handlePowerClicked()
 
         //Set next context
         setContext("sessionSelection");
-    }
-
-    togglePower();
-
-    if(isPowerOn){
-        //Turn on device
-        emit powerOn();
-        shutDownTimer->start(5000);
     }else{
-        //Turn off device
-        emit powerOff();
-        shutDownTimer->stop();
+        togglePower();
+
+        if(isPowerOn){
+            //Turn on device
+            emit powerOn();
+            shutDownTimer->start(50000);
+            //FOR TESTING
+            setContext("session");
+        }else{
+            //Turn off device
+            emit powerOff();
+            shutDownTimer->stop();
+        }
     }
 }
 

@@ -23,8 +23,11 @@ MainWindow::MainWindow(QWidget *parent)
         QLabel *label = new QLabel(QString("|%1|").arg(i));
         label->setAlignment(Qt::AlignHCenter);
         ui->numbersLayout->addWidget(label);
+        //Add to list
         numberLabels.prepend(label);
     }
+    //Numbers start at grey
+    setLitUp({});
 
     // Create Sessions
     Group *twenty = new Group({new Session(true, 0.5, 20, SessionType::SUB_DELTA),
@@ -120,9 +123,28 @@ void MainWindow::handleSessionProgress(int elapsedSeconds, SessionType sessionTy
 
 void MainWindow::handleEndedSession(){
     //Graphs from 8-1
-//    ui->number_8->setStyleSheet("background-color:rgb(170, 0, 0);");
+    for(int end = 8; end >= 0; end--)
+    {
+        QSet<int> nums = {};
+        for(int number = 1; number <= end; number++)
+        {
+            nums.insert(number);
+        }
+        setLitUp(nums);
+        delay(1000);
+    }
 
     //Prompt user to record session
+}
+
+//https://stackoverflow.com/questions/3752742/how-do-i-create-a-pause-wait-function-using-qt
+void MainWindow::delay(int ms)
+{
+    QTime dieTime= QTime::currentTime().addMSecs(ms);
+    while (QTime::currentTime() < dieTime)
+    {
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+    }
 }
 
 void MainWindow::setLitUp(QWidget *widget, bool litUp)
@@ -133,16 +155,31 @@ void MainWindow::setLitUp(QWidget *widget, bool litUp)
 
 void MainWindow::setLitUp(QSet<int> numbers)
 {
-    for (int i = 0; i < 8; i++)
+    //Light set of numbers passed
+    for (int number = 1; number <= 8; number++)
     {
-        QLabel *label = numberLabels[i - 1];
+        QLabel *label = numberLabels[number - 1];
         // Set label to colour
-        if (numbers.contains(i))
+        if (numbers.contains(number))
         {
             // Set label to colour
+            if(number == 8 || number == 7)
+            {
+                label->setStyleSheet("background-color:rgb(174, 0, 0);");
+
+            }else if(number == 6 || number == 5 || number == 4){
+
+                label->setStyleSheet("background-color:rgb(249, 166, 0);");
+
+            }else{
+
+                label->setStyleSheet("background-color:rgb(233, 233, 0);");
+
+            }
+
         } else
         {
-            // Set label to no colour
+            label->setStyleSheet("background-color:rgb(130, 130, 130);");
         }
     }
 }
@@ -154,6 +191,8 @@ void MainWindow::handlePowerOn()
 
 void MainWindow::handlePowerOff()
 {
+    //Turn off numbers
+    setLitUp({});
     ui->powerOffView->raise();
     //Turn off lights
 }
