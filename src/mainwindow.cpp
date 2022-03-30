@@ -133,13 +133,13 @@ void MainWindow::handleEndedSession(){
             nums.insert(number);
         }
         setLitUp(nums);
-        delay(1000);
+        delay(500);
     }
 
     //Prompt user to record session
     //Check mark : Yes
     //Power button : No
-    ui->sessionProgressValues->setText("Do you want to record the session?");
+    ui->sessionProgressValues->setText("Do you want to record the session?\nPress ✅/🔋");
 }
 
 void MainWindow::handleResetDisplay()
@@ -165,31 +165,30 @@ void MainWindow::setLitUp(QWidget *widget, bool litUp)
     widget->setStyleSheet(styleSheet.replace(litUp ? "/off/" : "/on/", litUp ? "/on/" : "/off/"));
 }
 
+// Lights up the set of numbers passed, and turns off the rest
 void MainWindow::setLitUp(QSet<int> numbers)
 {
-    //Light set of numbers passed
     for (int number = 1; number <= 8; number++)
     {
         QLabel *label = numberLabels[number - 1];
-        // Set label to colour
+
         if (numbers.contains(number))
         {
             // Set label to colour
-            if(number == 8 || number == 7)
+            if (number == 8 || number == 7)
             {
                 label->setStyleSheet("background-color:rgb(174, 0, 0);");
-
-            }else if(number == 6 || number == 5 || number == 4){
-
-                label->setStyleSheet("background-color:rgb(249, 166, 0);");
-
-            }else{
-
-                label->setStyleSheet("background-color:rgb(233, 233, 0);");
-
             }
-
-        } else
+            else if (number == 6 || number == 5 || number == 4)
+            {
+                label->setStyleSheet("background-color:rgb(249, 166, 0);");
+            }
+            else
+            {
+                label->setStyleSheet("background-color:rgb(233, 233, 0);");
+            }
+        }
+        else
         {
             label->setStyleSheet("background-color:rgb(130, 130, 130);");
         }
@@ -205,8 +204,22 @@ void MainWindow::handlePowerOff()
 {
     //Turn off numbers
     setLitUp({});
-    handleGroupSelected();
+
+    // Turn off lights
+    for (QWidget *groupWidget : groupWidgets.values())
+    {
+        setLitUp(groupWidget, false);
+    }
+    for (QWidget *sessionWidget : sessionWidgets.values())
+    {
+        setLitUp(sessionWidget, false);
+    }
+    setLitUp(ui->shortPulse, false);
+    setLitUp(ui->longPulse, false);
+    setLitUp(ui->leftConnected, false);
+    setLitUp(ui->rightConnected, false);
+
+    // Turn off display
     ui->powerOffView->raise();
-    //Turn off lights
 }
 
