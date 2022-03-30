@@ -62,7 +62,7 @@ MainWindow::MainWindow(QWidget *parent)
     //A session ended
     connect(controller, SIGNAL(sessionEnds()), this, SLOT(handleEndedSession()));
     //reset Display
-    connect(controller, SIGNAL(resetSelectionContext()), this, SLOT(handleResetDisplay()));
+    connect(controller, SIGNAL(useSelectionContext()), this, SLOT(handleResetDisplay()));
     //When shutdown timer reaches 0 OR user turns off device
     connect(controller, SIGNAL(powerOff()), this, SLOT(handlePowerOff()));
     //User turns on device

@@ -23,14 +23,32 @@ public:
     void setEarClips(EarClips *);
     void changeBattery(Battery *);
 
-    //Get power status
-    bool getPowerStatus();
+signals:
+    void newRecord(Record* record);
+    void sessionProgress(int runningSeconds, SessionType type);
+    void sessionEnds();
+    void useSelectionContext();
+    void powerOff();
+    void powerOn();
 
-    void togglePower();
+private slots:
+    void handleSelectClicked();
+    void handlePowerClicked();
 
-    //Reset Timeout timer
-    void resetTimeout(int ms);
+private:
+    QMap<QString, bool> context;
+    QList<Record*> history;
+    QList<Group *> groups;
+    QTimer *shutDownTimer;
+    QTimer *remainingSessionTime;
+    Session *currentSession;
+    EarClips *earClips;
+    Battery *currentBattery;
+    bool isPowerOn;
+    int elapsedSessionTime;
+    int timerId;
 
+    void timerEvent(QTimerEvent *event);
 
     /**
      * @brief getContext
@@ -51,35 +69,9 @@ public:
      */
     void resetContext();
 
-signals:
-    void newRecord(Record* record);
-    void sessionProgress(int runningSeconds, SessionType type);
-    void sessionEnds();
-    void resetSelectionContext();
-    void powerOff();
-    void powerOn();
-
-private slots:
-    void handleSelectClicked();
-    void handlePowerClicked();
-
-private:
-    QMap<QString, bool> context;
-    QList<Record*> history;
-    QList<Group *> groups;
-    QTimer *clock;
-    QTimer* shutDownTimer;
-    QTimer *remainingSessionTime;
-    Session *currentSession;
-    EarClips *earClips;
-    Battery *currentBattery;
-    bool isPowerOn;
-    int elapsedSessionTime;
-
-    void timerEvent(QTimerEvent *event);
     void stopSession();
-    Record* recordSession(Session *session);
-
+    void stopRecordPrompt(bool shouldRecord);
+    void togglePower();
 };
 
 #endif // CONTROLLER_H
