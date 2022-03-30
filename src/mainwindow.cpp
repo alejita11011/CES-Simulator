@@ -18,11 +18,12 @@ MainWindow::MainWindow(QWidget *parent)
     sessionWidgets[SessionType::THETA] = ui->thetaSession;
 
     // Add number labels
-    for (int i = 8; i >= 1; i++)
+    for (int i = 8; i >= 1; i--)
     {
         QLabel *label = new QLabel(QString("|%1|").arg(i));
         label->setAlignment(Qt::AlignHCenter);
         ui->numbersLayout->addWidget(label);
+        numberLabels.prepend(label);
     }
 
     // Create Sessions
@@ -130,16 +131,21 @@ void MainWindow::setLitUp(QWidget *widget, bool litUp)
     widget->setStyleSheet(styleSheet.replace(litUp ? "/off/" : "/on/", litUp ? "/on/" : "/off/"));
 }
 
-//void MainWindow::setLitUp(QWidget *widget, bool litUp)
-//{
-//    QString styleSheet = widget->styleSheet();
-//    widget->setStyleSheet(styleSheet.replace(litUp ? "/off/" : "/on/", litUp ? "/on/" : "/off/"));
-//}
-//void MainWindow::lightUpNumber(int number)
-//{
-
-//}
-
+void MainWindow::setLitUp(QSet<int> numbers)
+{
+    for (int i = 0; i < 8; i++)
+    {
+        QLabel *label = numberLabels[i - 1];
+        // Set label to colour
+        if (numbers.contains(i))
+        {
+            // Set label to colour
+        } else
+        {
+            // Set label to no colour
+        }
+    }
+}
 
 void MainWindow::handlePowerOn()
 {

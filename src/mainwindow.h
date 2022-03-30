@@ -7,6 +7,7 @@
 #include <QChar>
 #include <QMap>
 #include <QLabel>
+#include <QSet>
 #include "controller.h"
 #include "record.h"
 #include "earclips.h"
@@ -33,12 +34,14 @@ private:
     QMap<QString, QWidget *> groupWidgets;
     // A map from SessionType to the LightableWidget associated with a session type
     QMap<SessionType, QWidget *> sessionWidgets;
+    // A list of the number labels
+    QList<QLabel *> numberLabels;
 
     // Formats a number of seconds in ##m##s format
     QString formatSeconds(int seconds);
 
     void setLitUp(QWidget *widget, bool litUp);
-
+    void setLitUp(QSet<int> numbers);
 
 private slots:
     void handleNewRecord(Record* record);  
