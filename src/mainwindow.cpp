@@ -116,11 +116,11 @@ void MainWindow::handleGroupSelected(/* Group *group */) // TODO
 }
 
 //Displays session progress on device screen
-void MainWindow::handleSessionProgress(int elapsedSeconds, SessionType sessionType)
+void MainWindow::handleSessionProgress(int remainingSeconds, SessionType sessionType)
 {
     ui->sessionProgressValues->raise();
     ui->sessionProgressValues->clear();
-    ui->sessionProgressValues->setText(formatSeconds(elapsedSeconds) + "\n" + ToString(sessionType));
+    ui->sessionProgressValues->setText(formatSeconds(remainingSeconds) + "\n" + ToString(sessionType));
 }
 
 void MainWindow::handleEndedSession(){

@@ -25,7 +25,7 @@ public:
 
 signals:
     void newRecord(Record* record);
-    void sessionProgress(int runningSeconds, SessionType type);
+    void sessionProgress(int remainingSeconds, SessionType type);
     void sessionEnds();
     void useSelectionContext();
     void powerOff();
@@ -40,7 +40,6 @@ private:
     QList<Record*> history;
     QList<Group *> groups;
     QTimer *shutDownTimer;
-    QTimer *remainingSessionTime;
     Session *currentSession;
     EarClips *earClips;
     Battery *currentBattery;

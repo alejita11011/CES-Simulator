@@ -9,7 +9,7 @@ Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QOb
     isPowerOn      = false;
     this->groups   = groups;
     currentSession = nullptr;
-    remainingSessionTime = nullptr;
+    elapsedSessionTime = 0;
 
     // Initialize context
     this->context["sessionSelection"] = false;
@@ -82,15 +82,12 @@ void Controller::resetContext()
 //Start selected session
 void Controller::handleSelectClicked()
 {
-    //If context is SESSION
-    if (getContext("session"))
+    if (getContext("sessionSelection"))
     {
         currentSession = new Session(true, 0.5, 10, SessionType::SUB_DELTA); // HARDCODED SELECTED SESSION
-        //Set timer to session duration
-        remainingSessionTime = new QTimer(this);
-        //When timer reaches 0
-        connect(remainingSessionTime, &QTimer::timeout, [this]() { stopSession(); });
-        remainingSessionTime->start(currentSession->getPresetDurationSeconds()*1000);
+        elapsedSessionTime = 0;
+
+        setContext("session");  // TODO connection test
 
         emit sessionProgress(currentSession->getPresetDurationSeconds(), currentSession->getType());
     }
@@ -103,25 +100,28 @@ void Controller::handleSelectClicked()
 // Triggered once every second
 void Controller::timerEvent(QTimerEvent *event)
 {
-    // Emits progress of active session
-    if (getContext("session") && currentSession != nullptr)
+    if (getContext("session"))
     {
-        int runningSeconds = remainingSessionTime->remainingTime() / 1000;
+        // Increment elapsed time
+        elapsedSessionTime++;
+
+        // Emit progress of active session
+        int remainingSeconds = currentSession->getPresetDurationSeconds() - elapsedSessionTime;
         SessionType sessionType = currentSession->getType();
-        emit sessionProgress(runningSeconds, sessionType);
+        emit sessionProgress(remainingSeconds, sessionType);
+
+        if (remainingSeconds == 0)
+        {
+            stopSession();
+        }
 
         // Constantly refresh shut down timer during active session
         shutDownTimer->start(50000);
     }
-
 }
 
 void Controller::stopSession()
 {
-    elapsedSessionTime = currentSession->getPresetDurationSeconds() - (remainingSessionTime->remainingTime() / 1000);
-    //Stop timer
-    remainingSessionTime->stop();
-
     setContext("promptRecordSession");    
     emit sessionEnds();
 }
@@ -131,15 +131,12 @@ void Controller::stopRecordPrompt(bool shouldRecord)
     if (shouldRecord)
     {
         Record* record = new Record(elapsedSessionTime, 5, currentSession->getType());
-        remainingSessionTime->stop();
         history.append(record);
         emit newRecord(record);
     }
 
     delete currentSession;
-    delete remainingSessionTime;
     currentSession = nullptr;
-    remainingSessionTime = nullptr;
 
     //Set next context
     setContext("sessionSelection");
@@ -167,7 +164,7 @@ void Controller::handlePowerClicked()
             emit powerOn();
             shutDownTimer->start(50000);
             //FOR TESTING
-            setContext("session");
+            setContext("sessionSelection");
         }
         else
         {
