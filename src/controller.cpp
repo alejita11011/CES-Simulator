@@ -2,6 +2,8 @@
 #include <QDebug>
 #include <QtGlobal>
 
+int Controller::IDLE_TIMEOUT_MS = 30000;
+
 Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QObject(parent)
 {
     earClips       = nullptr;
@@ -19,8 +21,8 @@ Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QOb
 
     // Timers
     timerId = startTimer(1000);
-    shutDownTimer =  new QTimer(this);
-    connect(shutDownTimer, &QTimer::timeout, [this]() { emit powerOff(); });
+    shutDownTimer = new QTimer(this);  // Will be started when device is turned on
+    connect(shutDownTimer, &QTimer::timeout, [this](){ togglePower(); });
 }
 
 Controller::~Controller()
@@ -116,13 +118,13 @@ void Controller::timerEvent(QTimerEvent *event)
         }
 
         // Constantly refresh shut down timer during active session
-        shutDownTimer->start(50000);
+        shutDownTimer->start(IDLE_TIMEOUT_MS);
     }
 }
 
 void Controller::stopSession()
 {
-    setContext("promptRecordSession");    
+    setContext("promptRecordSession");
     emit sessionEnds();
 }
 
@@ -157,26 +159,26 @@ void Controller::handlePowerClicked()
     else
     {
         togglePower();
-
-        if (isPowerOn)
-        {
-            //Turn on device
-            emit powerOn();
-            shutDownTimer->start(50000);
-            //FOR TESTING
-            setContext("sessionSelection");
-        }
-        else
-        {
-            //Turn off device
-            emit powerOff();
-            shutDownTimer->stop();
-        }
     }
 }
 
 void Controller::togglePower(){
     isPowerOn = !isPowerOn;
+
+    if (isPowerOn)
+    {
+        //Turn on device
+        emit powerOn();
+        shutDownTimer->start(IDLE_TIMEOUT_MS);
+        //FOR TESTING
+        setContext("sessionSelection");
+    }
+    else
+    {
+        //Turn off device
+        emit powerOff();
+        shutDownTimer->stop();
+    }
 }
 
 void Controller::setEarClips(EarClips *e)

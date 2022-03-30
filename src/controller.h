@@ -23,6 +23,8 @@ public:
     void setEarClips(EarClips *);
     void changeBattery(Battery *);
 
+    static int IDLE_TIMEOUT_MS;
+
 signals:
     void newRecord(Record* record);
     void sessionProgress(int remainingSeconds, SessionType type);
