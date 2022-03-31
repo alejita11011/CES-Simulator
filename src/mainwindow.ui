@@ -168,7 +168,7 @@ radius: 1.35, stop: 0 #fff, stop: 1 #bbb
     </property>
     <property name="styleSheet">
      <string notr="true">border-radius: 12px;
-background-color: rgb(170, 170, 255);
+background-color: rgb(255, 255, 255);
 color: rgb(0, 0, 0);
 selection-background-color: rgb(122, 0, 0)</string>
     </property>
@@ -395,6 +395,25 @@ background-color: rgb(0, 0, 0);</string>
      <string notr="true">border-image: url(:/images/off/power.png);</string>
     </property>
    </widget>
+   <widget class="QLabel" name="noRecords">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>290</y>
+      <width>191</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>No session records. Start a session to begin recording...</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignHCenter|Qt::AlignTop</set>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
    <zorder>sessionProgressValues</zorder>
    <zorder>PowerButton</zorder>
    <zorder>IntensityDown</zorder>
@@ -408,6 +427,7 @@ background-color: rgb(0, 0, 0);</string>
    <zorder>horizontalLayoutWidget_4</zorder>
    <zorder>powerOffView</zorder>
    <zorder>powerLed</zorder>
+   <zorder>noRecords</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
