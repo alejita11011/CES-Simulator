@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1518</width>
-    <height>1155</height>
+    <width>1178</width>
+    <height>1019</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,7 +29,7 @@
       <height>871</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="centralwidgetHLayout">
+    <layout class="QHBoxLayout" name="CESwidgetLayout">
      <item>
       <widget class="QWidget" name="CESwidget" native="true">
        <property name="styleSheet">
@@ -402,13 +402,32 @@ radius: 1.35, stop: 0 #fff, stop: 1 #bbb
      </item>
     </layout>
    </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_6">
+    <property name="geometry">
+     <rect>
+      <x>850</x>
+      <y>0</y>
+      <width>261</width>
+      <height>871</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="accessoryWidgetLayout">
+     <item>
+      <widget class="QWidget" name="accessoryWidget" native="true">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1518</width>
+     <width>1178</width>
      <height>22</height>
     </rect>
    </property>
