@@ -382,6 +382,19 @@ background-color: rgb(255, 255, 255);</string>
 background-color: rgb(0, 0, 0);</string>
     </property>
    </widget>
+   <widget class="QWidget" name="powerLed" native="true">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>447</y>
+      <width>31</width>
+      <height>9</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-image: url(:/images/off/power.png);</string>
+    </property>
+   </widget>
    <zorder>sessionProgressValues</zorder>
    <zorder>PowerButton</zorder>
    <zorder>IntensityDown</zorder>
@@ -394,6 +407,7 @@ background-color: rgb(0, 0, 0);</string>
    <zorder>horizontalLayoutWidget_3</zorder>
    <zorder>horizontalLayoutWidget_4</zorder>
    <zorder>powerOffView</zorder>
+   <zorder>powerLed</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -401,7 +415,7 @@ background-color: rgb(0, 0, 0);</string>
      <x>0</x>
      <y>0</y>
      <width>941</width>
-     <height>20</height>
+     <height>17</height>
     </rect>
    </property>
   </widget>

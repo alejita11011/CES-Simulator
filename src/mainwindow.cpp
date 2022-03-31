@@ -198,6 +198,7 @@ void MainWindow::setLitUp(QSet<int> numbers)
 void MainWindow::handlePowerOn()
 {
     ui->listWidget->raise();
+    setLitUp(ui->powerLed, true);
 }
 
 void MainWindow::handlePowerOff()
@@ -206,6 +207,7 @@ void MainWindow::handlePowerOff()
     setLitUp({});
 
     // Turn off lights
+    setLitUp(ui->powerLed, false);
     for (QWidget *groupWidget : groupWidgets.values())
     {
         setLitUp(groupWidget, false);
