@@ -8,7 +8,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     // UI setup
     ui->setupUi(this);
-    this->setStyleSheet("MainWindow{background-image: url(:/images/CES.png); background-position: center;}");
+    //this->setStyleSheet("MainWindow{background-image: url(:/images/CES.png); background-position: center;}");
+    this->setStyleSheet("QWidget#CESwidget{border-image: url(:/images/CES.png); background-position: center;}");
     groupWidgets["20min"] = ui->twentyMinGroup;
     groupWidgets["45min"] = ui->fourtyFiveMinGroup;
     groupWidgets["user"] = ui->userDefinedGroup;
