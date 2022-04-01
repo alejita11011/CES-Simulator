@@ -8,9 +8,7 @@
 #include <QMap>
 #include <QLabel>
 #include <QSet>
-#include <QTime>
-#include <QCoreApplication>
-#include <QEventLoop>
+#include "utils.h"
 #include "controller.h"
 #include "record.h"
 #include "earclips.h"
@@ -45,7 +43,6 @@ private:
 
     void setLitUp(QWidget *widget, bool litUp);
     void setLitUp(QSet<int> numbers);
-    void delay(int ms);
 
 private slots:
     void handleNewRecord(Record* record);  
@@ -59,6 +56,10 @@ private slots:
     void handleEndedSession();
 
     void handleResetDisplay();
+
+    void handleBattery(bool);
+
+    void handleBatteryShutDown();
 
     void handlePowerOff();
 

@@ -69,6 +69,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(controller, SIGNAL(powerOff()), this, SLOT(handlePowerOff()));
     //User turns on device
     connect(controller, SIGNAL(powerOn()), this, SLOT(handlePowerOn()));
+    connect(controller, SIGNAL(batteryLevel(bool)), this, SLOT(handleBattery(bool)));
+    connect(controller, SIGNAL(batteryShutDown()), this, SLOT(handleBatteryShutDown()));
+
     connect(ui->PowerButton, SIGNAL(clicked()), controller, SLOT(handlePowerClicked()));
     connect(ui->SelectButton, SIGNAL(clicked()), controller, SLOT(handleSelectClicked()));
     connect(ui->IntensityDown, SIGNAL(clicked()), controller, SLOT(handleDownClicked()));
@@ -128,9 +131,6 @@ void MainWindow::handleSessionProgress(int remainingSeconds, SessionType session
     ui->sessionProgressValues->clear();
     ui->sessionProgressValues->setText(formatSeconds(remainingSeconds) + "\n" + ToString(sessionType));
 
-    QFont progressFont = ui->sessionProgressValues->font();
-    progressFont.setPointSize(12);
-    ui->sessionProgressValues->setFont(progressFont);
 }
 
 void MainWindow::handleIntensity(int intensity)
@@ -148,17 +148,13 @@ void MainWindow::handleEndedSession(){
             nums.insert(number);
         }
         setLitUp(nums);
-        delay(500);
+        delayMs(500);
     }
 
     //Prompt user to record session
     //Check mark : Yes
     //Power button : No
-    QFont promptFont = ui->sessionProgressValues->font();
-    promptFont.setPointSize(8);
-    ui->sessionProgressValues->setFont(promptFont);
     ui->sessionProgressValues->setText("Do you want to record the session?\nPress check mark/power");
-
 
 }
 
@@ -167,16 +163,6 @@ void MainWindow::handleResetDisplay()
     ui->listWidget->raise();
     setLitUp({});
     handleGroupSelected();
-}
-
-//https://stackoverflow.com/questions/3752742/how-do-i-create-a-pause-wait-function-using-qt
-void MainWindow::delay(int ms)
-{
-    QTime dieTime= QTime::currentTime().addMSecs(ms);
-    while (QTime::currentTime() < dieTime)
-    {
-        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-    }
 }
 
 void MainWindow::setLitUp(QWidget *widget, bool litUp)
@@ -213,6 +199,24 @@ void MainWindow::setLitUp(QSet<int> numbers)
             label->setStyleSheet("background-color:rgb(130, 130, 130);");
         }
     }
+}
+
+void MainWindow::handleBattery(bool critical)
+{
+    if (critical)
+    {
+        setLitUp({1});
+    }else{
+        setLitUp({1,2});
+    }
+    delayMs(500);
+    setLitUp({});
+}
+
+void MainWindow::handleBatteryShutDown()
+{
+    ui->sessionProgressValues->setText("Battery critically low\nShutting down");
+    delayMs(3000);
 }
 
 void MainWindow::handlePowerOn()

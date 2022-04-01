@@ -33,7 +33,8 @@ HEADERS += \
     mainwindow.h \
     record.h \
     session.h \
-    sessiontype.h
+    sessiontype.h \
+    utils.h
 
 FORMS += \
     mainwindow.ui

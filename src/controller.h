@@ -11,6 +11,7 @@
 #include "battery.h"
 #include "session.h"
 #include "group.h"
+#include "utils.h"
 
 
 class Controller : public QObject
@@ -31,6 +32,8 @@ signals:
     void adjustSessionIntensity(int intensity);
     void sessionEnds();
     void useSelectionContext();
+    void batteryLevel(bool critical);
+    void batteryShutDown();
     void powerOff();
     void powerOn();
 
