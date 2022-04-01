@@ -12,6 +12,8 @@ Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QOb
     this->groups   = groups;
     currentSession = nullptr;
     elapsedSessionTime = 0;
+    currentIntensity = 0;
+    highestIntensity = 0;
 
     // Initialize context
     this->context["sessionSelection"] = false;
@@ -87,6 +89,10 @@ void Controller::handleSelectClicked()
     if (getContext("sessionSelection"))
     {
         currentSession = new Session(true, 0.5, 10, SessionType::SUB_DELTA); // HARDCODED SELECTED SESSION
+        //All sessions by default will be at intensity level 1
+        currentIntensity = 1;
+        highestIntensity = 1;
+        emit adjustSessionIntensity(currentIntensity);
         elapsedSessionTime = 0;
 
         setContext("activeSession");  // TODO connection test
@@ -96,6 +102,35 @@ void Controller::handleSelectClicked()
     else if (getContext("promptRecordSession"))
     {
         stopRecordPrompt(true);
+    }
+}
+
+void Controller::handleDownClicked()
+{
+
+    if(getContext("activeSession"))
+    {
+
+        if(currentIntensity > 1)
+        {
+            currentIntensity--;
+            emit adjustSessionIntensity(currentIntensity);
+        }
+
+    }
+}
+
+void Controller::handleUpClicked()
+{
+    if(getContext("activeSession"))
+    {
+        if(currentIntensity < 8)
+        {
+            currentIntensity++;
+            highestIntensity = std::max(currentIntensity, highestIntensity);
+            emit adjustSessionIntensity(currentIntensity);
+        }
+
     }
 }
 
@@ -132,7 +167,7 @@ void Controller::stopRecordPrompt(bool shouldRecord)
 {
     if (shouldRecord)
     {
-        Record* record = new Record(elapsedSessionTime, 5, currentSession->getType());
+        Record* record = new Record(elapsedSessionTime, highestIntensity, currentSession->getType());
         history.append(record);
         emit newRecord(record);
     }
@@ -172,6 +207,7 @@ void Controller::togglePower(){
         shutDownTimer->start(IDLE_TIMEOUT_MS);
         //FOR TESTING
         setContext("sessionSelection");
+        //TODO DISPLAY BATTERY LEVEL
     }
     else
     {

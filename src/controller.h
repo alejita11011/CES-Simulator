@@ -28,6 +28,7 @@ public:
 signals:
     void newRecord(Record* record);
     void sessionProgress(int remainingSeconds, SessionType type);
+    void adjustSessionIntensity(int intensity);
     void sessionEnds();
     void useSelectionContext();
     void powerOff();
@@ -36,6 +37,8 @@ signals:
 private slots:
     void handleSelectClicked();
     void handlePowerClicked();
+    void handleDownClicked();
+    void handleUpClicked();
 
 private:
     QMap<QString, bool> context;
@@ -48,6 +51,8 @@ private:
     bool isPowerOn;
     int elapsedSessionTime;
     int timerId;
+    int currentIntensity;
+    int highestIntensity;
 
     void timerEvent(QTimerEvent *event);
 

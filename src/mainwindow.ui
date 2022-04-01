@@ -86,7 +86,7 @@ radius: 1.35, stop: 0 #fff, stop: 1 #bbb
      <string/>
     </property>
    </widget>
-   <widget class="QPushButton" name="IntesityUp">
+   <widget class="QPushButton" name="IntensityUp">
     <property name="geometry">
      <rect>
       <x>590</x>
@@ -418,7 +418,7 @@ background-color: rgb(0, 0, 0);</string>
    <zorder>sessionProgressValues</zorder>
    <zorder>PowerButton</zorder>
    <zorder>IntensityDown</zorder>
-   <zorder>IntesityUp</zorder>
+   <zorder>IntensityUp</zorder>
    <zorder>SelectButton</zorder>
    <zorder>listWidget</zorder>
    <zorder>verticalLayoutWidget</zorder>

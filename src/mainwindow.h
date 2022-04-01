@@ -54,6 +54,8 @@ private slots:
 
     void handleSessionProgress(int elapsedSeconds, SessionType sessionType);
 
+    void handleIntensity(int intensity);
+
     void handleEndedSession();
 
     void handleResetDisplay();

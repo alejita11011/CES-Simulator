@@ -58,6 +58,8 @@ MainWindow::MainWindow(QWidget *parent)
     EarClips *earClips   = new EarClips();
 
     connect(controller, SIGNAL(sessionProgress(int, SessionType)), this, SLOT(handleSessionProgress(int, SessionType)));
+    //Adjust Intensity
+    connect(controller, SIGNAL(adjustSessionIntensity(int)), this, SLOT(handleIntensity(int)));
     connect(controller, SIGNAL(newRecord(Record *)), this, SLOT(handleNewRecord(Record *)));
     //A session ended
     connect(controller, SIGNAL(sessionEnds()), this, SLOT(handleEndedSession()));
@@ -69,6 +71,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(controller, SIGNAL(powerOn()), this, SLOT(handlePowerOn()));
     connect(ui->PowerButton, SIGNAL(clicked()), controller, SLOT(handlePowerClicked()));
     connect(ui->SelectButton, SIGNAL(clicked()), controller, SLOT(handleSelectClicked()));
+    connect(ui->IntensityDown, SIGNAL(clicked()), controller, SLOT(handleDownClicked()));
+    connect(ui->IntensityUp, SIGNAL(clicked()), controller, SLOT(handleUpClicked()));
 
 }
 
@@ -123,6 +127,11 @@ void MainWindow::handleSessionProgress(int remainingSeconds, SessionType session
     ui->sessionProgressValues->raise();
     ui->sessionProgressValues->clear();
     ui->sessionProgressValues->setText(formatSeconds(remainingSeconds) + "\n" + ToString(sessionType));
+}
+
+void MainWindow::handleIntensity(int intensity)
+{
+    setLitUp({intensity});
 }
 
 void MainWindow::handleEndedSession(){
