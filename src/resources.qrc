@@ -27,5 +27,7 @@
         <file>images/on/theta.png</file>
         <file>images/on/ud.png</file>
         <file>images/CES.png</file>
+        <file>images/off/power.png</file>
+        <file>images/on/power.png</file>
     </qresource>
 </RCC>

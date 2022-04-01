@@ -97,6 +97,8 @@ QString MainWindow::formatSeconds(int seconds)
 
 void MainWindow::handleNewRecord(Record *record)
 {
+    ui->noRecords->hide();
+
     QString itemText = QString("%1 (%2)\n%3-session of intensity %4")
             .arg(record->getStartTime().toString("hh:mm:ss ap"))
             .arg(formatSeconds(record->getDurationSeconds()))
@@ -198,6 +200,8 @@ void MainWindow::setLitUp(QSet<int> numbers)
 void MainWindow::handlePowerOn()
 {
     ui->listWidget->raise();
+    ui->noRecords->raise();
+    setLitUp(ui->powerLed, true);
 }
 
 void MainWindow::handlePowerOff()
@@ -206,6 +210,7 @@ void MainWindow::handlePowerOff()
     setLitUp({});
 
     // Turn off lights
+    setLitUp(ui->powerLed, false);
     for (QWidget *groupWidget : groupWidgets.values())
     {
         setLitUp(groupWidget, false);
