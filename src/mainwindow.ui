@@ -10,6 +10,11 @@
     <height>674</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>12</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -349,7 +354,7 @@ selection-background-color: rgb(122, 0, 0)</string>
     <property name="font">
      <font>
       <family>Nimbus Sans L</family>
-      <pointsize>12</pointsize>
+      <pointsize>10</pointsize>
       <weight>75</weight>
       <italic>false</italic>
       <bold>true</bold>
@@ -405,6 +410,11 @@ background-color: rgb(0, 0, 0);</string>
       <height>231</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>9</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>No session records. Start a session to begin recording...</string>
     </property>
@@ -436,7 +446,7 @@ background-color: rgb(0, 0, 0);</string>
      <x>0</x>
      <y>0</y>
      <width>941</width>
-     <height>30</height>
+     <height>38</height>
     </rect>
    </property>
   </widget>

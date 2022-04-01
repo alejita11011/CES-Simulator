@@ -127,6 +127,10 @@ void MainWindow::handleSessionProgress(int remainingSeconds, SessionType session
     ui->sessionProgressValues->raise();
     ui->sessionProgressValues->clear();
     ui->sessionProgressValues->setText(formatSeconds(remainingSeconds) + "\n" + ToString(sessionType));
+
+    QFont progressFont = ui->sessionProgressValues->font();
+    progressFont.setPointSize(12);
+    ui->sessionProgressValues->setFont(progressFont);
 }
 
 void MainWindow::handleIntensity(int intensity)
@@ -150,7 +154,12 @@ void MainWindow::handleEndedSession(){
     //Prompt user to record session
     //Check mark : Yes
     //Power button : No
-    ui->sessionProgressValues->setText("Do you want to record the session?\nPress ✅/🔋");
+    QFont promptFont = ui->sessionProgressValues->font();
+    promptFont.setPointSize(8);
+    ui->sessionProgressValues->setFont(promptFont);
+    ui->sessionProgressValues->setText("Do you want to record the session?\nPress check mark/power");
+
+
 }
 
 void MainWindow::handleResetDisplay()
