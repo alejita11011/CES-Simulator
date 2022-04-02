@@ -6,17 +6,20 @@ int Controller::IDLE_TIMEOUT_MS = 30000;
 
 Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QObject(parent)
 {
-    earClips       = nullptr;
-    currentBattery = b;
-    isPowerOn      = false;
-    this->groups   = groups;
-    currentSession = nullptr;
-    elapsedSessionTime = 0;
+    earClips                = nullptr;
+    currentBattery          = b;
+    isPowerOn               = false;
+    this->groups            = groups;
+    currentSession          = nullptr;
+    elapsedSessionTime      = 0;
+    earClipsConnectedDevice = false;
+    rightEarClipConnection  = 0;
+    leftEarClipConnection   = 0;
 
     // Initialize context
-    this->context["sessionSelection"] = false;
-    this->context["connectionTest"] = false;
-    this->context["activeSession"] = false;
+    this->context["sessionSelection"]    = false;
+    this->context["connectionTest"]      = false;
+    this->context["activeSession"]       = false;
     this->context["promptRecordSession"] = false;
 
     // Timers
@@ -195,3 +198,13 @@ void Controller::changeBattery(Battery *b)
     delete currentBattery;
     currentBattery = b;
 }
+
+int Controller::earClipConnectionTest()
+{
+    if (earClips == nullptr || !earClipsConnectedDevice)
+    {
+        return 0;
+    }
+    return std::min(leftEarClipConnection, rightEarClipConnection);
+}
+

@@ -424,7 +424,7 @@ radius: 1.35, stop: 0 #fff, stop: 1 #bbb
         <attribute name="title">
          <string>Ear Clip Connection</string>
         </attribute>
-        <widget class="QSlider" name="verticalSlider">
+        <widget class="QSlider" name="leftEarClipSlider">
          <property name="geometry">
           <rect>
            <x>80</x>
@@ -501,7 +501,7 @@ radius: 1.35, stop: 0 #fff, stop: 1 #bbb
           <string>Ear Clip Connection in Ears</string>
          </property>
         </widget>
-        <widget class="QLabel" name="inEarConnectionLabel_2">
+        <widget class="QLabel" name="deviceearclipCLabel">
          <property name="geometry">
           <rect>
            <x>60</x>
@@ -514,7 +514,7 @@ radius: 1.35, stop: 0 #fff, stop: 1 #bbb
           <string>Ear Clip Connection to Device</string>
          </property>
         </widget>
-        <widget class="QComboBox" name="comboBox">
+        <widget class="QComboBox" name="earClipDeviceCCBox">
          <property name="geometry">
           <rect>
            <x>90</x>
@@ -525,12 +525,12 @@ radius: 1.35, stop: 0 #fff, stop: 1 #bbb
          </property>
          <item>
           <property name="text">
-           <string>Connected </string>
+           <string>Disconnected</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Disconnected</string>
+           <string>Connected </string>
           </property>
          </item>
         </widget>
