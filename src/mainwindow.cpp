@@ -70,6 +70,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(controller, SIGNAL(powerOn()), this, SLOT(handlePowerOn()));
     connect(ui->PowerButton, SIGNAL(clicked()), controller, SLOT(handlePowerClicked()));
     connect(ui->SelectButton, SIGNAL(clicked()), controller, SLOT(handleSelectClicked()));
+    //User connects/disconnects ear clips from device
+    connect(ui->earClipDeviceCCBox, SIGNAL(currentIndexChanged(int)), controller, SLOT(handleEarClipConnection(int)));
 
 }
 
@@ -223,4 +225,12 @@ void MainWindow::handlePowerOff()
     // Turn off display
     ui->powerOffView->raise();
 }
+
+
+
+
+
+
+
+
 

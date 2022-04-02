@@ -205,6 +205,15 @@ int Controller::earClipConnectionTest()
     {
         return 0;
     }
+    // emit something instead
     return std::min(leftEarClipConnection, rightEarClipConnection);
 }
 
+void Controller::handleEarClipConnection(int index)
+{
+    earClipsConnectedDevice = index;
+    if (getContext("connectionTest"))
+    {
+        earClipConnectionTest();
+    }
+}

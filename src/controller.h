@@ -5,6 +5,7 @@
 #include <QListWidget>
 #include <QTimer>
 #include <QObject>
+#include <iostream> // for testing, to be removed
 #include "record.h"
 #include "sessiontype.h"
 #include "earclips.h"
@@ -36,6 +37,7 @@ signals:
 private slots:
     void handleSelectClicked();
     void handlePowerClicked();
+    void handleEarClipConnection(int);
 
 private:
     QMap<QString, bool> context;
