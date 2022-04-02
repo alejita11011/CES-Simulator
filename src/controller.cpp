@@ -201,7 +201,12 @@ void Controller::changeBattery(Battery *b)
 
 int Controller::earClipConnectionTest()
 {
-    connectionModeLight(currentSession->isShortPulse());
+    // the line below is the line we want to run but for now it
+    // crashes the app since we have no currentSession
+    // connectionModeLight(currentSession->isShortPulse());
+    connectionModeLight(true); // for testing purposes
+    // currently earclips is a nullptr so this always returns 0
+    // for testing purposes comment out the condition earClips == nullptr
     if (earClips == nullptr || !earClipsConnectedDevice)
     {
         emit connectionLevel(0);
