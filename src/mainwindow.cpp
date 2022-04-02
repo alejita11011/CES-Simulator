@@ -76,6 +76,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->leftEarClipSlider, SIGNAL(valueChanged(int)), controller, SLOT(handleLeftEarClipSlider(int)));
     //Handle events for right ear clip slider
     connect(ui->rightEarClipSlider, SIGNAL(valueChanged(int)), controller, SLOT(handleRightEarClipSlider(int)));
+    //Handle signals from connection tests
+    connect(controller, SIGNAL(connectionLevel(int)), this, SLOT(handleConnectionTest(int)));
 
 }
 
@@ -230,7 +232,21 @@ void MainWindow::handlePowerOff()
     ui->powerOffView->raise();
 }
 
-
+void MainWindow::handleConnectionTest(int level)
+{
+    if (level == 2)
+    {
+        setLitUp({1,2,3});
+    }
+    else if (level == 1)
+    {
+        setLitUp({4,5,6});
+    }
+    else
+    {
+        setLitUp({7,8});
+    }
+}
 
 
 

@@ -33,6 +33,7 @@ signals:
     void useSelectionContext();
     void powerOff();
     void powerOn();
+    void connectionLevel(int);
 
 private slots:
     void handleSelectClicked();
