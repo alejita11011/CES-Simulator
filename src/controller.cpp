@@ -229,7 +229,6 @@ void Controller::handleEarClipConnection(int index)
     {
         earClipConnectionTest();
     }
-    earClipConnectionTest();
 }
 
 void Controller::handleLeftEarClipSlider(int val)
@@ -239,7 +238,6 @@ void Controller::handleLeftEarClipSlider(int val)
     {
         earClipConnectionTest();
     }
-    earClipConnectionTest();
 }
 
 void Controller::handleRightEarClipSlider(int val)
@@ -249,5 +247,4 @@ void Controller::handleRightEarClipSlider(int val)
     {
         earClipConnectionTest();
     }
-    earClipConnectionTest();
 }
