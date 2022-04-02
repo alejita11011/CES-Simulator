@@ -78,6 +78,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->rightEarClipSlider, SIGNAL(valueChanged(int)), controller, SLOT(handleRightEarClipSlider(int)));
     //Handle signals from connection tests
     connect(controller, SIGNAL(connectionLevel(int)), this, SLOT(handleConnectionTest(int)));
+    // handle
+    connect(controller,SIGNAL(connectionModeLight(bool)), this, SLOT(handleModeLight(bool)));
 
 }
 
@@ -248,7 +250,15 @@ void MainWindow::handleConnectionTest(int level)
     }
 }
 
-
+void MainWindow::handleModeLight(bool isShortPulse)
+{
+    if (isShortPulse)
+    {
+        setLitUp(ui->shortPulse, true);
+        return;
+    }
+    setLitUp(ui->longPulse, true);
+}
 
 
 

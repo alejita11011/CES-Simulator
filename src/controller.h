@@ -34,6 +34,7 @@ signals:
     void powerOff();
     void powerOn();
     void connectionLevel(int);
+    void connectionModeLight(bool);
 
 private slots:
     void handleSelectClicked();

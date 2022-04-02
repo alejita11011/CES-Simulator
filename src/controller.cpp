@@ -201,6 +201,7 @@ void Controller::changeBattery(Battery *b)
 
 int Controller::earClipConnectionTest()
 {
+    connectionModeLight(currentSession->isShortPulse());
     if (earClips == nullptr || !earClipsConnectedDevice)
     {
         emit connectionLevel(0);

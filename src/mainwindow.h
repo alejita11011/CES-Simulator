@@ -64,6 +64,8 @@ private slots:
 
     void handleConnectionTest(int);
 
+    void handleModeLight(bool);
+
 
 };
 #endif // MAINWINDOW_H
