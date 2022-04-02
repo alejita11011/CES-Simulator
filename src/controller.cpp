@@ -201,7 +201,7 @@ void Controller::changeBattery(Battery *b)
 
 int Controller::earClipConnectionTest()
 {
-    if (/*earClips == nullptr ||*/ !earClipsConnectedDevice)
+    if (earClips == nullptr || !earClipsConnectedDevice)
     {
         emit connectionLevel(0);
         return 0;
