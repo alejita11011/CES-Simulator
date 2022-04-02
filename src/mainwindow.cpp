@@ -72,6 +72,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->SelectButton, SIGNAL(clicked()), controller, SLOT(handleSelectClicked()));
     //User connects/disconnects ear clips from device
     connect(ui->earClipDeviceCCBox, SIGNAL(currentIndexChanged(int)), controller, SLOT(handleEarClipConnection(int)));
+    //Handle events for left ear clip slider
+    connect(ui->leftEarClipSlider, SIGNAL(valueChanged(int)), controller, SLOT(handleLeftEarClipSlider(int)));
+    //Handle events for right ear clip slider
+    connect(ui->rightEarClipSlider, SIGNAL(valueChanged(int)), controller, SLOT(handleRightEarClipSlider(int)));
 
 }
 

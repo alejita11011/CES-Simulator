@@ -434,16 +434,19 @@ radius: 1.35, stop: 0 #fff, stop: 1 #bbb
           </rect>
          </property>
          <property name="minimum">
-          <number>1</number>
+          <number>0</number>
          </property>
          <property name="maximum">
-          <number>3</number>
+          <number>2</number>
+         </property>
+         <property name="value">
+          <number>0</number>
          </property>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
         </widget>
-        <widget class="QSlider" name="verticalSlider_2">
+        <widget class="QSlider" name="rightEarClipSlider">
          <property name="geometry">
           <rect>
            <x>190</x>
@@ -453,10 +456,13 @@ radius: 1.35, stop: 0 #fff, stop: 1 #bbb
           </rect>
          </property>
          <property name="minimum">
-          <number>1</number>
+          <number>0</number>
          </property>
          <property name="maximum">
-          <number>3</number>
+          <number>2</number>
+         </property>
+         <property name="value">
+          <number>0</number>
          </property>
          <property name="orientation">
           <enum>Qt::Vertical</enum>

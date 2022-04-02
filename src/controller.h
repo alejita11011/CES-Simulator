@@ -38,6 +38,8 @@ private slots:
     void handleSelectClicked();
     void handlePowerClicked();
     void handleEarClipConnection(int);
+    void handleLeftEarClipSlider(int);
+    void handleRightEarClipSlider(int);
 
 private:
     QMap<QString, bool> context;

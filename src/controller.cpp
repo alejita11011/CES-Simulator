@@ -206,12 +206,32 @@ int Controller::earClipConnectionTest()
         return 0;
     }
     // emit something instead
+    // if one of these variables are 0 there should be no connection
+    // otherwise it shold be the min of the two
     return std::min(leftEarClipConnection, rightEarClipConnection);
 }
 
 void Controller::handleEarClipConnection(int index)
 {
     earClipsConnectedDevice = index;
+    if (getContext("connectionTest"))
+    {
+        earClipConnectionTest();
+    }
+}
+
+void Controller::handleLeftEarClipSlider(int val)
+{
+    leftEarClipConnection = val;
+    if (getContext("connectionTest"))
+    {
+        earClipConnectionTest();
+    }
+}
+
+void Controller::handleRightEarClipSlider(int val)
+{
+    leftEarClipConnection = val;
     if (getContext("connectionTest"))
     {
         earClipConnectionTest();
