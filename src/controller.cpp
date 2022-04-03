@@ -90,6 +90,9 @@ void Controller::handleSelectClicked()
         currentSession = new Session(true, 0.5, 10, SessionType::SUB_DELTA); // HARDCODED SELECTED SESSION
         elapsedSessionTime = 0;
 
+        setContext("connectionTest");
+        waitForConnection();
+
         setContext("activeSession");  // TODO connection test
 
         emit sessionProgress(currentSession->getPresetDurationSeconds(), currentSession->getType());
@@ -213,14 +216,26 @@ void Controller::handleEarClipConnectionLevel(int level)
         // connectionModeLight(currentSession->isShortPulse());
         connectionModeLight(true); // for testing purposes
         sendEarClipConnection(level);
+        if (level > 0)
+        {
+            emit continueToSession();
+        }
     }
     else if (getContext("activeSession") && level == 0)
     {
         // connectionModeLight(currentSession->isShortPulse());
         connectionModeLight(true); // for testing purposes
         sendEarClipConnection(level);
-        //in this case the session must be stopped.
+        stopSession();
     }
+
 
 }
 
+int Controller::waitForConnection()
+{
+    QEventLoop loop;
+    earClips->earClipConnectionTest();
+    connect(this, SIGNAL(continueToSession()), &loop, SLOT(quit()));
+    return loop.exec();
+}

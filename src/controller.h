@@ -5,6 +5,7 @@
 #include <QListWidget>
 #include <QTimer>
 #include <QObject>
+#include <QEventLoop>
 #include <iostream> // for testing, to be removed
 #include "record.h"
 #include "sessiontype.h"
@@ -35,6 +36,7 @@ signals:
     void powerOn();
     void connectionModeLight(bool);
     void sendEarClipConnection(int);
+    void continueToSession();
 
 private slots:
     void handleSelectClicked();
@@ -77,6 +79,8 @@ private:
     void stopSession();
     void stopRecordPrompt(bool shouldRecord);
     void togglePower();
+
+    int waitForConnection();
 };
 
 #endif // CONTROLLER_H
