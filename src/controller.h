@@ -11,6 +11,7 @@
 #include "battery.h"
 #include "session.h"
 #include "group.h"
+#include "utils.h"
 
 
 class Controller : public QObject
@@ -28,14 +29,19 @@ public:
 signals:
     void newRecord(Record* record);
     void sessionProgress(int remainingSeconds, SessionType type);
+    void adjustSessionIntensity(int intensity);
     void sessionEnds();
     void useSelectionContext();
+    void batteryLevel(bool critical);
+    void batteryShutDown();
     void powerOff();
     void powerOn();
 
 private slots:
     void handleSelectClicked();
     void handlePowerClicked();
+    void handleDownClicked();
+    void handleUpClicked();
 
 private:
     QMap<QString, bool> context;
@@ -48,6 +54,8 @@ private:
     bool isPowerOn;
     int elapsedSessionTime;
     int timerId;
+    int currentIntensity;
+    int highestIntensity;
 
     void timerEvent(QTimerEvent *event);
 

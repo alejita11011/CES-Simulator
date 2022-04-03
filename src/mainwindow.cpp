@@ -58,6 +58,8 @@ MainWindow::MainWindow(QWidget *parent)
     EarClips *earClips   = new EarClips();
 
     connect(controller, SIGNAL(sessionProgress(int, SessionType)), this, SLOT(handleSessionProgress(int, SessionType)));
+    //Adjust Intensity
+    connect(controller, SIGNAL(adjustSessionIntensity(int)), this, SLOT(handleIntensity(int)));
     connect(controller, SIGNAL(newRecord(Record *)), this, SLOT(handleNewRecord(Record *)));
     //A session ended
     connect(controller, SIGNAL(sessionEnds()), this, SLOT(handleEndedSession()));
@@ -67,8 +69,13 @@ MainWindow::MainWindow(QWidget *parent)
     connect(controller, SIGNAL(powerOff()), this, SLOT(handlePowerOff()));
     //User turns on device
     connect(controller, SIGNAL(powerOn()), this, SLOT(handlePowerOn()));
+    connect(controller, SIGNAL(batteryLevel(bool)), this, SLOT(handleBattery(bool)));
+    connect(controller, SIGNAL(batteryShutDown()), this, SLOT(handleBatteryShutDown()));
+
     connect(ui->PowerButton, SIGNAL(clicked()), controller, SLOT(handlePowerClicked()));
     connect(ui->SelectButton, SIGNAL(clicked()), controller, SLOT(handleSelectClicked()));
+    connect(ui->IntensityDown, SIGNAL(clicked()), controller, SLOT(handleDownClicked()));
+    connect(ui->IntensityUp, SIGNAL(clicked()), controller, SLOT(handleUpClicked()));
 
 }
 
@@ -123,6 +130,12 @@ void MainWindow::handleSessionProgress(int remainingSeconds, SessionType session
     ui->sessionProgressValues->raise();
     ui->sessionProgressValues->clear();
     ui->sessionProgressValues->setText(formatSeconds(remainingSeconds) + "\n" + ToString(sessionType));
+
+}
+
+void MainWindow::handleIntensity(int intensity)
+{
+    setLitUp({intensity});
 }
 
 void MainWindow::handleEndedSession(){
@@ -135,13 +148,14 @@ void MainWindow::handleEndedSession(){
             nums.insert(number);
         }
         setLitUp(nums);
-        delay(500);
+        delayMs(500);
     }
 
     //Prompt user to record session
     //Check mark : Yes
     //Power button : No
-    ui->sessionProgressValues->setText("Do you want to record the session?\nPress ✅/🔋");
+    ui->sessionProgressValues->setText("Do you want to record the session?\nPress check mark/power");
+
 }
 
 void MainWindow::handleResetDisplay()
@@ -149,16 +163,6 @@ void MainWindow::handleResetDisplay()
     ui->listWidget->raise();
     setLitUp({});
     handleGroupSelected();
-}
-
-//https://stackoverflow.com/questions/3752742/how-do-i-create-a-pause-wait-function-using-qt
-void MainWindow::delay(int ms)
-{
-    QTime dieTime= QTime::currentTime().addMSecs(ms);
-    while (QTime::currentTime() < dieTime)
-    {
-        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-    }
 }
 
 void MainWindow::setLitUp(QWidget *widget, bool litUp)
@@ -195,6 +199,24 @@ void MainWindow::setLitUp(QSet<int> numbers)
             label->setStyleSheet("background-color:rgb(130, 130, 130);");
         }
     }
+}
+
+void MainWindow::handleBattery(bool critical)
+{
+    if (critical)
+    {
+        setLitUp({1});
+    }else{
+        setLitUp({1,2});
+    }
+    delayMs(500);
+    setLitUp({});
+}
+
+void MainWindow::handleBatteryShutDown()
+{
+    ui->sessionProgressValues->setText("Battery critically low\nShutting down");
+    delayMs(3000);
 }
 
 void MainWindow::handlePowerOn()

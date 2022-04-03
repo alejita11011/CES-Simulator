@@ -10,6 +10,11 @@
     <height>674</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>12</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -86,7 +91,7 @@ radius: 1.35, stop: 0 #fff, stop: 1 #bbb
      <string/>
     </property>
    </widget>
-   <widget class="QPushButton" name="IntesityUp">
+   <widget class="QPushButton" name="IntensityUp">
     <property name="geometry">
      <rect>
       <x>590</x>
@@ -349,7 +354,8 @@ selection-background-color: rgb(122, 0, 0)</string>
     <property name="font">
      <font>
       <family>Nimbus Sans L</family>
-      <pointsize>12</pointsize>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
       <italic>false</italic>
       <bold>true</bold>
      </font>
@@ -398,11 +404,16 @@ background-color: rgb(0, 0, 0);</string>
    <widget class="QLabel" name="noRecords">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>290</y>
-      <width>191</width>
-      <height>81</height>
+      <x>180</x>
+      <y>270</y>
+      <width>211</width>
+      <height>231</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>9</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>No session records. Start a session to begin recording...</string>
@@ -417,7 +428,7 @@ background-color: rgb(0, 0, 0);</string>
    <zorder>sessionProgressValues</zorder>
    <zorder>PowerButton</zorder>
    <zorder>IntensityDown</zorder>
-   <zorder>IntesityUp</zorder>
+   <zorder>IntensityUp</zorder>
    <zorder>SelectButton</zorder>
    <zorder>listWidget</zorder>
    <zorder>verticalLayoutWidget</zorder>
@@ -435,7 +446,7 @@ background-color: rgb(0, 0, 0);</string>
      <x>0</x>
      <y>0</y>
      <width>941</width>
-     <height>17</height>
+     <height>38</height>
     </rect>
    </property>
   </widget>
