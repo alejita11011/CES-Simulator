@@ -12,9 +12,7 @@ Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QOb
     this->groups            = groups;
     currentSession          = nullptr;
     elapsedSessionTime      = 0;
-    earClipsConnectedDevice = false;
-    rightEarClipConnection  = 0;
-    leftEarClipConnection   = 0;
+
 
     // Initialize context
     this->context["sessionSelection"]    = false;
@@ -191,6 +189,8 @@ void Controller::setEarClips(EarClips *e)
         delete earClips;
     }
     earClips = e;
+    // handle connectionLevel signal from EarClips
+    connect(earClips, SIGNAL(connectionLevel(int)), this, SLOT(handleEarClipConnectionLevel(int)));
 }
 
 void Controller::changeBattery(Battery *b)
@@ -199,52 +199,28 @@ void Controller::changeBattery(Battery *b)
     currentBattery = b;
 }
 
-int Controller::earClipConnectionTest()
+void Controller::handleEarClipConnectionLevel(int level)
 {
-    // the line below is the line we want to run but for now it
-    // crashes the app since we have no currentSession
-    // connectionModeLight(currentSession->isShortPulse());
-    connectionModeLight(true); // for testing purposes
-    // currently earclips is a nullptr so this always returns 0
-    // for testing purposes comment out the condition earClips == nullptr
-    if (earClips == nullptr || !earClipsConnectedDevice)
-    {
-        emit connectionLevel(0);
-        return 0;
-    }
-    else if (leftEarClipConnection == 0 || rightEarClipConnection == 0)
-    {
-        emit connectionLevel(0);
-        return 0;
-    }
-    int connectionValue = std::min(leftEarClipConnection, rightEarClipConnection);
-    emit connectionLevel(connectionValue);
-    return connectionValue;
-}
 
-void Controller::handleEarClipConnection(int index)
-{
-    earClipsConnectedDevice = index;
+    if (earClips == nullptr)
+    {
+        level = 0;
+    }
     if (getContext("connectionTest"))
     {
-        earClipConnectionTest();
+        // the line below is the line we want to run but for now it
+        // crashes the app since we have no currentSession
+        // connectionModeLight(currentSession->isShortPulse());
+        connectionModeLight(true); // for testing purposes
+        sendEarClipConnection(level);
     }
+    else if (getContext("activeSession") && level == 0)
+    {
+        // connectionModeLight(currentSession->isShortPulse());
+        connectionModeLight(true); // for testing purposes
+        sendEarClipConnection(level);
+        //in this case the session must be stopped.
+    }
+
 }
 
-void Controller::handleLeftEarClipSlider(int val)
-{
-    leftEarClipConnection = val;
-    if (getContext("connectionTest"))
-    {
-        earClipConnectionTest();
-    }
-}
-
-void Controller::handleRightEarClipSlider(int val)
-{
-    rightEarClipConnection = val;
-    if (getContext("connectionTest"))
-    {
-        earClipConnectionTest();
-    }
-}

@@ -57,6 +57,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     //Create earClips
     EarClips *earClips   = new EarClips();
+    //for testing
+    controller->setEarClips(earClips);
 
     connect(controller, SIGNAL(sessionProgress(int, SessionType)), this, SLOT(handleSessionProgress(int, SessionType)));
     connect(controller, SIGNAL(newRecord(Record *)), this, SLOT(handleNewRecord(Record *)));
@@ -71,14 +73,14 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->PowerButton, SIGNAL(clicked()), controller, SLOT(handlePowerClicked()));
     connect(ui->SelectButton, SIGNAL(clicked()), controller, SLOT(handleSelectClicked()));
     //User connects/disconnects ear clips from device
-    connect(ui->earClipDeviceCCBox, SIGNAL(currentIndexChanged(int)), controller, SLOT(handleEarClipConnection(int)));
+    connect(ui->earClipDeviceCCBox, SIGNAL(currentIndexChanged(int)), earClips, SLOT(handleEarClipConnection(int)));
     //Handle events for left ear clip slider
-    connect(ui->leftEarClipSlider, SIGNAL(valueChanged(int)), controller, SLOT(handleLeftEarClipSlider(int)));
+    connect(ui->leftEarClipSlider, SIGNAL(valueChanged(int)), earClips, SLOT(handleLeftEarClipSlider(int)));
     //Handle events for right ear clip slider
-    connect(ui->rightEarClipSlider, SIGNAL(valueChanged(int)), controller, SLOT(handleRightEarClipSlider(int)));
+    connect(ui->rightEarClipSlider, SIGNAL(valueChanged(int)), earClips, SLOT(handleRightEarClipSlider(int)));
     //Handle signals from connection tests
-    connect(controller, SIGNAL(connectionLevel(int)), this, SLOT(handleConnectionTest(int)));
-    // handle
+    connect(controller, SIGNAL(sendEarClipConnection(int)), this, SLOT(handleConnectionTest(int)));
+    // handle connectionModeLight signals
     connect(controller,SIGNAL(connectionModeLight(bool)), this, SLOT(handleModeLight(bool)));
 
 }

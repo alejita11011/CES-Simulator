@@ -33,15 +33,13 @@ signals:
     void useSelectionContext();
     void powerOff();
     void powerOn();
-    void connectionLevel(int);
     void connectionModeLight(bool);
+    void sendEarClipConnection(int);
 
 private slots:
     void handleSelectClicked();
     void handlePowerClicked();
-    void handleEarClipConnection(int);
-    void handleLeftEarClipSlider(int);
-    void handleRightEarClipSlider(int);
+    void handleEarClipConnectionLevel(int);
 
 private:
     QMap<QString, bool> context;
@@ -54,9 +52,6 @@ private:
     bool isPowerOn;
     int elapsedSessionTime;
     int timerId;
-    bool earClipsConnectedDevice;
-    int rightEarClipConnection;
-    int leftEarClipConnection;
 
     void timerEvent(QTimerEvent *event);
 
@@ -82,12 +77,6 @@ private:
     void stopSession();
     void stopRecordPrompt(bool shouldRecord);
     void togglePower();
-
-    /**
-     * @brief runs the ear clip connection test, 2 = excellent, 1 = okay, 0 = no connection
-     * @return minimum of the vablues in variables rightEarClipConnection and leftEarClipConnection
-     */
-    int earClipConnectionTest();
 };
 
 #endif // CONTROLLER_H
