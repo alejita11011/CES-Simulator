@@ -93,7 +93,7 @@ void Controller::handleSelectClicked()
         setContext("connectionTest");
         waitForConnection();
 
-        setContext("activeSession");  // TODO connection test
+        setContext("activeSession");
 
         emit sessionProgress(currentSession->getPresetDurationSeconds(), currentSession->getType());
     }
@@ -235,7 +235,7 @@ void Controller::handleEarClipConnectionLevel(int level)
 int Controller::waitForConnection()
 {
     QEventLoop loop;
-    earClips->earClipConnectionTest();
     connect(this, SIGNAL(continueToSession()), &loop, SLOT(quit()));
+    earClips->earClipConnectionTest();
     return loop.exec();
 }

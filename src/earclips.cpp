@@ -5,23 +5,7 @@ EarClips::EarClips(QObject *parent) : QObject(parent)
     rightEarClipConnection  = 0;
     leftEarClipConnection   = 0;
     earClipsConnectedDevice = false;
-    //isLeftClipConnected  = false;//
-    //isRightClipConnected = false;//
 }
-/*
-void EarClips::setLeftEarClip(bool status)
-{
-    isLeftClipConnected = status;
-}
-
-void EarClips::setRightEarClip(bool status)
-{
-    isRightClipConnected = status;
-}
-
-bool EarClips::isConnected(){   return (isLeftClipConnected && isRightClipConnected);   }
-*/
-
 
 int EarClips::earClipConnectionTest()
 {
