@@ -7,6 +7,7 @@
 #include <QObject>
 #include <QEventLoop>
 #include <iostream> // for testing, to be removed
+#include <QCoreApplication> //test
 #include "record.h"
 #include "sessiontype.h"
 #include "earclips.h"
@@ -36,7 +37,6 @@ signals:
     void powerOn();
     void connectionModeLight(bool);
     void sendEarClipConnection(int);
-    void continueToSession();
 
 private slots:
     void handleSelectClicked();
@@ -80,7 +80,6 @@ private:
     void stopRecordPrompt(bool shouldRecord);
     void togglePower();
 
-    int waitForConnection();
 };
 
 #endif // CONTROLLER_H

@@ -91,8 +91,16 @@ void Controller::handleSelectClicked()
         elapsedSessionTime = 0;
 
         setContext("connectionTest");
-        waitForConnection();
-
+        int temp = earClips->earClipConnectionTest();
+        while (temp <= 0)
+        {
+            QTime dieTime= QTime::currentTime().addMSecs(500);
+            while (QTime::currentTime() < dieTime)
+            {
+                QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+            }
+            temp = earClips->earClipConnectionTest();
+        }
         setContext("activeSession");
 
         emit sessionProgress(currentSession->getPresetDurationSeconds(), currentSession->getType());
@@ -110,7 +118,6 @@ void Controller::timerEvent(QTimerEvent *event)
     {
         // Increment elapsed time
         elapsedSessionTime++;
-
         // Emit progress of active session
         int remainingSeconds = currentSession->getPresetDurationSeconds() - elapsedSessionTime;
         SessionType sessionType = currentSession->getType();
@@ -216,10 +223,7 @@ void Controller::handleEarClipConnectionLevel(int level)
         // connectionModeLight(currentSession->isShortPulse());
         connectionModeLight(true); // for testing purposes
         sendEarClipConnection(level);
-        if (level > 0)
-        {
-            emit continueToSession();
-        }
+
     }
     else if (getContext("activeSession") && level == 0)
     {
@@ -232,10 +236,4 @@ void Controller::handleEarClipConnectionLevel(int level)
 
 }
 
-int Controller::waitForConnection()
-{
-    QEventLoop loop;
-    connect(this, SIGNAL(continueToSession()), &loop, SLOT(quit()));
-    earClips->earClipConnectionTest();
-    return loop.exec();
-}
+

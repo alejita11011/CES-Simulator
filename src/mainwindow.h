@@ -11,6 +11,7 @@
 #include <QTime>
 #include <QCoreApplication>
 #include <QEventLoop>
+#include <iostream>
 #include "controller.h"
 #include "record.h"
 #include "earclips.h"
