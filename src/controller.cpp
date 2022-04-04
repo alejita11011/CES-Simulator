@@ -12,6 +12,7 @@ Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QOb
     this->groups            = groups;
     currentSession          = nullptr;
     elapsedSessionTime      = 0;
+    earClipsAreConnected    = false;
 
 
     // Initialize context
@@ -92,7 +93,7 @@ void Controller::handleSelectClicked()
 
         setContext("connectionTest");
         int temp = earClips->earClipConnectionTest();
-        while (temp <= 0)
+        while (temp <= 0 || !earClipsAreConnected)
         {
             QTime dieTime= QTime::currentTime().addMSecs(500);
             while (QTime::currentTime() < dieTime)
@@ -212,7 +213,7 @@ void Controller::changeBattery(Battery *b)
 void Controller::handleEarClipConnectionLevel(int level)
 {
 
-    if (earClips == nullptr)
+    if (!earClipsAreConnected)
     {
         level = 0;
     }
@@ -236,4 +237,8 @@ void Controller::handleEarClipConnectionLevel(int level)
 
 }
 
-
+void Controller::handleEarClipConnection(int index)
+{
+    earClipsAreConnected = index;
+    earClips->earClipConnectionTest();
+}

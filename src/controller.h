@@ -42,6 +42,7 @@ private slots:
     void handleSelectClicked();
     void handlePowerClicked();
     void handleEarClipConnectionLevel(int);
+    void handleEarClipConnection(int);
 
 private:
     QMap<QString, bool> context;
@@ -54,6 +55,7 @@ private:
     bool isPowerOn;
     int elapsedSessionTime;
     int timerId;
+    bool earClipsAreConnected;
 
     void timerEvent(QTimerEvent *event);
 

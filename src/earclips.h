@@ -29,13 +29,11 @@ signals:
 private slots:
     void handleLeftEarClipSlider(int);
     void handleRightEarClipSlider(int);
-    void handleEarClipConnection(int);
 
 
 private:
     int rightEarClipConnection;
     int leftEarClipConnection;
-    bool earClipsConnectedDevice;
 
 };
 

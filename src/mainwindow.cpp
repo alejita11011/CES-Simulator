@@ -73,7 +73,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->PowerButton, SIGNAL(clicked()), controller, SLOT(handlePowerClicked()));
     connect(ui->SelectButton, SIGNAL(clicked()), controller, SLOT(handleSelectClicked()));
     //User connects/disconnects ear clips from device
-    connect(ui->earClipDeviceCCBox, SIGNAL(currentIndexChanged(int)), earClips, SLOT(handleEarClipConnection(int)));
+    connect(ui->earClipDeviceCCBox, SIGNAL(currentIndexChanged(int)), controller, SLOT(handleEarClipConnection(int)));
     //Handle events for left ear clip slider
     connect(ui->leftEarClipSlider, SIGNAL(valueChanged(int)), earClips, SLOT(handleLeftEarClipSlider(int)));
     //Handle events for right ear clip slider
