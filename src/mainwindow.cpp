@@ -80,8 +80,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->rightEarClipSlider, SIGNAL(valueChanged(int)), earClips, SLOT(handleRightEarClipSlider(int)));
     //Handle signals from connection tests
     connect(controller, SIGNAL(sendEarClipConnection(int)), this, SLOT(handleConnectionTest(int)));
-    // handle connectionModeLight signals
+    //Handle connectionModeLight signals
     connect(controller,SIGNAL(connectionModeLight(bool)), this, SLOT(handleModeLight(bool)));
+    //Handle battery change
+    connect(ui->batteryChangeButton, SIGNAL(clicked()), this, SLOT(handleBatteryChange()));
 
 }
 
@@ -264,7 +266,15 @@ void MainWindow::handleModeLight(bool isShortPulse)
     setLitUp(ui->longPulse, true);
 }
 
-
+void MainWindow::handleBatteryChange()
+{
+    Battery *b = new Battery();
+    controller->changeBattery(b);
+    // let the user know battery has been changed?
+    // display battery level
+    // if this is pressed during active session
+    // the session should be stopped.
+}
 
 
 

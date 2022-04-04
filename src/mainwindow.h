@@ -67,6 +67,8 @@ private slots:
 
     void handleModeLight(bool);
 
+    void handleBatteryChange();
+
 
 };
 #endif // MAINWINDOW_H
