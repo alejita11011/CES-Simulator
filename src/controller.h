@@ -5,15 +5,13 @@
 #include <QListWidget>
 #include <QTimer>
 #include <QObject>
-#include <QEventLoop>
-#include <iostream> // for testing, to be removed
-#include <QCoreApplication> //test
 #include "record.h"
 #include "sessiontype.h"
 #include "earclips.h"
 #include "battery.h"
 #include "session.h"
 #include "group.h"
+#include "utils.h"
 
 
 class Controller : public QObject
@@ -31,8 +29,11 @@ public:
 signals:
     void newRecord(Record* record);
     void sessionProgress(int remainingSeconds, SessionType type);
+    void adjustSessionIntensity(int intensity);
     void sessionEnds();
     void useSelectionContext();
+    void batteryLevel(bool critical);
+    void batteryShutDown();
     void powerOff();
     void powerOn();
     void connectionModeLight(bool);
@@ -43,6 +44,8 @@ private slots:
     void handlePowerClicked();
     void handleEarClipConnectionLevel(int);
     void handleEarClipConnection(int);
+    void handleDownClicked();
+    void handleUpClicked();
 
 private:
     QMap<QString, bool> context;
@@ -56,6 +59,8 @@ private:
     int elapsedSessionTime;
     int timerId;
     bool earClipsAreConnected;
+    int currentIntensity;
+    int highestIntensity;
 
     void timerEvent(QTimerEvent *event);
 
