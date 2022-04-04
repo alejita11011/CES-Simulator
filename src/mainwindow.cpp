@@ -154,7 +154,8 @@ void MainWindow::handleEndedSession(){
     //Prompt user to record session
     //Check mark : Yes
     //Power button : No
-    ui->sessionProgressValues->setText("Do you want to record the session?\nPress check mark/power");
+    ui->textValues->raise();
+    ui->textValues->setText("Do you want to record the session?\nPress check mark/power");
 
 }
 
@@ -215,14 +216,16 @@ void MainWindow::handleBattery(bool critical)
 
 void MainWindow::handleBatteryShutDown()
 {
-    ui->sessionProgressValues->setText("Battery critically low\nShutting down");
+    ui->textValues->raise();
+    ui->textValues->setText("Battery critically low\nShutting down");
     delayMs(3000);
 }
 
 void MainWindow::handlePowerOn()
 {
     ui->listWidget->raise();
-    ui->noRecords->raise();
+    ui->textValues->raise();
+    ui->textValues->setText("No records\nStart a session");
     setLitUp(ui->powerLed, true);
 }
 
