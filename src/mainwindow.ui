@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1140</width>
-    <height>912</height>
+    <width>1311</width>
+    <height>908</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -197,7 +197,6 @@ radius: 1.35, stop: 0 #fff, stop: 1 #bbb
          <font>
           <family>Nimbus Sans L</family>
           <pointsize>12</pointsize>
-          <weight>75</weight>
           <italic>false</italic>
           <bold>true</bold>
          </font>
@@ -462,7 +461,7 @@ background-color: rgb(255, 255, 255);</string>
      <rect>
       <x>850</x>
       <y>0</y>
-      <width>281</width>
+      <width>441</width>
       <height>871</height>
      </rect>
     </property>
@@ -504,7 +503,7 @@ background-color: rgb(255, 255, 255);</string>
         <widget class="QSlider" name="rightEarClipSlider">
          <property name="geometry">
           <rect>
-           <x>190</x>
+           <x>250</x>
            <y>200</y>
            <width>16</width>
            <height>160</height>
@@ -528,7 +527,7 @@ background-color: rgb(255, 255, 255);</string>
           <rect>
            <x>60</x>
            <y>150</y>
-           <width>71</width>
+           <width>121</width>
            <height>17</height>
           </rect>
          </property>
@@ -539,9 +538,9 @@ background-color: rgb(255, 255, 255);</string>
         <widget class="QLabel" name="rightEarClipLabel">
          <property name="geometry">
           <rect>
-           <x>160</x>
+           <x>230</x>
            <y>150</y>
-           <width>81</width>
+           <width>121</width>
            <height>17</height>
           </rect>
          </property>
@@ -554,7 +553,7 @@ background-color: rgb(255, 255, 255);</string>
           <rect>
            <x>70</x>
            <y>70</y>
-           <width>151</width>
+           <width>261</width>
            <height>20</height>
           </rect>
          </property>
@@ -565,7 +564,7 @@ background-color: rgb(255, 255, 255);</string>
         <widget class="QLabel" name="deviceearclipCLabel">
          <property name="geometry">
           <rect>
-           <x>60</x>
+           <x>130</x>
            <y>470</y>
            <width>171</width>
            <height>20</height>
@@ -578,7 +577,7 @@ background-color: rgb(255, 255, 255);</string>
         <widget class="QComboBox" name="earClipDeviceCCBox">
          <property name="geometry">
           <rect>
-           <x>90</x>
+           <x>160</x>
            <y>570</y>
            <width>111</width>
            <height>25</height>
@@ -646,8 +645,8 @@ background-color: rgb(255, 255, 255);</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1140</width>
-     <height>22</height>
+     <width>1311</width>
+     <height>17</height>
     </rect>
    </property>
   </widget>
