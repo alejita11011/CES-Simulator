@@ -138,12 +138,10 @@ void MainWindow::handleGroupSelected(/* Group *group */) // TODO
 //Displays session progress on device screen
 void MainWindow::handleSessionProgress(int remainingSeconds, SessionType sessionType)
 {
-    delayMs(1000);
     setLitUp({});
     ui->sessionProgressValues->raise();
     ui->sessionProgressValues->clear();
     ui->sessionProgressValues->setText(formatSeconds(remainingSeconds) + "\n" + ToString(sessionType));
-
 }
 
 void MainWindow::handleIntensity(int intensity)

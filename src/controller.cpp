@@ -189,6 +189,7 @@ void Controller::timerEvent(QTimerEvent *event)
 
 void Controller::stopSession()
 {
+    qDebug() << "Session stopping";
     setContext("promptRecordSession");
     emit sessionEnds();
 }
