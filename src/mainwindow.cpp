@@ -168,13 +168,6 @@ void MainWindow::handleEndedSession(){
 
 }
 
-void MainWindow::handleResetDisplay()
-{
-    ui->listWidget->raise();
-    setLitUp({});
-    handleGroupSelected();
-}
-
 void MainWindow::setLitUp(QWidget *widget, bool litUp)
 {
     QString styleSheet = widget->styleSheet();
@@ -237,14 +230,13 @@ void MainWindow::handleBatteryShutDown()
 // Power on (assuming not critically low)
 void MainWindow::handlePowerOn(int batteryLevel, bool isLow)
 {
-    qDebug() << "BATTERY LEVEL" << batteryLevel;
+    handleResetDisplay();
 
-    //Display battery level
-    ui->textValues->raise();
-    ui->textValues->setText("No records\nStart a session");
     ui->SelectButton->setDisabled(false);
     setLitUp(ui->powerLed, true);
 
+    //Display battery level
+    qDebug() << "BATTERY LEVEL" << batteryLevel;
     if(isLow){
         //Battery is low
         setLitUp({1,2});
@@ -256,6 +248,20 @@ void MainWindow::handlePowerOn(int batteryLevel, bool isLow)
 
     delayMs(2000);
     setLitUp({});
+}
+
+void MainWindow::handleResetDisplay()
+{
+    if (ui->listWidget->count() == 0)
+    {
+        ui->textValues->raise();
+        ui->textValues->setText("No records\nStart a session");
+    } else
+    {
+        ui->listWidget->raise();
+    }
+    setLitUp({});
+    handleGroupSelected();
 }
 
 void MainWindow::handlePowerOff()
