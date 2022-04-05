@@ -63,7 +63,7 @@ private slots:
 
     void handlePowerOff();
 
-    void handlePowerOn();
+    void handlePowerOn(int, bool, bool);
 
     void handleConnectionTest(int);
 

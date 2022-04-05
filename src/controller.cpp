@@ -239,12 +239,21 @@ void Controller::togglePower(){
 
     if (isPowerOn)
     {
+        qDebug() << currentBattery->getBatteryLevel(); // FOR TESTING
         //Turn on device
-        emit powerOn();
-        shutDownTimer->start(IDLE_TIMEOUT_MS);
-        //FOR TESTING
-        setContext("sessionSelection");
-        //TODO DISPLAY BATTERY LEVEL
+        emit powerOn(currentBattery->getBatteryLevel(), currentBattery->isLow(), currentBattery->isCriticallyLow());
+
+        if(currentBattery->isCriticallyLow())
+        {
+            //Turn off device
+            emit powerOff();
+            shutDownTimer->stop();
+        }else{
+            shutDownTimer->start(IDLE_TIMEOUT_MS);
+            //FOR TESTING
+            setContext("sessionSelection");
+        }
+
     }
     else
     {
