@@ -140,7 +140,6 @@ void MainWindow::handleGroupSelected(/* Group *group */) // TODO
 //Displays session progress on device screen
 void MainWindow::handleSessionProgress(int remainingSeconds, SessionType sessionType)
 {
-    delayMs(1000);
     setLitUp({});
     ui->sessionProgressValues->raise();
     ui->sessionProgressValues->clear();
@@ -303,6 +302,7 @@ void MainWindow::handleConnectionTest(int level, QString disconnected)
         }
         setLitUp({7,8});
     }
+    delayMs(1000);
 }
 
 void MainWindow::handleModeLight(bool isShortPulse)
