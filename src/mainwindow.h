@@ -65,7 +65,7 @@ private slots:
 
     void handlePowerOn();
 
-    void handleConnectionTest(int);
+    void handleConnectionTest(int, QString);
 
     void handleModeLight(bool);
 

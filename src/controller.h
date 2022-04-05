@@ -5,6 +5,7 @@
 #include <QListWidget>
 #include <QTimer>
 #include <QObject>
+#include <QString>
 #include "record.h"
 #include "sessiontype.h"
 #include "earclips.h"
@@ -37,12 +38,12 @@ signals:
     void powerOff();
     void powerOn();
     void connectionModeLight(bool);
-    void sendEarClipConnection(int);
+    void sendEarClipConnection(int, QString);
 
 private slots:
     void handleSelectClicked();
     void handlePowerClicked();
-    void handleEarClipConnectionLevel(int);
+    void handleEarClipConnectionLevel(int, QString);
     void handleEarClipConnection(int);
     void handleDownClicked();
     void handleUpClicked();

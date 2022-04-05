@@ -84,7 +84,7 @@ MainWindow::MainWindow(QWidget *parent)
     //Handle events for right ear clip slider
     connect(ui->rightEarClipSlider, SIGNAL(valueChanged(int)), earClips, SLOT(handleRightEarClipSlider(int)));
     //Handle signals from connection tests
-    connect(controller, SIGNAL(sendEarClipConnection(int)), this, SLOT(handleConnectionTest(int)));
+    connect(controller, SIGNAL(sendEarClipConnection(int, QString)), this, SLOT(handleConnectionTest(int, QString)));
     //Handle connectionModeLight signals
     connect(controller,SIGNAL(connectionModeLight(bool)), this, SLOT(handleModeLight(bool)));
     //Handle battery change
@@ -155,6 +155,7 @@ void MainWindow::handleIntensity(int intensity)
 
 void MainWindow::handleEndedSession(){
     //Graphs from 8-1
+    delayMs(500);
     for(int end = 8; end >= 0; end--)
     {
         QSet<int> nums = {};
@@ -268,7 +269,7 @@ void MainWindow::handlePowerOff()
     ui->powerOffView->raise();
 }
 
-void MainWindow::handleConnectionTest(int level)
+void MainWindow::handleConnectionTest(int level, QString disconnected)
 {
     if (level == 2)
     {
@@ -280,6 +281,26 @@ void MainWindow::handleConnectionTest(int level)
     }
     else
     {
+        if (disconnected == "Left")
+        {
+            setLitUp({7,8});
+            for (int i = 0; i < 3; i++)
+            {
+                setLitUp(ui->leftConnected, true);
+                delayMs(200);
+                setLitUp(ui->leftConnected, false);
+            }
+        }
+        else if (disconnected == "Right")
+        {
+            setLitUp({7,8});
+            for (int i = 0; i < 3; i++)
+            {
+                setLitUp(ui->rightConnected, true);
+                delayMs(200);
+                setLitUp(ui->rightConnected, false);
+            }
+        }
         setLitUp({7,8});
     }
 }

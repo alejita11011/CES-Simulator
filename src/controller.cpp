@@ -262,7 +262,7 @@ void Controller::setEarClips(EarClips *e)
     }
     earClips = e;
     // handle connectionLevel signal from EarClips
-    connect(earClips, SIGNAL(connectionLevel(int)), this, SLOT(handleEarClipConnectionLevel(int)));
+    connect(earClips, SIGNAL(connectionLevel(int, QString)), this, SLOT(handleEarClipConnectionLevel(int, QString)));
 }
 
 void Controller::changeBattery(Battery *b)
@@ -271,7 +271,7 @@ void Controller::changeBattery(Battery *b)
     currentBattery = b;
 }
 
-void Controller::handleEarClipConnectionLevel(int level)
+void Controller::handleEarClipConnectionLevel(int level, QString disconnected)
 {
 
     if (!earClipsAreConnected)
@@ -284,18 +284,18 @@ void Controller::handleEarClipConnectionLevel(int level)
         // crashes the app since we have no currentSession
         // connectionModeLight(currentSession->isShortPulse());
         connectionModeLight(true); // for testing purposes
-        sendEarClipConnection(level);
+        sendEarClipConnection(level, "None");
 
     }
     else if (getContext("activeSession") && level == 0)
     {
         // blink no connection (number 7 and 8) on CES
-        // cound send a different signal to be recieved by MainWinow
+        // could send a different signal to be recieved by MainWinow
         // that will blink the numbers and the R or L depending on
         // which earclip was disconnected.
         // connectionModeLight(currentSession->isShortPulse());
         connectionModeLight(true); // for testing purposes
-        sendEarClipConnection(level);
+        sendEarClipConnection(level, disconnected);
         stopSession();
     }
 
