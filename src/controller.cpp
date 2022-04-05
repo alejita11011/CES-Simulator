@@ -237,30 +237,31 @@ void Controller::handlePowerClicked()
 
 void Controller::togglePower(){
     isPowerOn = !isPowerOn;
+    qDebug() << "power " << isPowerOn;
 
     if (isPowerOn)
     {
-        qDebug() << currentBattery->getBatteryLevel(); // FOR TESTING
         //Turn on device
+        qDebug() << currentBattery->getBatteryLevel(); // FOR TESTING
         emit powerOn(currentBattery->getBatteryLevel(), currentBattery->isLow(), currentBattery->isCriticallyLow());
 
-        if(currentBattery->isCriticallyLow())
+        if (currentBattery->isCriticallyLow())
         {
             //Turn off device
             emit batteryShutDown();
             togglePower();
-        }else{
-            shutDownTimer->start(IDLE_TIMEOUT_MS);
-            //FOR TESTING
-            setContext("sessionSelection");
+            return;
         }
 
+        shutDownTimer->start(IDLE_TIMEOUT_MS);
+        setContext("sessionSelection");
     }
     else
     {
         //Turn off device
         emit powerOff();
         shutDownTimer->stop();
+        resetContext();
     }
 }
 
@@ -279,6 +280,7 @@ void Controller::changeBattery(Battery *b)
 {
     delete currentBattery;
     currentBattery = b;
+    qDebug() << "a" << currentBattery->getBatteryLevel();
 }
 
 void Controller::handleEarClipConnectionLevel(int level)
