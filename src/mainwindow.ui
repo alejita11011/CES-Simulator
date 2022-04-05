@@ -598,40 +598,47 @@ background-color: rgb(255, 255, 255);</string>
         <attribute name="title">
          <string>Battery Replacement</string>
         </attribute>
-        <widget class="QPushButton" name="batteryChangeButton">
+        <widget class="QWidget" name="gridLayoutWidget_2">
          <property name="geometry">
           <rect>
-           <x>150</x>
-           <y>250</y>
-           <width>141</width>
-           <height>101</height>
+           <x>60</x>
+           <y>60</y>
+           <width>311</width>
+           <height>431</height>
           </rect>
          </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(115, 210, 22);</string>
-         </property>
-         <property name="text">
-          <string>Change Battery</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="batteryChangeLabel">
-         <property name="geometry">
-          <rect>
-           <x>40</x>
-           <y>120</y>
-           <width>351</width>
-           <height>81</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <family>Noto Sans Adlam</family>
-           <pointsize>16</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Change Battery </string>
-         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0" alignment="Qt::AlignHCenter">
+           <widget class="QLabel" name="batteryChangeLabel">
+            <property name="font">
+             <font>
+              <family>Noto Sans Adlam</family>
+              <pointsize>16</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Change Battery </string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="batteryChangeButton">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(115, 210, 22);
+margin: 30px;</string>
+            </property>
+            <property name="text">
+             <string>Change Battery</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </widget>
       </widget>
