@@ -35,7 +35,7 @@ signals:
     void batteryLevel(bool critical);
     void batteryShutDown();
     void powerOff();
-    void powerOn();
+    void powerOn(int batteryLevel, bool isLow);
     void connectionModeLight(bool);
     void sendEarClipConnection(int);
 
@@ -86,7 +86,7 @@ private:
     void stopSession();
     void stopRecordPrompt(bool shouldRecord);
     void togglePower();
-
+    void resetShutDownTimer();
 };
 
 #endif // CONTROLLER_H

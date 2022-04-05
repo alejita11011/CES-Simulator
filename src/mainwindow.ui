@@ -231,7 +231,7 @@ background-color: rgb(255, 255, 255);</string>
         </property>
         <property name="styleSheet">
          <string notr="true">border-radius: 12px;
-background-color: rgb(170, 170, 255);
+background-color: rgb(255, 255, 255);
 color: rgb(0, 0, 0);
 selection-background-color: rgb(122, 0, 0)</string>
         </property>
