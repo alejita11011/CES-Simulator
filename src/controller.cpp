@@ -13,8 +13,10 @@ Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QOb
     currentSession          = nullptr;
     elapsedSessionTime      = 0;
     earClipsAreConnected    = false;
-    currentIntensity = 0;
-    highestIntensity = 0;
+    currentIntensity        = 0;
+    highestIntensity        = 0;
+    selectedGroupIndex      = 0;
+    selectedSessionIndex    = 0;
 
     // Initialize context
     this->context["sessionSelection"]    = false;
@@ -263,6 +265,9 @@ void Controller::togglePower(){
         emit powerOn(currentBattery->getBatteryLevel(), currentBattery->isLow());
         resetShutDownTimer();
         setContext("sessionSelection");
+
+        // Update UI
+
     }
     else
     {
