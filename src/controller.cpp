@@ -289,6 +289,10 @@ void Controller::handleEarClipConnectionLevel(int level)
     }
     else if (getContext("activeSession") && level == 0)
     {
+        // blink no connection (number 7 and 8) on CES
+        // cound send a different signal to be recieved by MainWinow
+        // that will blink the numbers and the R or L depending on
+        // which earclip was disconnected.
         // connectionModeLight(currentSession->isShortPulse());
         connectionModeLight(true); // for testing purposes
         sendEarClipConnection(level);

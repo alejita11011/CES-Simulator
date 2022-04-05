@@ -288,10 +288,24 @@ void MainWindow::handleModeLight(bool isShortPulse)
 {
     if (isShortPulse)
     {
-        setLitUp(ui->shortPulse, true);
+        for (int i = 0; i < 3; i++)
+        {
+            // makes this light blink before session starts
+            // if there is no connection it keeps blinking
+            setLitUp(ui->shortPulse, true);
+            delayMs(200);
+            setLitUp(ui->shortPulse, false);
+        }
         return;
     }
-    setLitUp(ui->longPulse, true);
+    for (int i = 0; i < 3; i++)
+    {
+        // makes this light blink before session starts
+        // if there is no connection it keeps blinking
+        setLitUp(ui->longPulse, true);
+        delayMs(200);
+        setLitUp(ui->longPulse, false);
+    }
 }
 
 void MainWindow::handleBatteryChange()
