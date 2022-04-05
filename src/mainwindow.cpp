@@ -118,7 +118,6 @@ QString MainWindow::formatSeconds(int seconds)
 
 void MainWindow::handleNewRecord(Record *record)
 {
-    ui->noRecords->hide();
 
     QString itemText = QString("%1 (%2)\n%3-session of intensity %4")
             .arg(record->getStartTime().toString("hh:mm:ss ap"))
@@ -141,7 +140,7 @@ void MainWindow::handleGroupSelected(/* Group *group */) // TODO
 //Displays session progress on device screen
 void MainWindow::handleSessionProgress(int remainingSeconds, SessionType sessionType)
 {
-    delay(1000);
+    delayMs(1000);
     setLitUp({});
     ui->sessionProgressValues->raise();
     ui->sessionProgressValues->clear();
