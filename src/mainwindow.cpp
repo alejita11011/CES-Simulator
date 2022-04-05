@@ -69,7 +69,7 @@ MainWindow::MainWindow(QWidget *parent)
     //When shutdown timer reaches 0 OR user turns off device
     connect(controller, SIGNAL(powerOff()), this, SLOT(handlePowerOff()));
     //User turns on device
-    connect(controller, SIGNAL(powerOn(int, bool, bool)), this, SLOT(handlePowerOn(int, bool, bool)));
+    connect(controller, SIGNAL(powerOn(int, bool)), this, SLOT(handlePowerOn(int, bool)));
     connect(controller, SIGNAL(batteryLevel(bool)), this, SLOT(handleBattery(bool)));
     connect(controller, SIGNAL(batteryShutDown()), this, SLOT(handleBatteryShutDown()));
 
@@ -236,34 +236,28 @@ void MainWindow::handleBatteryShutDown()
 
 }
 
-void MainWindow::handlePowerOn(int batteryLevel, bool isLow, bool isCriticallyLow)
+// Power on (assuming not critically low)
+void MainWindow::handlePowerOn(int batteryLevel, bool isLow)
 {
-    qDebug() << "BATTERY LEVEL" + batteryLevel;
+    qDebug() << "BATTERY LEVEL" << batteryLevel;
 
     //Display battery level
-    if(isCriticallyLow)
-    {
-        return;
+    ui->textValues->raise();
+    ui->textValues->setText("No records\nStart a session");
+    ui->SelectButton->setDisabled(false);
+    setLitUp(ui->powerLed, true);
 
+    if(isLow){
+        //Battery is low
+        setLitUp({1,2});
+    }else if (batteryLevel <= 75){
+        setLitUp({1,2,3,4,5,6});
     }else{
-        ui->textValues->raise();
-        ui->textValues->setText("No records\nStart a session");
-        ui->SelectButton->setDisabled(false);
-        setLitUp(ui->powerLed, true);
-
-        if(isLow){
-            //Battery is low
-            setLitUp({1,2});
-        }else if (batteryLevel <= 75){
-            setLitUp({1,2,3,4,5,6});
-        }else{
-            setLitUp({1,2,3,4,5,6,7,8});
-        }
-
-        delayMs(2000);
-        setLitUp({});
+        setLitUp({1,2,3,4,5,6,7,8});
     }
 
+    delayMs(2000);
+    setLitUp({});
 }
 
 void MainWindow::handlePowerOff()

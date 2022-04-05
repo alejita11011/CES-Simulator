@@ -35,7 +35,7 @@ signals:
     void batteryLevel(bool critical);
     void batteryShutDown();
     void powerOff();
-    void powerOn(int batteryLevel, bool isLow,bool isCriticallyLow);
+    void powerOn(int batteryLevel, bool isLow);
     void connectionModeLight(bool);
     void sendEarClipConnection(int);
 
