@@ -247,8 +247,8 @@ void Controller::togglePower(){
         if(currentBattery->isCriticallyLow())
         {
             //Turn off device
-            emit powerOff();
-            shutDownTimer->stop();
+            emit batteryShutDown();
+            togglePower();
         }else{
             shutDownTimer->start(IDLE_TIMEOUT_MS);
             //FOR TESTING
