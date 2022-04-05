@@ -212,6 +212,7 @@ void Controller::stopRecordPrompt(bool shouldRecord)
     }else{
         //Set next context
         setContext("sessionSelection");
+        qDebug() << "HERE IN USESELECTION"; // FOR TESTING
         emit useSelectionContext();
     }
 

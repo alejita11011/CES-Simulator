@@ -230,7 +230,11 @@ void MainWindow::handleBatteryShutDown()
     //Battery is critically low
     ui->textValues->raise();
     ui->textValues->setText("Battery critically low\nShutting down");
-    handleBattery(true);
+    ui->SelectButton->setDisabled(true);
+    //either this
+    //handleBattery(true);
+    //or this
+    setLitUp({1});
     delayMs(3000);
     setLitUp({});
 }
@@ -247,11 +251,14 @@ void MainWindow::handlePowerOn(int batteryLevel, bool isLow, bool isCriticallyLo
     }else{
         ui->textValues->raise();
         ui->textValues->setText("No records\nStart a session");
+        ui->SelectButton->setDisabled(false);
         setLitUp(ui->powerLed, true);
 
         if(isLow){
             //Battery is low
-            handleBattery(false);
+            //handleBattery(false);
+            // OR THIS
+            setLitUp({1,2});
         }else if (batteryLevel <= 75){
             setLitUp({1,2,3,4,5,6});
         }else{
