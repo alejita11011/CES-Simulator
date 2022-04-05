@@ -36,10 +36,14 @@ signals:
     void batteryShutDown();
     void powerOff();
     void powerOn();
+    void connectionModeLight(bool);
+    void sendEarClipConnection(int);
 
 private slots:
     void handleSelectClicked();
     void handlePowerClicked();
+    void handleEarClipConnectionLevel(int);
+    void handleEarClipConnection(int);
     void handleDownClicked();
     void handleUpClicked();
 
@@ -54,6 +58,7 @@ private:
     bool isPowerOn;
     int elapsedSessionTime;
     int timerId;
+    bool earClipsAreConnected;
     int currentIntensity;
     int highestIntensity;
 
@@ -81,6 +86,7 @@ private:
     void stopSession();
     void stopRecordPrompt(bool shouldRecord);
     void togglePower();
+
 };
 
 #endif // CONTROLLER_H

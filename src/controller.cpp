@@ -6,19 +6,20 @@ int Controller::IDLE_TIMEOUT_MS = 30000;
 
 Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QObject(parent)
 {
-    earClips       = nullptr;
-    currentBattery = b;
-    isPowerOn      = false;
-    this->groups   = groups;
-    currentSession = nullptr;
-    elapsedSessionTime = 0;
+    earClips                = nullptr;
+    currentBattery          = b;
+    isPowerOn               = false;
+    this->groups            = groups;
+    currentSession          = nullptr;
+    elapsedSessionTime      = 0;
+    earClipsAreConnected    = false;
     currentIntensity = 0;
     highestIntensity = 0;
 
     // Initialize context
-    this->context["sessionSelection"] = false;
-    this->context["connectionTest"] = false;
-    this->context["activeSession"] = false;
+    this->context["sessionSelection"]    = false;
+    this->context["connectionTest"]      = false;
+    this->context["activeSession"]       = false;
     this->context["promptRecordSession"] = false;
 
     // Timers
@@ -96,7 +97,14 @@ void Controller::handleSelectClicked()
 
         elapsedSessionTime = 0;
 
-        setContext("activeSession");  // TODO connection test
+        setContext("connectionTest");
+        int temp = earClips->earClipConnectionTest();
+        while (temp <= 0 || !earClipsAreConnected)
+        {
+            delayMs(500);
+            temp = earClips->earClipConnectionTest();
+        }
+        setContext("activeSession");
 
         emit sessionProgress(currentSession->getPresetDurationSeconds(), currentSession->getType());
     }
@@ -142,7 +150,6 @@ void Controller::timerEvent(QTimerEvent *event)
     {
         // Increment elapsed time
         elapsedSessionTime++;
-
         // Emit progress of active session
         int remainingSeconds = currentSession->getPresetDurationSeconds() - elapsedSessionTime;
         SessionType sessionType = currentSession->getType();
@@ -254,10 +261,45 @@ void Controller::setEarClips(EarClips *e)
         delete earClips;
     }
     earClips = e;
+    // handle connectionLevel signal from EarClips
+    connect(earClips, SIGNAL(connectionLevel(int)), this, SLOT(handleEarClipConnectionLevel(int)));
 }
 
 void Controller::changeBattery(Battery *b)
 {
     delete currentBattery;
     currentBattery = b;
+}
+
+void Controller::handleEarClipConnectionLevel(int level)
+{
+
+    if (!earClipsAreConnected)
+    {
+        level = 0;
+    }
+    if (getContext("connectionTest"))
+    {
+        // the line below is the line we want to run but for now it
+        // crashes the app since we have no currentSession
+        // connectionModeLight(currentSession->isShortPulse());
+        connectionModeLight(true); // for testing purposes
+        sendEarClipConnection(level);
+
+    }
+    else if (getContext("activeSession") && level == 0)
+    {
+        // connectionModeLight(currentSession->isShortPulse());
+        connectionModeLight(true); // for testing purposes
+        sendEarClipConnection(level);
+        stopSession();
+    }
+
+
+}
+
+void Controller::handleEarClipConnection(int index)
+{
+    earClipsAreConnected = index;
+    earClips->earClipConnectionTest();
 }

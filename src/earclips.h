@@ -16,16 +16,25 @@ class EarClips : public QObject
     Q_OBJECT
 public:
     explicit EarClips(QObject *parent = nullptr);
-    bool isConnected();
-    void setRightEarClip(bool);
-    void setLeftEarClip(bool);
+    /**
+     * @brief runs the ear clip connection test, 2 = excellent, 1 = okay, 0 = no connection
+     * @return minimum of the vablues in variables rightEarClipConnection and leftEarClipConnection
+     */
+    int earClipConnectionTest();
 
 signals:
+    void connectionLevel(int);
+
+
+private slots:
+    void handleLeftEarClipSlider(int);
+    void handleRightEarClipSlider(int);
 
 
 private:
-    bool isLeftClipConnected;
-    bool isRightClipConnected;
+    int rightEarClipConnection;
+    int leftEarClipConnection;
+
 };
 
 #endif // EARCLIPS_H

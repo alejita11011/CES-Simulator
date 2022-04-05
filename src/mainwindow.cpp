@@ -8,7 +8,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     // UI setup
     ui->setupUi(this);
-    this->setStyleSheet("MainWindow{background-image: url(:/images/CES.png); background-position: center;}");
+    //this->setStyleSheet("MainWindow{background-image: url(:/images/CES.png); background-position: center;}");
+    this->setStyleSheet("QWidget#CESwidget{border-image: url(:/images/CES.png); background-position: center;}");
     groupWidgets["20min"] = ui->twentyMinGroup;
     groupWidgets["45min"] = ui->fourtyFiveMinGroup;
     groupWidgets["user"] = ui->userDefinedGroup;
@@ -56,6 +57,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     //Create earClips
     EarClips *earClips   = new EarClips();
+    //for testing
+    controller->setEarClips(earClips);
 
     connect(controller, SIGNAL(sessionProgress(int, SessionType)), this, SLOT(handleSessionProgress(int, SessionType)));
     //Adjust Intensity
@@ -74,9 +77,20 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->PowerButton, SIGNAL(clicked()), controller, SLOT(handlePowerClicked()));
     connect(ui->SelectButton, SIGNAL(clicked()), controller, SLOT(handleSelectClicked()));
+    //User connects/disconnects ear clips from device
+    connect(ui->earClipDeviceCCBox, SIGNAL(currentIndexChanged(int)), controller, SLOT(handleEarClipConnection(int)));
+    //Handle events for left ear clip slider
+    connect(ui->leftEarClipSlider, SIGNAL(valueChanged(int)), earClips, SLOT(handleLeftEarClipSlider(int)));
+    //Handle events for right ear clip slider
+    connect(ui->rightEarClipSlider, SIGNAL(valueChanged(int)), earClips, SLOT(handleRightEarClipSlider(int)));
+    //Handle signals from connection tests
+    connect(controller, SIGNAL(sendEarClipConnection(int)), this, SLOT(handleConnectionTest(int)));
+    //Handle connectionModeLight signals
+    connect(controller,SIGNAL(connectionModeLight(bool)), this, SLOT(handleModeLight(bool)));
+    //Handle battery change
+    connect(ui->batteryChangeButton, SIGNAL(clicked()), this, SLOT(handleBatteryChange()));
     connect(ui->IntensityDown, SIGNAL(clicked()), controller, SLOT(handleDownClicked()));
     connect(ui->IntensityUp, SIGNAL(clicked()), controller, SLOT(handleUpClicked()));
-
 }
 
 MainWindow::~MainWindow()
@@ -104,7 +118,6 @@ QString MainWindow::formatSeconds(int seconds)
 
 void MainWindow::handleNewRecord(Record *record)
 {
-    ui->noRecords->hide();
 
     QString itemText = QString("%1 (%2)\n%3-session of intensity %4")
             .arg(record->getStartTime().toString("hh:mm:ss ap"))
@@ -127,6 +140,8 @@ void MainWindow::handleGroupSelected(/* Group *group */) // TODO
 //Displays session progress on device screen
 void MainWindow::handleSessionProgress(int remainingSeconds, SessionType sessionType)
 {
+    delayMs(1000);
+    setLitUp({});
     ui->sessionProgressValues->raise();
     ui->sessionProgressValues->clear();
     ui->sessionProgressValues->setText(formatSeconds(remainingSeconds) + "\n" + ToString(sessionType));
@@ -252,4 +267,42 @@ void MainWindow::handlePowerOff()
     // Turn off display
     ui->powerOffView->raise();
 }
+
+void MainWindow::handleConnectionTest(int level)
+{
+    if (level == 2)
+    {
+        setLitUp({1,2,3});
+    }
+    else if (level == 1)
+    {
+        setLitUp({4,5,6});
+    }
+    else
+    {
+        setLitUp({7,8});
+    }
+}
+
+void MainWindow::handleModeLight(bool isShortPulse)
+{
+    if (isShortPulse)
+    {
+        setLitUp(ui->shortPulse, true);
+        return;
+    }
+    setLitUp(ui->longPulse, true);
+}
+
+void MainWindow::handleBatteryChange()
+{
+    Battery *b = new Battery();
+    controller->changeBattery(b);
+    // let the user know battery has been changed?
+    // display battery level
+    // if this is pressed during active session
+    // the session should be stopped.
+}
+
+
 

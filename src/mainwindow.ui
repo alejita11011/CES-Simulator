@@ -6,14 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>941</width>
-    <height>674</height>
+    <width>1140</width>
+    <height>912</height>
    </rect>
-  </property>
-  <property name="font">
-   <font>
-    <pointsize>12</pointsize>
-   </font>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
@@ -25,17 +20,43 @@
    <property name="styleSheet">
     <string notr="true"/>
    </property>
-   <widget class="QPushButton" name="PowerButton">
+   <widget class="QWidget" name="horizontalLayoutWidget_5">
     <property name="geometry">
      <rect>
-      <x>660</x>
-      <y>460</y>
-      <width>51</width>
-      <height>51</height>
+      <x>0</x>
+      <y>0</y>
+      <width>851</width>
+      <height>871</height>
      </rect>
     </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton {
+    <layout class="QHBoxLayout" name="CESwidgetLayout">
+     <item>
+      <widget class="QWidget" name="CESwidget" native="true">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <widget class="QWidget" name="verticalLayoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>360</y>
+          <width>71</width>
+          <height>272</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="numbersLayout"/>
+       </widget>
+       <widget class="QPushButton" name="PowerButton">
+        <property name="geometry">
+         <rect>
+          <x>580</x>
+          <y>560</y>
+          <width>51</width>
+          <height>51</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
 	border-image: url(:/images/powerButton.jpg);
 color: #333;
 border: 2px solid #555;
@@ -53,88 +74,94 @@ cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4,
 radius: 1.35, stop: 0 #fff, stop: 1 #bbb
 );
 }</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="IntensityDown">
-    <property name="geometry">
-     <rect>
-      <x>590</x>
-      <y>460</y>
-      <width>51</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton {
-	border-image: url(:/images/downButton.jpg);
-color: #333;
-border: 2px solid #555;
-border-radius: 20px;
-border-style: outset;
-background: qradialgradient(
-cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4,
-radius: 1.35, stop: 0 #fff, stop: 1 #888
-);
-padding: 5px;
-}
-QPushButton:hover {
-background: qradialgradient(
-cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4,
-radius: 1.35, stop: 0 #fff, stop: 1 #bbb
-);
-}</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="IntensityUp">
-    <property name="geometry">
-     <rect>
-      <x>590</x>
-      <y>390</y>
-      <width>51</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton {
-	border-image: url(:/images/upButton.jpg);
-color: #333;
-border: 2px solid #555;
-border-radius: 20px;
-border-style: outset;
-background: qradialgradient(
-cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4,
-radius: 1.35, stop: 0 #fff, stop: 1 #888
-);
-padding: 5px;
-}
-QPushButton:hover {
-background: qradialgradient(
-cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4,
-radius: 1.35, stop: 0 #fff, stop: 1 #bbb
-);
-}</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="SelectButton">
-    <property name="geometry">
-     <rect>
-      <x>110</x>
-      <y>450</y>
-      <width>51</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton {
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QWidget" name="horizontalLayoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>270</y>
+          <width>201</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="sessionsLayout">
+         <item>
+          <widget class="QWidget" name="subDeltaSession" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">border-image: url(:/images/off/subdelta.png);</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QWidget" name="deltaSession" native="true">
+           <property name="styleSheet">
+            <string notr="true">border-image: url(:/images/off/delta.png);</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QWidget" name="alphaSession" native="true">
+           <property name="styleSheet">
+            <string notr="true">border-image: url(:/images/off/alpha.png);</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QWidget" name="thetaSession" native="true">
+           <property name="styleSheet">
+            <string notr="true">border-image: url(:/images/off/theta.png);</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="horizontalLayoutWidget_4">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>270</y>
+          <width>141</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="earClipsLayout">
+         <item>
+          <widget class="QWidget" name="leftConnected" native="true">
+           <property name="styleSheet">
+            <string notr="true">border-image: url(:/images/off/L.png);</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QWidget" name="rightConnected" native="true">
+           <property name="styleSheet">
+            <string notr="true">border-image: url(:/images/off/R.png);</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QPushButton" name="SelectButton">
+        <property name="geometry">
+         <rect>
+          <x>110</x>
+          <y>540</y>
+          <width>51</width>
+          <height>51</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
 	border-image: url(:/images/selectButton.jpg);
 color: #333;
 border: 2px solid #555;
@@ -152,329 +179,475 @@ cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4,
 radius: 1.35, stop: 0 #fff, stop: 1 #bbb
 );
 }</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QListWidget" name="listWidget">
-    <property name="geometry">
-     <rect>
-      <x>180</x>
-      <y>270</y>
-      <width>211</width>
-      <height>231</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>7</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border-radius: 12px;
-background-color: rgb(255, 255, 255);
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="sessionProgressValues">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>360</y>
+          <width>211</width>
+          <height>231</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <family>Nimbus Sans L</family>
+          <pointsize>12</pointsize>
+          <weight>75</weight>
+          <italic>false</italic>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-radius: 12px;
+background-color: rgb(255, 255, 255);</string>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QListWidget" name="listWidget">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>360</y>
+          <width>211</width>
+          <height>231</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>7</pointsize>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-radius: 12px;
+background-color: rgb(170, 170, 255);
 color: rgb(0, 0, 0);
 selection-background-color: rgb(122, 0, 0)</string>
-    </property>
-    <property name="spacing">
-     <number>2</number>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QWidget" name="verticalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>420</x>
-      <y>270</y>
-      <width>71</width>
-      <height>272</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="numbersLayout"/>
-   </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>180</x>
-      <y>140</y>
-      <width>201</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="sessionsLayout">
-     <item>
-      <widget class="QWidget" name="subDeltaSession" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border-image: url(:/images/off/subdelta.png);</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QWidget" name="deltaSession" native="true">
-       <property name="styleSheet">
-        <string notr="true">border-image: url(:/images/off/delta.png);</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QWidget" name="alphaSession" native="true">
-       <property name="styleSheet">
-        <string notr="true">border-image: url(:/images/off/alpha.png);</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QWidget" name="thetaSession" native="true">
-       <property name="styleSheet">
-        <string notr="true">border-image: url(:/images/off/theta.png);</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget_2">
-    <property name="geometry">
-     <rect>
-      <x>210</x>
-      <y>100</y>
-      <width>141</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="groupsLayout">
-     <item>
-      <widget class="QWidget" name="twentyMinGroup" native="true">
-       <property name="styleSheet">
-        <string notr="true">border-image: url(:/images/off/20.png);</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QWidget" name="fourtyFiveMinGroup" native="true">
-       <property name="styleSheet">
-        <string notr="true">border-image: url(:/images/off/45.png);</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QWidget" name="userDefinedGroup" native="true">
-       <property name="styleSheet">
-        <string notr="true">border-image: url(:/images/off/ud.png);</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget_3">
-    <property name="geometry">
-     <rect>
-      <x>420</x>
-      <y>100</y>
-      <width>141</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="pulsesLayout">
-     <item>
-      <widget class="QWidget" name="shortPulse" native="true">
-       <property name="styleSheet">
-        <string notr="true">border-image: url(:/images/off/shortpulse.png);</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>9</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QWidget" name="longPulse" native="true">
-       <property name="styleSheet">
-        <string notr="true">border-image: url(:/images/off/longpulse.png);</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget_4">
-    <property name="geometry">
-     <rect>
-      <x>420</x>
-      <y>140</y>
-      <width>141</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="earClipsLayout">
-     <item>
-      <widget class="QWidget" name="leftConnected" native="true">
-       <property name="styleSheet">
-        <string notr="true">border-image: url(:/images/off/L.png);</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QWidget" name="rightConnected" native="true">
-       <property name="styleSheet">
-        <string notr="true">border-image: url(:/images/off/R.png);</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QLabel" name="sessionProgressValues">
-    <property name="geometry">
-     <rect>
-      <x>180</x>
-      <y>270</y>
-      <width>211</width>
-      <height>231</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Nimbus Sans L</family>
-      <pointsize>14</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border-radius: 12px;
-background-color: rgb(255, 255, 255);</string>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QGraphicsView" name="powerOffView">
-    <property name="geometry">
-     <rect>
-      <x>180</x>
-      <y>270</y>
-      <width>211</width>
-      <height>231</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border-radius: 12px;
+        </property>
+        <property name="spacing">
+         <number>2</number>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QWidget" name="horizontalLayoutWidget_2">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>230</y>
+          <width>141</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="groupsLayout">
+         <item>
+          <widget class="QWidget" name="twentyMinGroup" native="true">
+           <property name="styleSheet">
+            <string notr="true">border-image: url(:/images/off/20.png);</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QWidget" name="fourtyFiveMinGroup" native="true">
+           <property name="styleSheet">
+            <string notr="true">border-image: url(:/images/off/45.png);</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QWidget" name="userDefinedGroup" native="true">
+           <property name="styleSheet">
+            <string notr="true">border-image: url(:/images/off/ud.png);</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QGraphicsView" name="powerOffView">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>360</y>
+          <width>211</width>
+          <height>231</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-radius: 12px;
 background-color: rgb(0, 0, 0);</string>
-    </property>
-   </widget>
-   <widget class="QWidget" name="powerLed" native="true">
-    <property name="geometry">
-     <rect>
-      <x>670</x>
-      <y>447</y>
-      <width>31</width>
-      <height>9</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border-image: url(:/images/off/power.png);</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="noRecords">
-    <property name="geometry">
-     <rect>
-      <x>180</x>
-      <y>270</y>
-      <width>211</width>
-      <height>231</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>9</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>No session records. Start a session to begin recording...</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignHCenter|Qt::AlignTop</set>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QLabel" name="textValues">
-    <property name="geometry">
-     <rect>
-      <x>180</x>
-      <y>270</y>
-      <width>211</width>
-      <height>231</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>8</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border-radius: 12px;
+        </property>
+       </widget>
+       <widget class="QPushButton" name="IntensityUp">
+        <property name="geometry">
+         <rect>
+          <x>510</x>
+          <y>490</y>
+          <width>51</width>
+          <height>51</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
+	border-image: url(:/images/upButton.jpg);
+color: #333;
+border: 2px solid #555;
+border-radius: 20px;
+border-style: outset;
+background: qradialgradient(
+cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4,
+radius: 1.35, stop: 0 #fff, stop: 1 #888
+);
+padding: 5px;
+}
+QPushButton:hover {
+background: qradialgradient(
+cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4,
+radius: 1.35, stop: 0 #fff, stop: 1 #bbb
+);
+}</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QWidget" name="horizontalLayoutWidget_3">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>230</y>
+          <width>141</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="pulsesLayout">
+         <item>
+          <widget class="QWidget" name="shortPulse" native="true">
+           <property name="styleSheet">
+            <string notr="true">border-image: url(:/images/off/shortpulse.png);</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>9</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QWidget" name="longPulse" native="true">
+           <property name="styleSheet">
+            <string notr="true">border-image: url(:/images/off/longpulse.png);</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QPushButton" name="IntensityDown">
+        <property name="geometry">
+         <rect>
+          <x>510</x>
+          <y>560</y>
+          <width>51</width>
+          <height>51</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
+	border-image: url(:/images/downButton.jpg);
+color: #333;
+border: 2px solid #555;
+border-radius: 20px;
+border-style: outset;
+background: qradialgradient(
+cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4,
+radius: 1.35, stop: 0 #fff, stop: 1 #888
+);
+padding: 5px;
+}
+QPushButton:hover {
+background: qradialgradient(
+cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4,
+radius: 1.35, stop: 0 #fff, stop: 1 #bbb
+);
+}</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QWidget" name="powerLed" native="true">
+        <property name="geometry">
+         <rect>
+          <x>590</x>
+          <y>540</y>
+          <width>31</width>
+          <height>9</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-image: url(:/images/off/power.png);</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="textValues">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>360</y>
+          <width>211</width>
+          <height>231</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-radius: 12px;
 background-color: rgb(255, 255, 255);</string>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <zorder>verticalLayoutWidget</zorder>
+       <zorder>PowerButton</zorder>
+       <zorder>horizontalLayoutWidget</zorder>
+       <zorder>horizontalLayoutWidget_4</zorder>
+       <zorder>SelectButton</zorder>
+       <zorder>sessionProgressValues</zorder>
+       <zorder>listWidget</zorder>
+       <zorder>horizontalLayoutWidget_2</zorder>
+       <zorder>IntensityUp</zorder>
+       <zorder>horizontalLayoutWidget_3</zorder>
+       <zorder>IntensityDown</zorder>
+       <zorder>powerLed</zorder>
+       <zorder>textValues</zorder>
+       <zorder>powerOffView</zorder>
+      </widget>
+     </item>
+    </layout>
    </widget>
-   <zorder>textValues</zorder>
-   <zorder>sessionProgressValues</zorder>
-   <zorder>PowerButton</zorder>
-   <zorder>IntensityDown</zorder>
-   <zorder>IntensityUp</zorder>
-   <zorder>SelectButton</zorder>
-   <zorder>listWidget</zorder>
-   <zorder>verticalLayoutWidget</zorder>
-   <zorder>horizontalLayoutWidget</zorder>
-   <zorder>horizontalLayoutWidget_2</zorder>
-   <zorder>horizontalLayoutWidget_3</zorder>
-   <zorder>horizontalLayoutWidget_4</zorder>
-   <zorder>powerOffView</zorder>
-   <zorder>powerLed</zorder>
-   <zorder>noRecords</zorder>
+   <widget class="QWidget" name="horizontalLayoutWidget_6">
+    <property name="geometry">
+     <rect>
+      <x>850</x>
+      <y>0</y>
+      <width>281</width>
+      <height>871</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="accessoryWidgetLayout">
+     <item>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="earClipsSliderWidget">
+        <attribute name="title">
+         <string>Ear Clip Connection</string>
+        </attribute>
+        <widget class="QSlider" name="leftEarClipSlider">
+         <property name="geometry">
+          <rect>
+           <x>80</x>
+           <y>200</y>
+           <width>16</width>
+           <height>160</height>
+          </rect>
+         </property>
+         <property name="minimum">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <number>2</number>
+         </property>
+         <property name="value">
+          <number>0</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+        <widget class="QSlider" name="rightEarClipSlider">
+         <property name="geometry">
+          <rect>
+           <x>190</x>
+           <y>200</y>
+           <width>16</width>
+           <height>160</height>
+          </rect>
+         </property>
+         <property name="minimum">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <number>2</number>
+         </property>
+         <property name="value">
+          <number>0</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+        <widget class="QLabel" name="leftEarClipLabel">
+         <property name="geometry">
+          <rect>
+           <x>60</x>
+           <y>150</y>
+           <width>71</width>
+           <height>17</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Left Ear Clip </string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="rightEarClipLabel">
+         <property name="geometry">
+          <rect>
+           <x>160</x>
+           <y>150</y>
+           <width>81</width>
+           <height>17</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Right Ear Clip </string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="inEarConnectionLabel">
+         <property name="geometry">
+          <rect>
+           <x>70</x>
+           <y>70</y>
+           <width>151</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Ear Clip Connection in Ears</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="deviceearclipCLabel">
+         <property name="geometry">
+          <rect>
+           <x>60</x>
+           <y>470</y>
+           <width>171</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Ear Clip Connection to Device</string>
+         </property>
+        </widget>
+        <widget class="QComboBox" name="earClipDeviceCCBox">
+         <property name="geometry">
+          <rect>
+           <x>90</x>
+           <y>570</y>
+           <width>111</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <item>
+          <property name="text">
+           <string>Disconnected</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Connected </string>
+          </property>
+         </item>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="tab_2">
+        <attribute name="title">
+         <string>Battery Replacement</string>
+        </attribute>
+        <widget class="QPushButton" name="batteryChangeButton">
+         <property name="geometry">
+          <rect>
+           <x>70</x>
+           <y>240</y>
+           <width>141</width>
+           <height>101</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(115, 210, 22);</string>
+         </property>
+         <property name="text">
+          <string>Change Battery</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="batteryChangeLabel">
+         <property name="geometry">
+          <rect>
+           <x>60</x>
+           <y>120</y>
+           <width>171</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <family>Noto Sans Adlam</family>
+           <pointsize>16</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Change Battery </string>
+         </property>
+        </widget>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>941</width>
-     <height>38</height>
+     <width>1140</width>
+     <height>22</height>
     </rect>
    </property>
   </widget>

@@ -65,5 +65,12 @@ private slots:
 
     void handlePowerOn();
 
+    void handleConnectionTest(int);
+
+    void handleModeLight(bool);
+
+    void handleBatteryChange();
+
+
 };
 #endif // MAINWINDOW_H
