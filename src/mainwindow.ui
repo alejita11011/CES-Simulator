@@ -197,7 +197,6 @@ radius: 1.35, stop: 0 #fff, stop: 1 #bbb
          <font>
           <family>Nimbus Sans L</family>
           <pointsize>12</pointsize>
-          <weight>75</weight>
           <italic>false</italic>
           <bold>true</bold>
          </font>
@@ -232,7 +231,7 @@ background-color: rgb(255, 255, 255);</string>
         </property>
         <property name="styleSheet">
          <string notr="true">border-radius: 12px;
-background-color: rgb(170, 170, 255);
+background-color: rgb(255, 255, 255);
 color: rgb(0, 0, 0);
 selection-background-color: rgb(122, 0, 0)</string>
         </property>
@@ -647,7 +646,7 @@ background-color: rgb(255, 255, 255);</string>
      <x>0</x>
      <y>0</y>
      <width>1140</width>
-     <height>22</height>
+     <height>17</height>
     </rect>
    </property>
   </widget>
