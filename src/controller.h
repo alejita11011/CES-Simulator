@@ -6,6 +6,7 @@
 #include <QTimer>
 #include <QObject>
 #include <QString>
+#include <iostream>
 #include "record.h"
 #include "sessiontype.h"
 #include "earclips.h"
@@ -87,6 +88,7 @@ private:
     void stopSession();
     void stopRecordPrompt(bool shouldRecord);
     void togglePower();
+    void pausedSession();
 
 };
 

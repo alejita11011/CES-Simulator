@@ -20,6 +20,7 @@ Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QOb
     this->context["sessionSelection"]    = false;
     this->context["connectionTest"]      = false;
     this->context["activeSession"]       = false;
+    this->context["pausedSession"]       = false;
     this->context["promptRecordSession"] = false;
 
     // Timers
@@ -296,7 +297,13 @@ void Controller::handleEarClipConnectionLevel(int level, QString disconnected)
         // connectionModeLight(currentSession->isShortPulse());
         connectionModeLight(true); // for testing purposes
         sendEarClipConnection(level, disconnected);
-        stopSession();
+        //stopSession();
+        setContext("pausedSession");
+        pausedSession();
+    }
+    else if(getContext("pausedSession"))
+    {
+        sendEarClipConnection(level, disconnected);
     }
 
 
@@ -306,4 +313,23 @@ void Controller::handleEarClipConnection(int index)
 {
     earClipsAreConnected = index;
     earClips->earClipConnectionTest();
+}
+
+void Controller::pausedSession()
+{
+    if (getContext("pausedSession"))
+    {
+        int temp = earClips->earClipConnectionTest();
+        for (int i = 0; i < 10; i++)
+        {
+            if (temp > 0 && earClipsAreConnected)
+            {
+                setContext("activeSession");
+                return;
+            }
+            delayMs(500);
+            temp = earClips->earClipConnectionTest();
+        }
+        stopSession();
+    }
 }
