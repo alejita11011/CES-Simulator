@@ -86,7 +86,7 @@ private:
     void stopSession();
     void stopRecordPrompt(bool shouldRecord);
     void togglePower();
-
+    void resetShutDownTimer();
 };
 
 #endif // CONTROLLER_H
