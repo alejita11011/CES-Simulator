@@ -16,6 +16,8 @@ participant "availableSessionWidgets :\nQWidget" as availableSessionWidgets
 participant "otherSessionWidgets :\nQWidget" as otherSessionWidgets
 participant "selectedNumberLabel :\nQLabel" as selectedNumberLabel
 participant "otherNumberLabels :\nQLabel" as otherNumberLabels
+participant "shortPulse :\QWidget" as shortPulse
+participant "longPulse :\QWidget" as longPulse
 
 note over controller: <size:10>isPowerOn = true\n<size:10>context = "sessionSelection"\n<size:10>selectedGroupIndex = 0
 
@@ -65,9 +67,9 @@ loop Until user selects the right session
     return true
 
     mainWindow -> mainWindow ++ : setLitUp(shortPulse, true)
-    mainWindow -> otherSessionWidgets -- : setStyleSheet("border-image: /on/shortPulse.png")
+    mainWindow -> shortPulse -- : setStyleSheet("border-image: /on/shortPulse.png")
     mainWindow -> mainWindow ++ : setLitUp(longPulse, false)
-    mainWindow -> otherSessionWidgets -- : setStyleSheet("border-image: /off/longPulse.png")
+    mainWindow -> longPulse -- : setStyleSheet("border-image: /off/longPulse.png")
     return
     controller --
 end ref
