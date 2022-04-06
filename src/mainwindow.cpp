@@ -301,29 +301,16 @@ void MainWindow::handleConnectionTest(int level, QString disconnected)
     }
     else
     {
+        setLitUp({7,8});
         if (disconnected == "Left")
         {
-            setLitUp({7,8});
-            for (int i = 0; i < 3; i++)
-            {
-                setLitUp(ui->leftConnected, true);
-                delayMs(200);
-                setLitUp(ui->leftConnected, false);
-                delayMs(200);
-            }
+            flash(ui->leftConnected, 3, 200);
+
         }
         else if (disconnected == "Right")
         {
-            setLitUp({7,8});
-            for (int i = 0; i < 3; i++)
-            {
-                setLitUp(ui->rightConnected, true);
-                delayMs(200);
-                setLitUp(ui->rightConnected, false);
-                delayMs(200);
-            }
+            flash(ui->rightConnected, 3, 200);
         }
-        setLitUp({7,8});
     }
     delayMs(1000);
 }
@@ -332,24 +319,10 @@ void MainWindow::handleModeLight(bool isShortPulse)
 {
     if (isShortPulse)
     {
-        for (int i = 0; i < 3; i++)
-        {
-            // makes this light blink before session starts
-            // if there is no connection it keeps blinking
-            setLitUp(ui->shortPulse, true);
-            delayMs(200);
-            setLitUp(ui->shortPulse, false);
-        }
+        flash(ui->shortPulse, 3, 100);
         return;
     }
-    for (int i = 0; i < 3; i++)
-    {
-        // makes this light blink before session starts
-        // if there is no connection it keeps blinking
-        setLitUp(ui->longPulse, true);
-        delayMs(200);
-        setLitUp(ui->longPulse, false);
-    }
+    flash(ui->longPulse, 3, 200);
 }
 
 void MainWindow::handleBatteryChange()
@@ -364,3 +337,12 @@ void MainWindow::handleBatteryChange()
 
 
 
+void MainWindow::flash(QWidget *widget, int times, int onDurationMs)
+{
+    for (int i = 0; i < times; i++)
+    {
+        setLitUp(widget, true);
+        delayMs(onDurationMs);
+        setLitUp(widget, false);
+    }
+}
