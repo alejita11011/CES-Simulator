@@ -325,7 +325,7 @@ void MainWindow::handleModeLight(bool isShortPulse)
 {
     if (isShortPulse)
     {
-        flash(ui->shortPulse, 3, 100);
+        flash(ui->shortPulse, 3, 200);
         return;
     }
     flash(ui->longPulse, 3, 200);
@@ -350,6 +350,7 @@ void MainWindow::flash(QWidget *widget, int times, int onDurationMs)
         setLitUp(widget, true);
         delayMs(onDurationMs);
         setLitUp(widget, false);
+        delayMs(onDurationMs);
     }
 }
 
@@ -360,5 +361,6 @@ void MainWindow::flash(QSet<int> numbers, int times, int onDurationMs)
         setLitUp(numbers);
         delayMs(onDurationMs);
         setLitUp({});
+        delayMs(onDurationMs);
     }
 }

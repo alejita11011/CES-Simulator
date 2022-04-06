@@ -11,10 +11,6 @@ int EarClips::earClipConnectionTest()
     if (leftEarClipConnection == 0 || rightEarClipConnection == 0)
     {
         emit connectionLevel(0, leftEarClipConnection == 0, rightEarClipConnection == 0);
-        return;
-    }
-    {
-        emit connectionLevel(0, false, true);
         return 0;
     }
     int connectionValue = std::min(leftEarClipConnection, rightEarClipConnection);
