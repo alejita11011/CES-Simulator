@@ -19,6 +19,11 @@ Session* Group::getSessions(int sessionIndex)
     return this->sessions[sessionIndex];
 }
 
+int Group::size()
+{
+    return this->sessions.size();
+}
+
 bool Group::containsSessionType(SessionType sessionType)
 {
     for (Session *session : sessions)
