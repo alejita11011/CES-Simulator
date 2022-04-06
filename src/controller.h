@@ -38,7 +38,8 @@ signals:
     void powerOn(int batteryLevel, bool isLow);
     void connectionModeLight(bool);
     void sendEarClipConnection(int);
-    void selectSession(Session *session);
+    void selectGroup(Group *group);
+    void selectSession(int selectedSessionIndex);
 
 private slots:
     void handleSelectClicked();

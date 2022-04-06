@@ -89,6 +89,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->batteryChangeButton, SIGNAL(clicked()), this, SLOT(handleBatteryChange()));
     connect(ui->IntensityDown, SIGNAL(clicked()), controller, SLOT(handleDownClicked()));
     connect(ui->IntensityUp, SIGNAL(clicked()), controller, SLOT(handleUpClicked()));
+    //Session selection
+    connect(controller, SIGNAL(selectGroup(Group *)), this, SLOT(handleGroupSelected(Group *)));
+    connect(controller, SIGNAL(selectSession(int)), this, SLOT(handleSessionSelected(int)));
 }
 
 MainWindow::~MainWindow()
