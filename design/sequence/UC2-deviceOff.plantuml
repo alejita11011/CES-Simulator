@@ -1,37 +1,36 @@
-@startuml UC1-deviceOn
+@startuml UC2-deviceOff
 
-title <size:32>**UC1:** Turn OASIS Device On
+title <size:32>**UC2:** Turn OASIS Device Off
 
 actor       User as user
 participant "powerButton :\nQPushButton" as powerButton
 participant "controller :\nController" as controller
 participant "powerHoldTimer :\nQTimer" as powerHoldTimer
-participant "battery :\nBattery" as battery
 participant "mainWindow :\nQMainWindow" as mainWindow
 participant "powerLed :\nQWidget" as powerLed
+participant "widgets[i] :\nQWidget" as widget
 participant "numberLabels[i] :\nQLabel" as numberLabel
+participant "powerOffView :\nQGraphicsView" as powerOffView
 
-note over controller: <size:10>isPowerOn = false \n<size:10>context = ""
+note over controller: <size:10>isPowerOn = true
 user -> powerButton ++ : Press + hold
 powerButton -> controller ++-- : pressed()
 controller -> powerHoldTimer -- : start(2000)
 
 powerHoldTimer -> powerHoldTimer ++ : timeout()
 powerHoldTimer -> controller --++ : togglePower()
-note over controller: <size:10>isPowerOn = true
-controller -> battery ++ : isCriticallyLow()
-return false
-controller -> mainWindow ++ : powerOn(batteryLevel, isLow)
-mainWindow -> mainWindow ++ : setLitUp(powerLed, true)
-mainWindow -> powerLed -- : setStyleSheet(\n  "border-image: /on/power.png"\n)
-mainWindow -> mainWindow ++ : setLitUp({1,2,3,4,5,6,7,8})
-mainWindow -> numberLabel -- : setStyleSheet(\n  "background-color:rgb(249, 166, 0)"\n)
-mainWindow -> mainWindow : delayMs(2000)
+note over controller: <size:10>isPowerOn = false
+controller -> mainWindow ++ : powerOff()
+mainWindow -> mainWindow ++ : setLitUp(powerLed, false)
+mainWindow -> powerLed -- : setStyleSheet(\n  "border-image: /off/power.png"\n)
+mainWindow -> mainWindow ++ : setLitUp(widgets[i], false)
+mainWindow -> widget -- : setStyleSheet(\n  "border-image: /off/<widget>.png"\n)
 mainWindow -> mainWindow ++ : setLitUp({})
 mainWindow -> numberLabel -- : setStyleSheet(\n  "background-color:rgb(130, 130, 130)"\n)
+mainWindow -> powerOffView : raise()
 return
-controller -> controller ++-- : setContext("sessionSelection")
-note over controller: <size:10>context = "sessionSelection"
+controller -> controller ++-- : resetContext()
+note over controller: <size:10>context = ""
 controller --
 
 user -> powerButton ++ : Release
