@@ -234,7 +234,15 @@ void Controller::handlePowerClicked()
 {
     resetShutDownTimer();
 
-    if (getContext("activeSession"))
+    if (getContext("sessionSelection"))
+    {
+        selectedGroupIndex   = (selectedGroupIndex + 1) % groups.size();
+        //Prevent showing inexistent session option by setting index outside 0-3 range (nothing lights up)
+        selectedSessionIndex = groups[selectedGroupIndex]->getSessions().size() == 0 ? -1 : 0;
+        emit selectGroup(groups[selectedGroupIndex]);
+        emit selectSession(selectedSessionIndex);
+    }
+    else if (getContext("activeSession"))
     {
         //The session stops
         stopSession();
