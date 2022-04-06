@@ -349,14 +349,15 @@ void Controller::pausedSession()
                     handleDownClicked();
                     delayMs(200);
                 }
-                // uncomment once merged with main branch
-                // resetShutDownTimer();
+                resetShutDownTimer();
                 return;
             }
             delayMs(500);
             temp = earClips->earClipConnectionTest();
         }
         stopSession();
+    }
+}
 
 void Controller::resetShutDownTimer()
 {
