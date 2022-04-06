@@ -34,7 +34,7 @@ note over controller: <size:10>context = ""
 controller --
 
 user -> powerButton ++ : Release
-powerButton -> controller ++-- : released()
+powerButton -> controller ++-- : clicked()
 controller -> powerHoldTimer ++ : isActive()
 return false
 
