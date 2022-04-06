@@ -19,6 +19,19 @@ QList<Session *> Group::getSessions()
     return this->sessions;
 }
 
+bool Group::containsSessionType(SessionType sessionType)
+{
+    for (Session *session : sessions)
+    {
+        if (session->getType() == sessionType)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 Group::~Group()
 {
     for (Session* session: this->sessions)

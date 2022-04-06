@@ -27,7 +27,7 @@ public:
     static int IDLE_TIMEOUT_MS;
 
 signals:
-    void newRecord(Record* record);
+    void newRecord(Record *record);
     void sessionProgress(int remainingSeconds, SessionType type);
     void adjustSessionIntensity(int intensity);
     void sessionEnds();
@@ -38,6 +38,8 @@ signals:
     void powerOn(int batteryLevel, bool isLow);
     void connectionModeLight(bool);
     void sendEarClipConnection(int);
+    void selectGroup(Group *group);
+    void selectSession(int selectedSessionIndex, Session *session);
 
 private slots:
     void handleSelectClicked();
@@ -49,13 +51,15 @@ private slots:
 
 private:
     QMap<QString, bool> context;
-    QList<Record*> history;
+    QList<Record *> history;
     QList<Group *> groups;
     QTimer *shutDownTimer;
     Session *currentSession;
     EarClips *earClips;
     Battery *currentBattery;
     bool isPowerOn;
+    int selectedGroupIndex;
+    int selectedSessionIndex;
     int elapsedSessionTime;
     int timerId;
     bool earClipsAreConnected;
@@ -87,6 +91,7 @@ private:
     void stopRecordPrompt(bool shouldRecord);
     void togglePower();
     void resetShutDownTimer();
+
 };
 
 #endif // CONTROLLER_H

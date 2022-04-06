@@ -47,7 +47,9 @@ private:
 private slots:
     void handleNewRecord(Record* record);  
 
-    void handleGroupSelected(/* Group *group */);
+    void handleGroupSelected(Group *group);
+
+    void handleSessionSelected(int selectedSessionIndex, Session *selectedSession);
 
     void handleSessionProgress(int elapsedSeconds, SessionType sessionType);
 
