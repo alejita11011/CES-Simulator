@@ -39,7 +39,7 @@ signals:
     void connectionModeLight(bool);
     void sendEarClipConnection(int);
     void selectGroup(Group *group);
-    void selectSession(int selectedSessionIndex);
+    void selectSession(int selectedSessionIndex, Session *session);
 
 private slots:
     void handleSelectClicked();

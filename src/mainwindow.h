@@ -49,7 +49,7 @@ private slots:
 
     void handleGroupSelected(Group *group);
 
-    void handleSessionSelected(int selectedSessionIndex);
+    void handleSessionSelected(int selectedSessionIndex, Session *selectedSession);
 
     void handleSessionProgress(int elapsedSeconds, SessionType sessionType);
 

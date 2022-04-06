@@ -91,7 +91,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->IntensityUp, SIGNAL(clicked()), controller, SLOT(handleUpClicked()));
     //Session selection
     connect(controller, SIGNAL(selectGroup(Group *)), this, SLOT(handleGroupSelected(Group *)));
-    connect(controller, SIGNAL(selectSession(int)), this, SLOT(handleSessionSelected(int)));
+    connect(controller, SIGNAL(selectSession(int, Session *)), this, SLOT(handleSessionSelected(int, Session *)));
 }
 
 MainWindow::~MainWindow()
@@ -156,9 +156,25 @@ void MainWindow::handleGroupSelected(Group *group)
     }
 }
 
-void MainWindow::handleSessionSelected(int selectedSessionIndex)
+void MainWindow::handleSessionSelected(int selectedSessionIndex, Session *selectedSession)
 {
     setLitUp({selectedSessionIndex + 1});
+
+    if (selectedSession == nullptr)
+    {
+        setLitUp(ui->shortPulse, false);
+        setLitUp(ui->longPulse, false);
+    }
+    else if (selectedSession->isShortPulse())
+    {
+        setLitUp(ui->shortPulse, true);
+        setLitUp(ui->longPulse, false);
+    }
+    else
+    {
+        setLitUp(ui->shortPulse, false);
+        setLitUp(ui->longPulse, true);
+    }
 }
 
 //Displays session progress on device screen
