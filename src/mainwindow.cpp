@@ -301,7 +301,8 @@ void MainWindow::handleConnectionTest(int level, bool isLeftDisconnected, bool i
     }
     else
     {
-        setLitUp({7,8});
+        //setLitUp({7,8});
+        flash({7,8}, 3, 200);
         if (isLeftDisconnected && isRightDisconnected)
         {
             flash(ui->leftConnected, 3, 200);
@@ -349,5 +350,15 @@ void MainWindow::flash(QWidget *widget, int times, int onDurationMs)
         setLitUp(widget, true);
         delayMs(onDurationMs);
         setLitUp(widget, false);
+    }
+}
+
+void MainWindow::flash(QSet<int> numbers, int times, int onDurationMs)
+{
+    for (int i = 0; i < times; i++)
+    {
+        setLitUp(numbers);
+        delayMs(onDurationMs);
+        setLitUp({});
     }
 }

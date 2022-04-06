@@ -45,6 +45,7 @@ private:
     void setLitUp(QWidget *widget, bool litUp);
     void setLitUp(QSet<int> numbers);
     void flash(QWidget *, int, int);
+    void flash(QSet<int> , int, int);
 
 private slots:
     void handleNewRecord(Record* record);  
