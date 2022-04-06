@@ -8,7 +8,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     // UI setup
     ui->setupUi(this);
-    //this->setStyleSheet("MainWindow{background-image: url(:/images/CES.png); background-position: center;}");
     this->setStyleSheet("QWidget#CESwidget{border-image: url(:/images/CES.png); background-position: center;}");
     groupWidgets["20min"] = ui->twentyMinGroup;
     groupWidgets["45min"] = ui->fourtyFiveMinGroup;
@@ -51,7 +50,6 @@ MainWindow::MainWindow(QWidget *parent)
     //Create battery
     Battery *battery     = new Battery();
 
-
     //Create controller
     controller           = new Controller(battery, groups); // TODO singleton
 
@@ -71,7 +69,7 @@ MainWindow::MainWindow(QWidget *parent)
     //When shutdown timer reaches 0 OR user turns off device
     connect(controller, SIGNAL(powerOff()), this, SLOT(handlePowerOff()));
     //User turns on device
-    connect(controller, SIGNAL(powerOn()), this, SLOT(handlePowerOn()));
+    connect(controller, SIGNAL(powerOn(int, bool)), this, SLOT(handlePowerOn(int, bool)));
     connect(controller, SIGNAL(batteryLevel(bool)), this, SLOT(handleBattery(bool)));
     connect(controller, SIGNAL(batteryShutDown()), this, SLOT(handleBatteryShutDown()));
 
@@ -144,7 +142,6 @@ void MainWindow::handleSessionProgress(int remainingSeconds, SessionType session
     ui->sessionProgressValues->raise();
     ui->sessionProgressValues->clear();
     ui->sessionProgressValues->setText(formatSeconds(remainingSeconds) + "\n" + ToString(sessionType));
-
 }
 
 void MainWindow::handleIntensity(int intensity)
@@ -167,18 +164,9 @@ void MainWindow::handleEndedSession(){
     }
 
     //Prompt user to record session
-    //Check mark : Yes
-    //Power button : No
     ui->textValues->raise();
     ui->textValues->setText("Do you want to record the session?\nPress check mark/power");
 
-}
-
-void MainWindow::handleResetDisplay()
-{
-    ui->listWidget->raise();
-    setLitUp({});
-    handleGroupSelected();
 }
 
 void MainWindow::setLitUp(QWidget *widget, bool litUp)
@@ -231,17 +219,50 @@ void MainWindow::handleBattery(bool critical)
 
 void MainWindow::handleBatteryShutDown()
 {
+    //Battery is critically low
     ui->textValues->raise();
     ui->textValues->setText("Battery critically low\nShutting down");
-    delayMs(3000);
+    ui->SelectButton->setDisabled(true);
+    setLitUp({1});
+    delayMs(2000);
+
 }
 
-void MainWindow::handlePowerOn()
+// Power on (assuming not critically low)
+void MainWindow::handlePowerOn(int batteryLevel, bool isLow)
 {
-    ui->listWidget->raise();
-    ui->textValues->raise();
-    ui->textValues->setText("No records\nStart a session");
+    handleResetDisplay();
+
+    ui->SelectButton->setDisabled(false);
     setLitUp(ui->powerLed, true);
+
+    //Display battery level
+    qDebug() << "BATTERY LEVEL" << batteryLevel;
+    if(isLow){
+        //Battery is low
+        setLitUp({1,2});
+    }else if (batteryLevel <= 75){
+        setLitUp({1,2,3,4,5,6});
+    }else{
+        setLitUp({1,2,3,4,5,6,7,8});
+    }
+
+    delayMs(2000);
+    setLitUp({});
+}
+
+void MainWindow::handleResetDisplay()
+{
+    if (ui->listWidget->count() == 0)
+    {
+        ui->textValues->raise();
+        ui->textValues->setText("No records\nStart a session");
+    } else
+    {
+        ui->listWidget->raise();
+    }
+    setLitUp({});
+    handleGroupSelected();
 }
 
 void MainWindow::handlePowerOff()
