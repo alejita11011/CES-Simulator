@@ -325,6 +325,13 @@ void Controller::pausedSession()
             if (temp > 0 && earClipsAreConnected)
             {
                 setContext("activeSession");
+                for (int j = currentIntensity; j > 0; j--)
+                {
+                    handleDownClicked();
+                    delayMs(200);
+                }
+                // uncomment once merged with main branch
+                // resetShutDownTimer();
                 return;
             }
             delayMs(500);

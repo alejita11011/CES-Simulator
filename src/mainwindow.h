@@ -8,6 +8,7 @@
 #include <QMap>
 #include <QLabel>
 #include <QSet>
+#include <iostream>
 #include "utils.h"
 #include "controller.h"
 #include "record.h"

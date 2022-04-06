@@ -288,6 +288,7 @@ void MainWindow::handleConnectionTest(int level, QString disconnected)
                 setLitUp(ui->leftConnected, true);
                 delayMs(200);
                 setLitUp(ui->leftConnected, false);
+                delayMs(200);
             }
         }
         else if (disconnected == "Right")
@@ -298,6 +299,7 @@ void MainWindow::handleConnectionTest(int level, QString disconnected)
                 setLitUp(ui->rightConnected, true);
                 delayMs(200);
                 setLitUp(ui->rightConnected, false);
+                delayMs(200);
             }
         }
         setLitUp({7,8});
