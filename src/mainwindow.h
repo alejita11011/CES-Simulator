@@ -51,7 +51,7 @@ private slots:
 
     void handleSessionSelected(int selectedSessionIndex, Session *selectedSession);
 
-    void handleSessionProgress(int elapsedSeconds, SessionType sessionType);
+    void handleSessionProgress(int elapsedSeconds, SessionType sessionType, int batteryPercentage);
 
     void handleIntensity(int intensity);
 

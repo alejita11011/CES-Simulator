@@ -58,7 +58,7 @@ MainWindow::MainWindow(QWidget *parent)
     //for testing
     controller->setEarClips(earClips);
 
-    connect(controller, SIGNAL(sessionProgress(int, SessionType)), this, SLOT(handleSessionProgress(int, SessionType)));
+    connect(controller, SIGNAL(sessionProgress(int, SessionType, int)), this, SLOT(handleSessionProgress(int, SessionType, int)));
     //Adjust Intensity
     connect(controller, SIGNAL(adjustSessionIntensity(int)), this, SLOT(handleIntensity(int)));
     connect(controller, SIGNAL(newRecord(Record *)), this, SLOT(handleNewRecord(Record *)));
@@ -178,12 +178,13 @@ void MainWindow::handleSessionSelected(int selectedSessionIndex, Session *select
 }
 
 //Displays session progress on device screen
-void MainWindow::handleSessionProgress(int remainingSeconds, SessionType sessionType)
+void MainWindow::handleSessionProgress(int remainingSeconds, SessionType sessionType, int batteryPercentage)
 {
     setLitUp({});
     ui->sessionProgressValues->raise();
     ui->sessionProgressValues->clear();
     ui->sessionProgressValues->setText(formatSeconds(remainingSeconds) + "\n" + ToString(sessionType));
+    ui->progressBar->setValue(batteryPercentage);
 }
 
 void MainWindow::handleIntensity(int intensity)
@@ -358,10 +359,7 @@ void MainWindow::handleBatteryChange()
 {
     Battery *b = new Battery();
     controller->changeBattery(b);
-    // let the user know battery has been changed?
-    // display battery level
-    // if this is pressed during active session
-    // the session should be stopped.
+    ui->progressBar->setValue(100);
 }
 
 

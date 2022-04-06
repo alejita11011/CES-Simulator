@@ -115,7 +115,7 @@ void Controller::handleSelectClicked()
         }
         setContext("activeSession");
 
-        emit sessionProgress(currentSession->getPresetDurationSeconds(), currentSession->getType());
+        emit sessionProgress(currentSession->getPresetDurationSeconds(), currentSession->getType(), currentBattery->getBatteryLevel());
     }
     else if (getContext("promptRecordSession"))
     {
@@ -190,7 +190,7 @@ void Controller::timerEvent(QTimerEvent *event)
         // Emit progress of active session
         int remainingSeconds = currentSession->getPresetDurationSeconds() - elapsedSessionTime;
         SessionType sessionType = currentSession->getType();
-        emit sessionProgress(remainingSeconds, sessionType);
+        emit sessionProgress(remainingSeconds, sessionType, currentBattery->getBatteryLevel());
 
         //Battery depletes every second scaled by intensity level
         currentBattery->deplete((currentIntensity + 1)/2);

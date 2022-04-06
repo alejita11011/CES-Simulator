@@ -473,7 +473,7 @@ background-color: rgb(255, 255, 255);</string>
         <string notr="true"/>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="earClipsSliderWidget">
         <attribute name="title">
@@ -652,7 +652,7 @@ margin: 30px;</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
-           <widget class="QLabel" name="label">
+           <widget class="QLabel" name="progressBarLabel">
             <property name="font">
              <font>
               <family>Noto Sans Adlam</family>
