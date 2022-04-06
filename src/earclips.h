@@ -24,7 +24,7 @@ public:
     int earClipConnectionTest();
 
 signals:
-    void connectionLevel(int, QString);
+    void connectionLevel(int, bool, bool);
 
 
 private slots:

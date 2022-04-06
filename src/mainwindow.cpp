@@ -82,7 +82,7 @@ MainWindow::MainWindow(QWidget *parent)
     //Handle events for right ear clip slider
     connect(ui->rightEarClipSlider, SIGNAL(valueChanged(int)), earClips, SLOT(handleRightEarClipSlider(int)));
     //Handle signals from connection tests
-    connect(controller, SIGNAL(sendEarClipConnection(int, QString)), this, SLOT(handleConnectionTest(int, QString)));
+    connect(controller, SIGNAL(sendEarClipConnection(int, bool, bool)), this, SLOT(handleConnectionTest(int, bool, bool)));
     //Handle connectionModeLight signals
     connect(controller,SIGNAL(connectionModeLight(bool)), this, SLOT(handleModeLight(bool)));
     //Handle battery change
@@ -289,7 +289,7 @@ void MainWindow::handlePowerOff()
     ui->powerOffView->raise();
 }
 
-void MainWindow::handleConnectionTest(int level, QString disconnected)
+void MainWindow::handleConnectionTest(int level, bool isLeftDisconnected, bool isRightDisconnected)
 {
     if (level == 2)
     {
@@ -302,12 +302,17 @@ void MainWindow::handleConnectionTest(int level, QString disconnected)
     else
     {
         setLitUp({7,8});
-        if (disconnected == "Left")
+        if (isLeftDisconnected && isRightDisconnected)
+        {
+            flash(ui->leftConnected, 3, 200);
+            flash(ui->rightConnected, 3, 200);
+        }
+        else if (isLeftDisconnected)
         {
             flash(ui->leftConnected, 3, 200);
 
         }
-        else if (disconnected == "Right")
+        else if (isRightDisconnected)
         {
             flash(ui->rightConnected, 3, 200);
         }

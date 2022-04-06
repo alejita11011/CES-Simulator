@@ -282,7 +282,7 @@ void Controller::setEarClips(EarClips *e)
     }
     earClips = e;
     // handle connectionLevel signal from EarClips
-    connect(earClips, SIGNAL(connectionLevel(int, QString)), this, SLOT(handleEarClipConnectionLevel(int, QString)));
+    connect(earClips, SIGNAL(connectionLevel(int, bool, bool)), this, SLOT(handleEarClipConnectionLevel(int, bool, bool)));
 }
 
 void Controller::changeBattery(Battery *b)
@@ -291,7 +291,7 @@ void Controller::changeBattery(Battery *b)
     currentBattery = b;
 }
 
-void Controller::handleEarClipConnectionLevel(int level, QString disconnected)
+void Controller::handleEarClipConnectionLevel(int level, bool isLeftDisconnected, bool isRightDisconnected)
 {
 
     if (!earClipsAreConnected)
@@ -304,7 +304,7 @@ void Controller::handleEarClipConnectionLevel(int level, QString disconnected)
         // crashes the app since we have no currentSession
         // connectionModeLight(currentSession->isShortPulse());
         connectionModeLight(true); // for testing purposes
-        sendEarClipConnection(level, "None");
+        sendEarClipConnection(level, false, false);
 
     }
     else if (getContext("activeSession") && level == 0)
@@ -315,14 +315,13 @@ void Controller::handleEarClipConnectionLevel(int level, QString disconnected)
         // which earclip was disconnected.
         // connectionModeLight(currentSession->isShortPulse());
         connectionModeLight(true); // for testing purposes
-        sendEarClipConnection(level, disconnected);
-        //stopSession();
+        sendEarClipConnection(level, isLeftDisconnected, isRightDisconnected);
         setContext("pausedSession");
         pausedSession();
     }
     else if(getContext("pausedSession"))
     {
-        sendEarClipConnection(level, disconnected);
+        sendEarClipConnection(level, isLeftDisconnected, isRightDisconnected);
     }
 
 

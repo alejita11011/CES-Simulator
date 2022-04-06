@@ -39,12 +39,12 @@ signals:
     void powerOff();
     void powerOn(int batteryLevel, bool isLow);
     void connectionModeLight(bool);
-    void sendEarClipConnection(int, QString);
+    void sendEarClipConnection(int, bool, bool);
 
 private slots:
     void handleSelectClicked();
     void handlePowerClicked();
-    void handleEarClipConnectionLevel(int, QString);
+    void handleEarClipConnectionLevel(int, bool, bool);
     void handleEarClipConnection(int);
     void handleDownClicked();
     void handleUpClicked();
