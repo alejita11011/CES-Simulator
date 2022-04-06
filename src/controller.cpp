@@ -222,6 +222,10 @@ void Controller::stopRecordPrompt(bool shouldRecord)
         setContext("sessionSelection");
         qDebug() << "HERE IN USESELECTION"; // FOR TESTING
         emit useSelectionContext();
+        selectedGroupIndex   = 0;
+        selectedSessionIndex = 0;
+        emit selectGroup(groups[selectedGroupIndex]);
+        emit selectSession(selectedSessionIndex);
     }
 
 }
@@ -267,7 +271,8 @@ void Controller::togglePower(){
         setContext("sessionSelection");
 
         // Update UI
-
+        emit selectGroup(groups[selectedGroupIndex]);
+        emit selectSession(selectedSessionIndex);
     }
     else
     {

@@ -129,13 +129,36 @@ void MainWindow::handleNewRecord(Record *record)
     new QListWidgetItem(itemText, ui->listWidget);
 }
 
-void MainWindow::handleGroupSelected(/* Group *group */) // TODO
+void MainWindow::handleGroupSelected(Group *group)
 {
-    setLitUp(ui->fourtyFiveMinGroup, true);
-    setLitUp(ui->subDeltaSession, true);
-    setLitUp(ui->deltaSession, true);
-    setLitUp(ui->alphaSession, true);
-    setLitUp(ui->thetaSession, true);
+    for (QString groupName : groupWidgets.keys())
+    {
+        if (groupName == group->getName())
+        {
+            setLitUp(groupWidgets[groupName], true);
+        }
+        else
+        {
+            setLitUp(groupWidgets[groupName], false);
+        }
+    }
+
+    for (SessionType sessionType : sessionWidgets.keys())
+    {
+        if (group->containsSessionType(sessionType))
+        {
+            setLitUp(sessionWidgets[sessionType], true);
+        }
+        else
+        {
+            setLitUp(sessionWidgets[sessionType], false);
+        }
+    }
+}
+
+void MainWindow::handleSessionSelected(int selectedSessionIndex)
+{
+    setLitUp({selectedSessionIndex + 1});
 }
 
 //Displays session progress on device screen
@@ -263,8 +286,6 @@ void MainWindow::handleResetDisplay()
     {
         ui->listWidget->raise();
     }
-    setLitUp({});
-    handleGroupSelected();
 }
 
 void MainWindow::handlePowerOff()
