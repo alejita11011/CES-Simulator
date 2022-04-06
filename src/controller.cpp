@@ -122,7 +122,15 @@ void Controller::handleDownClicked()
 {
     resetShutDownTimer();
 
-    if (getContext("activeSession"))
+    if (getContext("sessionSelection"))
+    {
+        if (groups[selectedGroupIndex]->getSessions().size() > 0)
+        {
+            selectedSessionIndex = (selectedSessionIndex - 1) % groups[selectedGroupIndex]->getSessions().size();
+            emit selectSession(selectedSessionIndex);
+        }
+    }
+    else if (getContext("activeSession"))
     {
 
         if (currentIntensity > 1)
@@ -138,7 +146,15 @@ void Controller::handleUpClicked()
 {
     resetShutDownTimer();
 
-    if (getContext("activeSession"))
+    if (getContext("sessionSelection"))
+    {
+        if (groups[selectedGroupIndex]->getSessions().size() > 0)
+        {
+            selectedSessionIndex = (selectedSessionIndex + 1) % groups[selectedGroupIndex]->getSessions().size();
+            emit selectSession(selectedSessionIndex);
+        }
+    }
+    else if (getContext("activeSession"))
     {
         if (currentIntensity < 8)
         {
