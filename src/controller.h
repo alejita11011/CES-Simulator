@@ -37,7 +37,7 @@ signals:
     void batteryLevel(bool critical);
     void batteryShutDown();
     void powerOff();
-    void powerOn();
+    void powerOn(int batteryLevel, bool isLow);
     void connectionModeLight(bool);
     void sendEarClipConnection(int, QString);
 
@@ -89,6 +89,7 @@ private:
     void stopRecordPrompt(bool shouldRecord);
     void togglePower();
     void pausedSession();
+    void resetShutDownTimer();
 
 };
 

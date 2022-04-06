@@ -88,6 +88,8 @@ void Controller::resetContext()
 //Start selected session
 void Controller::handleSelectClicked()
 {
+    resetShutDownTimer();
+
     if (getContext("sessionSelection"))
     {
         currentSession = new Session(true, 0.5, 20, SessionType::SUB_DELTA); // HARDCODED SELECTED SESSION
@@ -117,6 +119,7 @@ void Controller::handleSelectClicked()
 
 void Controller::handleDownClicked()
 {
+    resetShutDownTimer();
 
     if (getContext("activeSession"))
     {
@@ -132,6 +135,8 @@ void Controller::handleDownClicked()
 
 void Controller::handleUpClicked()
 {
+    resetShutDownTimer();
+
     if (getContext("activeSession"))
     {
         if (currentIntensity < 8)
@@ -183,13 +188,14 @@ void Controller::timerEvent(QTimerEvent *event)
         }
 
         // Constantly refresh shut down timer during active session
-        shutDownTimer->start(IDLE_TIMEOUT_MS);
+        resetShutDownTimer();
     }
 
 }
 
 void Controller::stopSession()
 {
+    qDebug() << "Session stopping";
     setContext("promptRecordSession");
     emit sessionEnds();
 }
@@ -213,6 +219,7 @@ void Controller::stopRecordPrompt(bool shouldRecord)
     }else{
         //Set next context
         setContext("sessionSelection");
+        qDebug() << "HERE IN USESELECTION"; // FOR TESTING
         emit useSelectionContext();
     }
 
@@ -220,6 +227,8 @@ void Controller::stopRecordPrompt(bool shouldRecord)
 
 void Controller::handlePowerClicked()
 {
+    resetShutDownTimer();
+
     if (getContext("activeSession"))
     {
         //The session stops
@@ -237,21 +246,31 @@ void Controller::handlePowerClicked()
 
 void Controller::togglePower(){
     isPowerOn = !isPowerOn;
+    qDebug() << "Power on:" << isPowerOn;
 
     if (isPowerOn)
     {
         //Turn on device
-        emit powerOn();
-        shutDownTimer->start(IDLE_TIMEOUT_MS);
-        //FOR TESTING
+        qDebug() << currentBattery->getBatteryLevel(); // FOR TESTING
+
+        if (currentBattery->isCriticallyLow())
+        {
+            //Turn off device
+            emit batteryShutDown();
+            togglePower();
+            return;
+        }
+
+        emit powerOn(currentBattery->getBatteryLevel(), currentBattery->isLow());
+        resetShutDownTimer();
         setContext("sessionSelection");
-        //TODO DISPLAY BATTERY LEVEL
     }
     else
     {
         //Turn off device
         emit powerOff();
         shutDownTimer->stop();
+        resetContext();
     }
 }
 
@@ -338,5 +357,12 @@ void Controller::pausedSession()
             temp = earClips->earClipConnectionTest();
         }
         stopSession();
+
+void Controller::resetShutDownTimer()
+{
+    if (isPowerOn)
+    {
+        shutDownTimer->start(IDLE_TIMEOUT_MS);
+
     }
 }
