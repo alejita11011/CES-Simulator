@@ -116,7 +116,7 @@ void Controller::handleSelectClicked()
         }
         setContext("activeSession");
 
-        emit sessionProgress(currentSession->getPresetDurationSeconds(), currentSession->getType());
+        emit sessionProgress(currentSession->getPresetDurationSeconds(), currentSession->getType(), currentBattery->getBatteryLevel());
     }
     else if (getContext("promptRecordSession"))
     {
@@ -191,12 +191,11 @@ void Controller::timerEvent(QTimerEvent *event)
         // Emit progress of active session
         int remainingSeconds = currentSession->getPresetDurationSeconds() - elapsedSessionTime;
         SessionType sessionType = currentSession->getType();
-        emit sessionProgress(remainingSeconds, sessionType);
+        emit sessionProgress(remainingSeconds, sessionType, currentBattery->getBatteryLevel());
 
-        //Battery depletes every second scaled by intensity level
-        currentBattery->deplete((currentIntensity + 1)/2);
+        //Battery depletes every second scaled by intensity level and ear clip connection level
+        currentBattery->deplete(((currentIntensity + 1)/2) + earClips->earClipConnectionTest());
 
-        qDebug() << currentBattery->getBatteryLevel(); // FOR TESTING
 
         if (currentBattery->isCriticallyLow())
         {
@@ -297,7 +296,6 @@ void Controller::togglePower(){
     if (isPowerOn)
     {
         //Turn on device
-        qDebug() << currentBattery->getBatteryLevel(); // FOR TESTING
 
         if (currentBattery->isCriticallyLow())
         {

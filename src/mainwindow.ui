@@ -196,6 +196,7 @@ radius: 1.35, stop: 0 #fff, stop: 1 #bbb
         <property name="font">
          <font>
           <pointsize>12</pointsize>
+          <weight>75</weight>
           <italic>false</italic>
           <bold>true</bold>
          </font>
@@ -638,6 +639,44 @@ margin: 30px;</string>
           </item>
          </layout>
         </widget>
+        <widget class="QWidget" name="verticalLayoutWidget_2">
+         <property name="geometry">
+          <rect>
+           <x>60</x>
+           <y>570</y>
+           <width>311</width>
+           <height>161</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QLabel" name="progressBarLabel">
+            <property name="font">
+             <font>
+              <family>Noto Sans Adlam</family>
+              <pointsize>16</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Battery Percentage </string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QProgressBar" name="progressBar">
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+            <property name="value">
+             <number>100</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </widget>
       </widget>
      </item>
@@ -650,7 +689,7 @@ margin: 30px;</string>
      <x>0</x>
      <y>0</y>
      <width>1311</width>
-     <height>24</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

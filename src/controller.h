@@ -30,7 +30,7 @@ public:
 
 signals:
     void newRecord(Record *record);
-    void sessionProgress(int remainingSeconds, SessionType type);
+    void sessionProgress(int remainingSeconds, SessionType type, int batteryPercentage);
     void adjustSessionIntensity(int intensity);
     void sessionEnds();
     void useSelectionContext();
