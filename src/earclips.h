@@ -2,6 +2,7 @@
 #define EARCLIPS_H
 
 #include <QObject>
+#include <QString>
 
 /**
 * ear clips are set to be disconnected during the initialization
@@ -23,7 +24,7 @@ public:
     int earClipConnectionTest();
 
 signals:
-    void connectionLevel(int);
+    void connectionLevel(int, bool, bool);
 
 
 private slots:

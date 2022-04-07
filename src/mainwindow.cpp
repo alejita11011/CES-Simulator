@@ -82,7 +82,7 @@ MainWindow::MainWindow(QWidget *parent)
     //Handle events for right ear clip slider
     connect(ui->rightEarClipSlider, SIGNAL(valueChanged(int)), earClips, SLOT(handleRightEarClipSlider(int)));
     //Handle signals from connection tests
-    connect(controller, SIGNAL(sendEarClipConnection(int)), this, SLOT(handleConnectionTest(int)));
+    connect(controller, SIGNAL(sendEarClipConnection(int, bool, bool)), this, SLOT(handleConnectionTest(int, bool, bool)));
     //Handle connectionModeLight signals
     connect(controller,SIGNAL(connectionModeLight(bool)), this, SLOT(handleModeLight(bool)));
     //Handle battery change
@@ -194,6 +194,7 @@ void MainWindow::handleIntensity(int intensity)
 
 void MainWindow::handleEndedSession(){
     //Graphs from 8-1
+    delayMs(500);
     for(int end = 8; end >= 0; end--)
     {
         QSet<int> nums = {};
@@ -328,7 +329,7 @@ void MainWindow::handlePowerOff()
     ui->powerOffView->raise();
 }
 
-void MainWindow::handleConnectionTest(int level)
+void MainWindow::handleConnectionTest(int level, bool isLeftDisconnected, bool isRightDisconnected)
 {
     if (level == 2)
     {
@@ -340,18 +341,34 @@ void MainWindow::handleConnectionTest(int level)
     }
     else
     {
-        setLitUp({7,8});
+        //setLitUp({7,8});
+        flash({7,8}, 3, 200);
+        if (isLeftDisconnected && isRightDisconnected)
+        {
+            flash(ui->leftConnected, 3, 200);
+            flash(ui->rightConnected, 3, 200);
+        }
+        else if (isLeftDisconnected)
+        {
+            flash(ui->leftConnected, 3, 200);
+
+        }
+        else if (isRightDisconnected)
+        {
+            flash(ui->rightConnected, 3, 200);
+        }
     }
+    delayMs(1000);
 }
 
 void MainWindow::handleModeLight(bool isShortPulse)
 {
     if (isShortPulse)
     {
-        setLitUp(ui->shortPulse, true);
+        flash(ui->shortPulse, 3, 200);
         return;
     }
-    setLitUp(ui->longPulse, true);
+    flash(ui->longPulse, 3, 200);
 }
 
 void MainWindow::handleBatteryChange()
@@ -363,3 +380,24 @@ void MainWindow::handleBatteryChange()
 
 
 
+void MainWindow::flash(QWidget *widget, int times, int onDurationMs)
+{
+    for (int i = 0; i < times; i++)
+    {
+        setLitUp(widget, true);
+        delayMs(onDurationMs);
+        setLitUp(widget, false);
+        delayMs(onDurationMs);
+    }
+}
+
+void MainWindow::flash(QSet<int> numbers, int times, int onDurationMs)
+{
+    for (int i = 0; i < times; i++)
+    {
+        setLitUp(numbers);
+        delayMs(onDurationMs);
+        setLitUp({});
+        delayMs(onDurationMs);
+    }
+}

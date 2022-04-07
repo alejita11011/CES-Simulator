@@ -22,6 +22,7 @@ Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QOb
     this->context["sessionSelection"]    = false;
     this->context["connectionTest"]      = false;
     this->context["activeSession"]       = false;
+    this->context["pausedSession"]       = false;
     this->context["promptRecordSession"] = false;
 
     // Timers
@@ -93,12 +94,12 @@ void Controller::handleSelectClicked()
 
     if (getContext("sessionSelection"))
     {
-        if (groups[selectedGroupIndex]->getSessions().size() == 0)
+        if (groups[selectedGroupIndex]->size() == 0)
         {
             return;
         }
 
-        currentSession = groups[selectedGroupIndex]->getSessions()[selectedSessionIndex];
+        currentSession = groups[selectedGroupIndex]->getSession(selectedSessionIndex);
         //All sessions by default will be at intensity level 1
         currentIntensity = 1;
         highestIntensity = 1;
@@ -130,10 +131,10 @@ void Controller::handleDownClicked()
     if (getContext("sessionSelection"))
     {
         qDebug() << selectedSessionIndex;
-        if (groups[selectedGroupIndex]->getSessions().size() > 0)
+        if (groups[selectedGroupIndex]->size() > 0)
         {
-            selectedSessionIndex = ((selectedSessionIndex - 1) + groups[selectedGroupIndex]->getSessions().size()) % groups[selectedGroupIndex]->getSessions().size();
-            emit selectSession(selectedSessionIndex, groups[selectedGroupIndex]->getSessions()[selectedSessionIndex]);
+            selectedSessionIndex = ((selectedSessionIndex - 1) + groups[selectedGroupIndex]->size()) % groups[selectedGroupIndex]->size();
+            emit selectSession(selectedSessionIndex, groups[selectedGroupIndex]->getSession(selectedSessionIndex));
         }
         else
         {
@@ -158,10 +159,10 @@ void Controller::handleUpClicked()
 
     if (getContext("sessionSelection"))
     {
-        if (groups[selectedGroupIndex]->getSessions().size() > 0)
+        if (groups[selectedGroupIndex]->size() > 0)
         {
-            selectedSessionIndex = (selectedSessionIndex + 1) % groups[selectedGroupIndex]->getSessions().size();
-            emit selectSession(selectedSessionIndex, groups[selectedGroupIndex]->getSessions()[selectedSessionIndex]);
+            selectedSessionIndex = (selectedSessionIndex + 1) % groups[selectedGroupIndex]->size();
+            emit selectSession(selectedSessionIndex, groups[selectedGroupIndex]->getSession(selectedSessionIndex));
         }
         else
         {
@@ -254,7 +255,7 @@ void Controller::stopRecordPrompt(bool shouldRecord)
         selectedGroupIndex   = 0;
         selectedSessionIndex = 0;
         emit selectGroup(groups[selectedGroupIndex]);
-        emit selectSession(selectedSessionIndex, groups[selectedGroupIndex]->getSessions()[selectedSessionIndex]);
+        emit selectSession(selectedSessionIndex, groups[selectedGroupIndex]->getSession(selectedSessionIndex));
     }
 
 }
@@ -269,8 +270,8 @@ void Controller::handlePowerClicked()
         emit selectGroup(groups[selectedGroupIndex]);
 
         //Prevent showing inexistent session option by setting index outside 0-3 range (nothing lights up)
-        selectedSessionIndex = groups[selectedGroupIndex]->getSessions().size() == 0 ? -1 : 0;
-        Session *selectedSession = selectedSessionIndex == -1 ? nullptr : groups[selectedGroupIndex]->getSessions()[selectedSessionIndex];
+        selectedSessionIndex = groups[selectedGroupIndex]->size() == 0 ? -1 : 0;
+        Session *selectedSession = selectedSessionIndex == -1 ? nullptr : groups[selectedGroupIndex]->getSession(selectedSessionIndex);
         emit selectSession(selectedSessionIndex, selectedSession);
     }
     else if (getContext("activeSession"))
@@ -310,7 +311,7 @@ void Controller::togglePower(){
 
         // Update UI
         emit selectGroup(groups[selectedGroupIndex]);
-        Session *selectedSession = groups[selectedGroupIndex]->getSessions().size() == 0 ? nullptr : groups[selectedGroupIndex]->getSessions()[selectedSessionIndex];
+        Session *selectedSession = groups[selectedGroupIndex]->size() == 0 ? nullptr : groups[selectedGroupIndex]->getSession(selectedSessionIndex);
         emit selectSession(selectedSessionIndex, selectedSession);
     }
     else
@@ -330,7 +331,7 @@ void Controller::setEarClips(EarClips *e)
     }
     earClips = e;
     // handle connectionLevel signal from EarClips
-    connect(earClips, SIGNAL(connectionLevel(int)), this, SLOT(handleEarClipConnectionLevel(int)));
+    connect(earClips, SIGNAL(connectionLevel(int, bool, bool)), this, SLOT(handleEarClipConnectionLevel(int, bool, bool)));
 }
 
 void Controller::changeBattery(Battery *b)
@@ -339,7 +340,7 @@ void Controller::changeBattery(Battery *b)
     currentBattery = b;
 }
 
-void Controller::handleEarClipConnectionLevel(int level)
+void Controller::handleEarClipConnectionLevel(int level, bool isLeftDisconnected, bool isRightDisconnected)
 {
 
     if (!earClipsAreConnected)
@@ -352,15 +353,24 @@ void Controller::handleEarClipConnectionLevel(int level)
         // crashes the app since we have no currentSession
         // connectionModeLight(currentSession->isShortPulse());
         connectionModeLight(true); // for testing purposes
-        sendEarClipConnection(level);
+        sendEarClipConnection(level, false, false);
 
     }
     else if (getContext("activeSession") && level == 0)
     {
+        // blink no connection (number 7 and 8) on CES
+        // could send a different signal to be recieved by MainWinow
+        // that will blink the numbers and the R or L depending on
+        // which earclip was disconnected.
         // connectionModeLight(currentSession->isShortPulse());
         connectionModeLight(true); // for testing purposes
-        sendEarClipConnection(level);
-        stopSession();
+        sendEarClipConnection(level, isLeftDisconnected, isRightDisconnected);
+        setContext("pausedSession");
+        pausedSession();
+    }
+    else if(getContext("pausedSession"))
+    {
+        sendEarClipConnection(level, isLeftDisconnected, isRightDisconnected);
     }
 
 
@@ -372,10 +382,36 @@ void Controller::handleEarClipConnection(int index)
     earClips->earClipConnectionTest();
 }
 
+void Controller::pausedSession()
+{
+    if (getContext("pausedSession"))
+    {
+        int temp = earClips->earClipConnectionTest();
+        for (int i = 0; i < 10; i++)
+        {
+            if (temp > 0 && earClipsAreConnected)
+            {
+                setContext("activeSession");
+                for (int j = currentIntensity; j > 0; j--)
+                {
+                    handleDownClicked();
+                    delayMs(200);
+                }
+                resetShutDownTimer();
+                return;
+            }
+            delayMs(500);
+            temp = earClips->earClipConnectionTest();
+        }
+        stopSession();
+    }
+}
+
 void Controller::resetShutDownTimer()
 {
     if (isPowerOn)
     {
         shutDownTimer->start(IDLE_TIMEOUT_MS);
+
     }
 }

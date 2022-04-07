@@ -11,7 +11,8 @@ class Group
 public:
     Group(const QList<Session *> sessions, const QString name);
     QString getName();
-    QList<Session *> getSessions();
+    Session *getSession(int sessionIndex);
+    int size();
     bool containsSessionType(SessionType sessionType);
     ~Group();
 
