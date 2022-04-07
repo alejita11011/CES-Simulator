@@ -262,6 +262,13 @@ void Controller::stopRecordPrompt(bool shouldRecord)
 
 void Controller::handlePowerClicked()
 {
+    // If timer is not active, the user has hold power button for 2+ seconds. So, we ignore the clicked signal
+    if (!powerPressedTimer->isActive())
+    {
+        return;
+    }
+
+    powerPressedTimer->stop();
     resetShutDownTimer();
 
     if (getContext("sessionSelection"))
@@ -283,10 +290,14 @@ void Controller::handlePowerClicked()
     {
         stopRecordPrompt(false);
     }
-    else
-    {
-        togglePower();
-    }
+}
+
+void Controller::handlePowerPressed()
+{
+    // Toggle power once 2 seconds have passed, and stop timer to prevent it from repeating
+    powerPressedTimer = new QTimer();
+    connect(powerPressedTimer, &QTimer::timeout, [this](){ powerPressedTimer->stop(); togglePower(); });
+    powerPressedTimer->start(2000);
 }
 
 void Controller::togglePower(){

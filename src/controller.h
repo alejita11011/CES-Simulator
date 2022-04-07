@@ -46,6 +46,7 @@ signals:
 private slots:
     void handleSelectClicked();
     void handlePowerClicked();
+    void handlePowerPressed();
     void handleEarClipConnectionLevel(int, bool, bool);
     void handleEarClipConnection(int);
     void handleDownClicked();
@@ -56,6 +57,7 @@ private:
     QList<Record *> history;
     QList<Group *> groups;
     QTimer *shutDownTimer;
+    QTimer *powerPressedTimer;
     Session *currentSession;
     EarClips *earClips;
     Battery *currentBattery;
