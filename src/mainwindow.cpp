@@ -274,7 +274,7 @@ void MainWindow::handleBatteryShutDown()
 void MainWindow::handlePowerOn(int batteryLevel, bool isLow)
 {
     handleResetDisplay();
-
+    ui->progressBar->setValue(batteryLevel);
     ui->SelectButton->setDisabled(false);
     setLitUp(ui->powerLed, true);
 

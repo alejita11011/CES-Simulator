@@ -192,8 +192,8 @@ void Controller::timerEvent(QTimerEvent *event)
         SessionType sessionType = currentSession->getType();
         emit sessionProgress(remainingSeconds, sessionType, currentBattery->getBatteryLevel());
 
-        //Battery depletes every second scaled by intensity level
-        currentBattery->deplete((currentIntensity + 1)/2);
+        //Battery depletes every second scaled by intensity level and ear clip connection level
+        currentBattery->deplete(((currentIntensity + 1)/2) + earClips->earClipConnectionTest());
 
         qDebug() << currentBattery->getBatteryLevel(); // FOR TESTING
 

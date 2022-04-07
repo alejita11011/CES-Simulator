@@ -669,8 +669,11 @@ margin: 30px;</string>
           </item>
           <item>
            <widget class="QProgressBar" name="progressBar">
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
             <property name="value">
-             <number>24</number>
+             <number>100</number>
             </property>
            </widget>
           </item>
