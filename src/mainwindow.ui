@@ -110,16 +110,16 @@ radius: 1.35, stop: 0 #fff, stop: 1 #bbb
           </widget>
          </item>
          <item>
-          <widget class="QWidget" name="alphaSession" native="true">
+          <widget class="QWidget" name="thetaSession" native="true">
            <property name="styleSheet">
-            <string notr="true">border-image: url(:/images/off/alpha.png);</string>
+            <string notr="true">border-image: url(:/images/off/theta.png);</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QWidget" name="thetaSession" native="true">
+          <widget class="QWidget" name="alphaSession" native="true">
            <property name="styleSheet">
-            <string notr="true">border-image: url(:/images/off/theta.png);</string>
+            <string notr="true">border-image: url(:/images/off/alpha.png);</string>
            </property>
           </widget>
          </item>
@@ -195,7 +195,6 @@ radius: 1.35, stop: 0 #fff, stop: 1 #bbb
         </property>
         <property name="font">
          <font>
-          <family>Nimbus Sans L</family>
           <pointsize>12</pointsize>
           <italic>false</italic>
           <bold>true</bold>
@@ -612,7 +611,6 @@ background-color: rgb(255, 255, 255);</string>
            <widget class="QLabel" name="batteryChangeLabel">
             <property name="font">
              <font>
-              <family>Noto Sans Adlam</family>
               <pointsize>16</pointsize>
              </font>
             </property>
@@ -652,7 +650,7 @@ margin: 30px;</string>
      <x>0</x>
      <y>0</y>
      <width>1311</width>
-     <height>20</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>
