@@ -8,6 +8,7 @@
 #include <QMap>
 #include <QLabel>
 #include <QSet>
+#include <iostream>
 #include "utils.h"
 #include "controller.h"
 #include "record.h"
@@ -43,6 +44,8 @@ private:
 
     void setLitUp(QWidget *widget, bool litUp);
     void setLitUp(QSet<int> numbers);
+    void flash(QWidget *, int, int);
+    void flash(QSet<int> , int, int);
 
 private slots:
     void handleNewRecord(Record* record);  
@@ -51,7 +54,7 @@ private slots:
 
     void handleSessionSelected(int selectedSessionIndex, Session *selectedSession);
 
-    void handleSessionProgress(int elapsedSeconds, SessionType sessionType);
+    void handleSessionProgress(int elapsedSeconds, SessionType sessionType, int batteryPercentage);
 
     void handleIntensity(int intensity);
 
@@ -67,7 +70,7 @@ private slots:
 
     void handlePowerOn(int, bool);
 
-    void handleConnectionTest(int);
+    void handleConnectionTest(int, bool, bool);
 
     void handleModeLight(bool);
 

@@ -58,7 +58,7 @@ MainWindow::MainWindow(QWidget *parent)
     //for testing
     controller->setEarClips(earClips);
 
-    connect(controller, SIGNAL(sessionProgress(int, SessionType)), this, SLOT(handleSessionProgress(int, SessionType)));
+    connect(controller, SIGNAL(sessionProgress(int, SessionType, int)), this, SLOT(handleSessionProgress(int, SessionType, int)));
     //Adjust Intensity
     connect(controller, SIGNAL(adjustSessionIntensity(int)), this, SLOT(handleIntensity(int)));
     connect(controller, SIGNAL(newRecord(Record *)), this, SLOT(handleNewRecord(Record *)));
@@ -73,9 +73,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(controller, SIGNAL(batteryLevel(bool)), this, SLOT(handleBattery(bool)));
     connect(controller, SIGNAL(batteryShutDown()), this, SLOT(handleBatteryShutDown()));
     //Handle signals from connection tests
-    connect(controller, SIGNAL(sendEarClipConnection(int)), this, SLOT(handleConnectionTest(int)));
+    connect(controller, SIGNAL(sendEarClipConnection(int, bool, bool)), this, SLOT(handleConnectionTest(int, bool, bool)));
     //Handle connectionModeLight signals
-    connect(controller,SIGNAL(connectionModeLight(bool)), this, SLOT(handleModeLight(bool)));
+    connect(controller, SIGNAL(connectionModeLight(bool)), this, SLOT(handleModeLight(bool)));
     //Session selection
     connect(controller, SIGNAL(selectGroup(Group *)), this, SLOT(handleGroupSelected(Group *)));
     connect(controller, SIGNAL(selectSession(int, Session *)), this, SLOT(handleSessionSelected(int, Session *)));
@@ -181,12 +181,13 @@ void MainWindow::handleSessionSelected(int selectedSessionIndex, Session *select
 }
 
 //Displays session progress on device screen
-void MainWindow::handleSessionProgress(int remainingSeconds, SessionType sessionType)
+void MainWindow::handleSessionProgress(int remainingSeconds, SessionType sessionType, int batteryPercentage)
 {
     setLitUp({});
     ui->sessionProgressValues->raise();
     ui->sessionProgressValues->clear();
     ui->sessionProgressValues->setText(formatSeconds(remainingSeconds) + "\n" + ToString(sessionType));
+    ui->progressBar->setValue(batteryPercentage);
 }
 
 void MainWindow::handleIntensity(int intensity)
@@ -196,6 +197,7 @@ void MainWindow::handleIntensity(int intensity)
 
 void MainWindow::handleEndedSession(){
     //Graphs from 8-1
+    delayMs(500);
     for(int end = 8; end >= 0; end--)
     {
         QSet<int> nums = {};
@@ -276,12 +278,11 @@ void MainWindow::handleBatteryShutDown()
 void MainWindow::handlePowerOn(int batteryLevel, bool isLow)
 {
     handleResetDisplay();
-
+    ui->progressBar->setValue(batteryLevel);
     ui->SelectButton->setDisabled(false);
     setLitUp(ui->powerLed, true);
 
-    //Display battery level
-    qDebug() << "BATTERY LEVEL" << batteryLevel;
+
     if(isLow){
         //Battery is low
         setLitUp({1,2});
@@ -331,7 +332,7 @@ void MainWindow::handlePowerOff()
     ui->powerOffView->raise();
 }
 
-void MainWindow::handleConnectionTest(int level)
+void MainWindow::handleConnectionTest(int level, bool isLeftDisconnected, bool isRightDisconnected)
 {
     if (level == 2)
     {
@@ -343,29 +344,63 @@ void MainWindow::handleConnectionTest(int level)
     }
     else
     {
-        setLitUp({7,8});
+        //setLitUp({7,8});
+        flash({7,8}, 3, 200);
+        if (isLeftDisconnected && isRightDisconnected)
+        {
+            flash(ui->leftConnected, 3, 200);
+            flash(ui->rightConnected, 3, 200);
+        }
+        else if (isLeftDisconnected)
+        {
+            flash(ui->leftConnected, 3, 200);
+
+        }
+        else if (isRightDisconnected)
+        {
+            flash(ui->rightConnected, 3, 200);
+        }
     }
+    delayMs(1000);
 }
 
 void MainWindow::handleModeLight(bool isShortPulse)
 {
     if (isShortPulse)
     {
-        setLitUp(ui->shortPulse, true);
+        flash(ui->shortPulse, 3, 200);
         return;
     }
-    setLitUp(ui->longPulse, true);
+    flash(ui->longPulse, 3, 200);
 }
 
 void MainWindow::handleBatteryChange()
 {
     Battery *b = new Battery();
     controller->changeBattery(b);
-    // let the user know battery has been changed?
-    // display battery level
-    // if this is pressed during active session
-    // the session should be stopped.
+    ui->progressBar->setValue(100);
 }
 
 
 
+void MainWindow::flash(QWidget *widget, int times, int onDurationMs)
+{
+    for (int i = 0; i < times; i++)
+    {
+        setLitUp(widget, true);
+        delayMs(onDurationMs);
+        setLitUp(widget, false);
+        delayMs(onDurationMs);
+    }
+}
+
+void MainWindow::flash(QSet<int> numbers, int times, int onDurationMs)
+{
+    for (int i = 0; i < times; i++)
+    {
+        setLitUp(numbers);
+        delayMs(onDurationMs);
+        setLitUp({});
+        delayMs(onDurationMs);
+    }
+}

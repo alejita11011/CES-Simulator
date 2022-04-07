@@ -8,14 +8,13 @@ EarClips::EarClips(QObject *parent) : QObject(parent)
 
 int EarClips::earClipConnectionTest()
 {
-
     if (leftEarClipConnection == 0 || rightEarClipConnection == 0)
     {
-        emit connectionLevel(0);
+        emit connectionLevel(0, leftEarClipConnection == 0, rightEarClipConnection == 0);
         return 0;
     }
     int connectionValue = std::min(leftEarClipConnection, rightEarClipConnection);
-    emit connectionLevel(connectionValue);
+    emit connectionLevel(connectionValue, false, false);
     return connectionValue;
 }
 

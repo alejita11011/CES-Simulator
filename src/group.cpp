@@ -14,9 +14,14 @@ QString Group::getName()
     return this->name;
 }
 
-QList<Session *> Group::getSessions()
+Session *Group::getSession(int sessionIndex)
 {
-    return this->sessions;
+    return this->sessions[sessionIndex];
+}
+
+int Group::size()
+{
+    return this->sessions.size();
 }
 
 bool Group::containsSessionType(SessionType sessionType)
