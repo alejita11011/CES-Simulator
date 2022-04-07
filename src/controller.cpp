@@ -362,8 +362,8 @@ void Controller::handleEarClipConnectionLevel(int level, bool isLeftDisconnected
     {
         // the line below is the line we want to run but for now it
         // crashes the app since we have no currentSession
-        connectionModeLight(currentSession->isShortPulse());
-        sendEarClipConnection(level, false, false);
+        emit connectionModeLight(currentSession->isShortPulse());
+        emit sendEarClipConnection(level, false, false);
 
     }
     else if (getContext("activeSession") && level == 0)
@@ -372,14 +372,14 @@ void Controller::handleEarClipConnectionLevel(int level, bool isLeftDisconnected
         // could send a different signal to be recieved by MainWinow
         // that will blink the numbers and the R or L depending on
         // which earclip was disconnected.
-        connectionModeLight(currentSession->isShortPulse());
-        sendEarClipConnection(level, isLeftDisconnected, isRightDisconnected);
+        emit connectionModeLight(currentSession->isShortPulse());
+        emit sendEarClipConnection(level, isLeftDisconnected, isRightDisconnected);
         setContext("pausedSession");
         pausedSession();
     }
     else if(getContext("pausedSession"))
     {
-        sendEarClipConnection(level, isLeftDisconnected, isRightDisconnected);
+        emit sendEarClipConnection(level, isLeftDisconnected, isRightDisconnected);
     }
 
 
@@ -398,6 +398,10 @@ void Controller::pausedSession()
         int temp = earClips->earClipConnectionTest();
         for (int i = 0; i < 10; i++)
         {
+//            if (shutDownTimer->remainingTime() < 1000)
+//            {
+//                return;
+//            }
             if (temp > 0 && earClipsAreConnected)
             {
                 setContext("activeSession");
