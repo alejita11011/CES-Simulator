@@ -191,11 +191,11 @@ void Controller::timerEvent(QTimerEvent *event)
         // Emit progress of active session
         int remainingSeconds = currentSession->getPresetDurationSeconds() - elapsedSessionTime;
         SessionType sessionType = currentSession->getType();
-        emit sessionProgress(remainingSeconds, sessionType, currentBattery->getBatteryLevel());
 
         //Battery depletes every second scaled by intensity level and ear clip connection level
         currentBattery->deplete(((currentIntensity + 1)/2) + earClips->earClipConnectionTest());
 
+        emit sessionProgress(remainingSeconds, sessionType, currentBattery->getBatteryLevel());
 
         if (currentBattery->isCriticallyLow())
         {
@@ -362,8 +362,7 @@ void Controller::handleEarClipConnectionLevel(int level, bool isLeftDisconnected
     {
         // the line below is the line we want to run but for now it
         // crashes the app since we have no currentSession
-        // connectionModeLight(currentSession->isShortPulse());
-        connectionModeLight(true); // for testing purposes
+        connectionModeLight(currentSession->isShortPulse());
         sendEarClipConnection(level, false, false);
 
     }
@@ -373,8 +372,7 @@ void Controller::handleEarClipConnectionLevel(int level, bool isLeftDisconnected
         // could send a different signal to be recieved by MainWinow
         // that will blink the numbers and the R or L depending on
         // which earclip was disconnected.
-        // connectionModeLight(currentSession->isShortPulse());
-        connectionModeLight(true); // for testing purposes
+        connectionModeLight(currentSession->isShortPulse());
         sendEarClipConnection(level, isLeftDisconnected, isRightDisconnected);
         setContext("pausedSession");
         pausedSession();
