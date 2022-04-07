@@ -14,7 +14,7 @@ QString Group::getName()
     return this->name;
 }
 
-Session* Group::getSessions(int sessionIndex)
+Session *Group::getSession(int sessionIndex)
 {
     return this->sessions[sessionIndex];
 }
