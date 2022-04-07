@@ -195,7 +195,6 @@ void Controller::timerEvent(QTimerEvent *event)
         //Battery depletes every second scaled by intensity level and ear clip connection level
         currentBattery->deplete(((currentIntensity + 1)/2) + earClips->earClipConnectionTest());
 
-        qDebug() << currentBattery->getBatteryLevel(); // FOR TESTING
 
         if (currentBattery->isCriticallyLow())
         {
@@ -296,7 +295,6 @@ void Controller::togglePower(){
     if (isPowerOn)
     {
         //Turn on device
-        qDebug() << currentBattery->getBatteryLevel(); // FOR TESTING
 
         if (currentBattery->isCriticallyLow())
         {

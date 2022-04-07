@@ -278,8 +278,7 @@ void MainWindow::handlePowerOn(int batteryLevel, bool isLow)
     ui->SelectButton->setDisabled(false);
     setLitUp(ui->powerLed, true);
 
-    //Display battery level
-    qDebug() << "BATTERY LEVEL" << batteryLevel;
+
     if(isLow){
         //Battery is low
         setLitUp({1,2});
