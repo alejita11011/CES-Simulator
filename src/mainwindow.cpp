@@ -89,6 +89,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->batteryChangeButton, SIGNAL(clicked()), this, SLOT(handleBatteryChange()));
     connect(ui->IntensityDown, SIGNAL(clicked()), controller, SLOT(handleDownClicked()));
     connect(ui->IntensityUp, SIGNAL(clicked()), controller, SLOT(handleUpClicked()));
+    //Session selection
+    connect(controller, SIGNAL(selectGroup(Group *)), this, SLOT(handleGroupSelected(Group *)));
+    connect(controller, SIGNAL(selectSession(int, Session *)), this, SLOT(handleSessionSelected(int, Session *)));
 }
 
 MainWindow::~MainWindow()
@@ -126,13 +129,52 @@ void MainWindow::handleNewRecord(Record *record)
     new QListWidgetItem(itemText, ui->listWidget);
 }
 
-void MainWindow::handleGroupSelected(/* Group *group */) // TODO
+void MainWindow::handleGroupSelected(Group *group)
 {
-    setLitUp(ui->fourtyFiveMinGroup, true);
-    setLitUp(ui->subDeltaSession, true);
-    setLitUp(ui->deltaSession, true);
-    setLitUp(ui->alphaSession, true);
-    setLitUp(ui->thetaSession, true);
+    for (QString groupName : groupWidgets.keys())
+    {
+        if (groupName == group->getName())
+        {
+            setLitUp(groupWidgets[groupName], true);
+        }
+        else
+        {
+            setLitUp(groupWidgets[groupName], false);
+        }
+    }
+
+    for (SessionType sessionType : sessionWidgets.keys())
+    {
+        if (group->containsSessionType(sessionType))
+        {
+            setLitUp(sessionWidgets[sessionType], true);
+        }
+        else
+        {
+            setLitUp(sessionWidgets[sessionType], false);
+        }
+    }
+}
+
+void MainWindow::handleSessionSelected(int selectedSessionIndex, Session *selectedSession)
+{
+    setLitUp({selectedSessionIndex + 1});
+
+    if (selectedSession == nullptr)
+    {
+        setLitUp(ui->shortPulse, false);
+        setLitUp(ui->longPulse, false);
+    }
+    else if (selectedSession->isShortPulse())
+    {
+        setLitUp(ui->shortPulse, true);
+        setLitUp(ui->longPulse, false);
+    }
+    else
+    {
+        setLitUp(ui->shortPulse, false);
+        setLitUp(ui->longPulse, true);
+    }
 }
 
 //Displays session progress on device screen
@@ -261,8 +303,6 @@ void MainWindow::handleResetDisplay()
     {
         ui->listWidget->raise();
     }
-    setLitUp({});
-    handleGroupSelected();
 }
 
 void MainWindow::handlePowerOff()
