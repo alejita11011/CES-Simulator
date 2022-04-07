@@ -94,12 +94,12 @@ void Controller::handleSelectClicked()
 
     if (getContext("sessionSelection"))
     {
-        if (groups[selectedGroupIndex]->getSessions().size() == 0)
+        if (groups[selectedGroupIndex]->size() == 0)
         {
             return;
         }
 
-        currentSession = groups[selectedGroupIndex]->getSessions()[selectedSessionIndex];
+        currentSession = groups[selectedGroupIndex]->getSession(selectedSessionIndex);
         //All sessions by default will be at intensity level 1
         currentIntensity = 1;
         highestIntensity = 1;
@@ -131,10 +131,10 @@ void Controller::handleDownClicked()
     if (getContext("sessionSelection"))
     {
         qDebug() << selectedSessionIndex;
-        if (groups[selectedGroupIndex]->getSessions().size() > 0)
+        if (groups[selectedGroupIndex]->size() > 0)
         {
-            selectedSessionIndex = ((selectedSessionIndex - 1) + groups[selectedGroupIndex]->getSessions().size()) % groups[selectedGroupIndex]->getSessions().size();
-            emit selectSession(selectedSessionIndex, groups[selectedGroupIndex]->getSessions()[selectedSessionIndex]);
+            selectedSessionIndex = ((selectedSessionIndex - 1) + groups[selectedGroupIndex]->size()) % groups[selectedGroupIndex]->size();
+            emit selectSession(selectedSessionIndex, groups[selectedGroupIndex]->getSession(selectedSessionIndex));
         }
         else
         {
@@ -159,10 +159,10 @@ void Controller::handleUpClicked()
 
     if (getContext("sessionSelection"))
     {
-        if (groups[selectedGroupIndex]->getSessions().size() > 0)
+        if (groups[selectedGroupIndex]->size() > 0)
         {
-            selectedSessionIndex = (selectedSessionIndex + 1) % groups[selectedGroupIndex]->getSessions().size();
-            emit selectSession(selectedSessionIndex, groups[selectedGroupIndex]->getSessions()[selectedSessionIndex]);
+            selectedSessionIndex = (selectedSessionIndex + 1) % groups[selectedGroupIndex]->size();
+            emit selectSession(selectedSessionIndex, groups[selectedGroupIndex]->getSession(selectedSessionIndex));
         }
         else
         {
@@ -256,7 +256,7 @@ void Controller::stopRecordPrompt(bool shouldRecord)
         selectedGroupIndex   = 0;
         selectedSessionIndex = 0;
         emit selectGroup(groups[selectedGroupIndex]);
-        emit selectSession(selectedSessionIndex, groups[selectedGroupIndex]->getSessions()[selectedSessionIndex]);
+        emit selectSession(selectedSessionIndex, groups[selectedGroupIndex]->getSession(selectedSessionIndex));
     }
 
 }
@@ -271,8 +271,8 @@ void Controller::handlePowerClicked()
         emit selectGroup(groups[selectedGroupIndex]);
 
         //Prevent showing inexistent session option by setting index outside 0-3 range (nothing lights up)
-        selectedSessionIndex = groups[selectedGroupIndex]->getSessions().size() == 0 ? -1 : 0;
-        Session *selectedSession = selectedSessionIndex == -1 ? nullptr : groups[selectedGroupIndex]->getSessions()[selectedSessionIndex];
+        selectedSessionIndex = groups[selectedGroupIndex]->size() == 0 ? -1 : 0;
+        Session *selectedSession = selectedSessionIndex == -1 ? nullptr : groups[selectedGroupIndex]->getSession(selectedSessionIndex);
         emit selectSession(selectedSessionIndex, selectedSession);
     }
     else if (getContext("activeSession"))
@@ -313,7 +313,7 @@ void Controller::togglePower(){
 
         // Update UI
         emit selectGroup(groups[selectedGroupIndex]);
-        Session *selectedSession = groups[selectedGroupIndex]->getSessions().size() == 0 ? nullptr : groups[selectedGroupIndex]->getSessions()[selectedSessionIndex];
+        Session *selectedSession = groups[selectedGroupIndex]->size() == 0 ? nullptr : groups[selectedGroupIndex]->getSession(selectedSessionIndex);
         emit selectSession(selectedSessionIndex, selectedSession);
     }
     else
