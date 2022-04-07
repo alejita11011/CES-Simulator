@@ -294,6 +294,7 @@ void Controller::handlePowerClicked()
 
 void Controller::handlePowerPressed()
 {
+    // Toggle power once 2 seconds have passed, and stop timer to prevent it from repeating
     powerPressedTimer = new QTimer();
     connect(powerPressedTimer, &QTimer::timeout, [this](){ powerPressedTimer->stop(); togglePower(); });
     powerPressedTimer->start(2000);
