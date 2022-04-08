@@ -1,0 +1,43 @@
+@startuml UC4-activateSession
+
+title <size:32>**UC4:** Start the session
+
+actor       User as user
+participant "leftEarClipSlider :\nQSlider" as leftSlider
+participant "rightEarClipSlider :\nQSlider" as rightSlider
+' TODO
+participant check
+participant "earClips :\nEarClips" as earClips
+participant "controller :\nController" as controller
+participant "mainWindow :\nQMainWindow" as mainWindow
+
+note over earClips: <size:10>leftEarClipConnection = 0 \n<size:10>rightEarClipConnection = 0
+
+user -> leftSlider ++ : Connect to ear
+leftSlider -> earClips : handleLeftEarClipSlider(2)
+note over earClips: <size:10>leftEarClipConnection = 2
+leftSlider -> controller ++ : handleEarClipsChanged(2)
+controller -> controller ++ : getContext("activeSession")
+return false
+return
+leftSlider --
+
+user -> rightSlider ++ : Connect to ear
+rightSlider -> earClips : handleRightEarClipSlider(2)
+note over earClips: <size:10>rightEarClipConnection = 2
+rightSlider -> controller ++ : handleEarClipsChanged(2)
+controller -> controller ++ : getContext("activeSession")
+return false
+return
+rightSlider --
+
+' TODO user connect earclips to device
+
+' user clicks checkmark
+user -> check ++ : Click
+check -> controller ++ : handleSelectClicked()
+controller -> controller ++ : getContext("sessionSelection")
+return true
+controller -> controller ++ : connectionTest()
+
+@enduml
