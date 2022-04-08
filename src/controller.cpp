@@ -234,7 +234,6 @@ void Controller::stopRecordPrompt(bool shouldRecord)
         emit newRecord(record);
     }
 
-    delete currentSession;
     currentSession = nullptr;
 
     if(currentBattery->isCriticallyLow())
