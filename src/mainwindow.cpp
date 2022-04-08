@@ -86,11 +86,13 @@ MainWindow::MainWindow(QWidget *parent)
     //User selects something
     connect(ui->SelectButton, SIGNAL(clicked()), controller, SLOT(handleSelectClicked()));
     //User connects/disconnects ear clips from device
-    connect(ui->earClipDeviceCCBox, SIGNAL(currentIndexChanged(int)), controller, SLOT(handleEarClipConnection(int)));
+    connect(ui->earClipDeviceCCBox, SIGNAL(currentIndexChanged(int)), controller, SLOT(handleEarClipsPluggedIn(int)));
     //Handle events for left ear clip slider
     connect(ui->leftEarClipSlider, SIGNAL(valueChanged(int)), earClips, SLOT(handleLeftEarClipSlider(int)));
+    connect(ui->leftEarClipSlider, SIGNAL(valueChanged(int)), controller, SLOT(handleEarClipsChanged(int)));
     //Handle events for right ear clip slider
     connect(ui->rightEarClipSlider, SIGNAL(valueChanged(int)), earClips, SLOT(handleRightEarClipSlider(int)));
+    connect(ui->rightEarClipSlider, SIGNAL(valueChanged(int)), controller, SLOT(handleEarClipsChanged(int)));
     //Handle battery change
     connect(ui->batteryChangeButton, SIGNAL(clicked()), this, SLOT(handleBatteryChange()));
     connect(ui->IntensityDown, SIGNAL(clicked()), controller, SLOT(handleDownClicked()));
@@ -332,36 +334,30 @@ void MainWindow::handlePowerOff()
     ui->powerOffView->raise();
 }
 
-void MainWindow::handleConnectionTest(int level, bool isLeftDisconnected, bool isRightDisconnected)
+void MainWindow::handleConnectionTest(int level, bool isLeftConnected, bool isRightConnected)
 {
     if (level == 2)
     {
         setLitUp({1,2,3});
+        delayMs(2000);
     }
     else if (level == 1)
     {
         setLitUp({4,5,6});
+        delayMs(2000);
     }
     else
     {
-        //setLitUp({7,8});
-        flash({7,8}, 3, 200);
-        if (isLeftDisconnected && isRightDisconnected)
-        {
-            flash(ui->leftConnected, 3, 200);
-            flash(ui->rightConnected, 3, 200);
-        }
-        else if (isLeftDisconnected)
-        {
-            flash(ui->leftConnected, 3, 200);
+        setLitUp({7,8});
+        setLitUp(ui->leftConnected, !isLeftConnected);
+        setLitUp(ui->rightConnected, !isRightConnected);
+        delayMs(500);
 
-        }
-        else if (isRightDisconnected)
-        {
-            flash(ui->rightConnected, 3, 200);
-        }
+        setLitUp({});
+        setLitUp(ui->leftConnected, false);
+        setLitUp(ui->rightConnected, false);
+        delayMs(500);
     }
-    delayMs(1000);
 }
 
 void MainWindow::handleModeLight(bool isShortPulse)

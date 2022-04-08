@@ -47,8 +47,8 @@ private slots:
     void handleSelectClicked();
     void handlePowerClicked();
     void handlePowerPressed();
-    void handleEarClipConnectionLevel(int, bool, bool);
-    void handleEarClipConnection(int);
+    void handleEarClipsChanged(int);
+    void handleEarClipsPluggedIn(int);
     void handleDownClicked();
     void handleUpClicked();
 
@@ -91,10 +91,11 @@ private:
      */
     void resetContext();
 
+    void connectionTest();
     void stopSession();
     void stopRecordPrompt(bool shouldRecord);
     void togglePower();
-    void pausedSession();
+    void pauseSession();
     void resetShutDownTimer();
 
 };
