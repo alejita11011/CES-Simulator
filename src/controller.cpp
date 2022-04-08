@@ -4,9 +4,9 @@
 
 int Controller::IDLE_TIMEOUT_MS = 30000;
 
-Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QObject(parent)
+Controller::Controller(Battery *b, QList<Group *> groups, EarClips *earClips, QObject *parent) : QObject(parent)
 {
-    earClips                = nullptr;
+    this->earClips          = earClips;
     currentBattery          = b;
     isPowerOn               = false;
     this->groups            = groups;
@@ -42,6 +42,8 @@ Controller::~Controller()
     {
         delete group;
     }
+    delete currentBattery;
+    delete earClips;
 }
 
 bool Controller::getContext(QString context)
@@ -239,17 +241,17 @@ void Controller::stopRecordPrompt(bool shouldRecord)
     {
         emit batteryShutDown();
         togglePower();
-    }else{
+    }
+    else
+    {
         //Set next context
         setContext("sessionSelection");
-        qDebug() << "HERE IN USESELECTION"; // FOR TESTING
         emit useSelectionContext();
         selectedGroupIndex   = 0;
         selectedSessionIndex = 0;
         emit selectGroup(groups[selectedGroupIndex]);
         emit selectSession(selectedSessionIndex, groups[selectedGroupIndex]->getSession(selectedSessionIndex));
     }
-
 }
 
 void Controller::handlePowerClicked()
@@ -324,17 +326,6 @@ void Controller::togglePower(){
         shutDownTimer->stop();
         resetContext();
     }
-}
-
-void Controller::setEarClips(EarClips *e)
-{
-    if (earClips != nullptr)
-    {
-        delete earClips;
-    }
-    earClips = e;
-    // handle connectionLevel signal from EarClips
-    connect(earClips, SIGNAL(connectionLevel(int, bool, bool)), this, SLOT(handleEarClipConnectionLevel(int, bool, bool)));
 }
 
 void Controller::changeBattery(Battery *b)

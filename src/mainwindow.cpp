@@ -49,14 +49,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     //Create battery
     Battery *battery     = new Battery();
-
-    //Create controller
-    controller           = new Controller(battery, groups); // TODO singleton
-
     //Create earClips
     EarClips *earClips   = new EarClips();
-    //for testing
-    controller->setEarClips(earClips);
+
+    //Create controller
+    controller           = new Controller(battery, groups, earClips);
 
     connect(controller, SIGNAL(sessionProgress(int, SessionType, int)), this, SLOT(handleSessionProgress(int, SessionType, int)));
     //Adjust Intensity

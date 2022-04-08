@@ -20,10 +20,9 @@ class Controller : public QObject
 {
     Q_OBJECT
 public:
-    explicit Controller(Battery *b, QList<Group *> groups, QObject *parent = nullptr);
+    explicit Controller(Battery *b, QList<Group *> groups, EarClips *earClips, QObject *parent = nullptr);
     ~Controller();
 
-    void setEarClips(EarClips *);
     void changeBattery(Battery *);
 
     static int IDLE_TIMEOUT_MS;
