@@ -21,20 +21,17 @@ public:
      * @brief runs the ear clip connection test, 2 = excellent, 1 = okay, 0 = no connection
      * @return minimum of the vablues in variables rightEarClipConnection and leftEarClipConnection
      */
-    int earClipConnectionTest();
-
-signals:
-    void connectionLevel(int, bool, bool);
-
+    int minConnectionLevel();
+    bool isLeftConnected();
+    bool isRightConnected();
 
 private slots:
     void handleLeftEarClipSlider(int);
     void handleRightEarClipSlider(int);
 
-
 private:
-    int rightEarClipConnection;
     int leftEarClipConnection;
+    int rightEarClipConnection;
 
 };
 
