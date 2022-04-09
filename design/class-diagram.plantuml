@@ -3,45 +3,111 @@ skinparam classAttributeIconSize 0
 
 QObject <|-- QWidget
 QWidget <|-- QMainWindow
+QWidget <|-- QFrame
+QFrame <|-- QLabel
 QMainWindow <|-- MainWindow
 MainWindow --> "1" Controller : " - controller"
-class MainWindow {
+MainWindow --> "*" QLabel : " - numberLabels"
+
+namespace Ui {
 }
 
+MainWindow --o Ui
+
+class MainWindow {
+  - groupWidgets : QMap<QString, QWidget *>
+  - sessionWidgets : QMap<SessionType, QWidget *>
+  - formatSeconds(int) : QString
+  - setLitUp(QWidget *, bool) : void
+  - setLitUp(QSet<int>) : void
+  - flash(QWidget *, int, int) : void
+  - flash(QSet<int> , int, int) : void
+  - handleNewRecord(Record*) : void
+  - handleGroupSelected(Group *) : void 
+  - handleSessionSelected(int, Session *) : void
+  - handleSessionProgress(int, SessionType, int) : void
+  - handleIntensity(int) : void
+  - handleEndedSession() : void
+  - handleResetDisplay() : void
+  - handleBattery(bool)  : void 
+  - handleBatteryShutDown() : void
+  - handlePowerOff() : void
+  - handlePowerOn(int, bool) : void
+  - handleConnectionTest(int, bool, bool) : void
+  - handleModeLight(bool) : void
+  - handleBatteryChange() : void
+}
+
+QObject <|-- QTimer
 QObject <|-- Controller
-Controller --> "3" Group : " - groups"
 Controller --> "*" Record : " - history"
-Battery "1" <-- Controller : " - battery"
-EarClips "0..1" <-- Controller : " - earClips"
-Controller --> "1" QTimer : " - idleTimeout"
+Controller --> "3" Group : " - groups"
+Controller --> "1" QTimer : " - shutDownTimer"
+Controller --> "1" QTimer : " - powerPressedTimer"
 Controller --> "0..1" Session : " - currentSession"
-Controller --> "0..1" QTimer : " - remainingSessionTime"
-Controller --> "0..1" QTimer : " - nextBatteryDecrement"
+Controller --> "1" EarClips : " - earClips"
+Controller --> "1" Battery: " - currentBattery"
+
 class Controller {
-  + runConnectionTest() : bool
-  + startSession() : void
-  + endSession() : void
-  + changeBattery(Battery*) : void
-  + setEarClips(EarClips*) : void
-  - recordSession() : void
+  + {static} IDLE_TIMEOUT_MS : int
+  - context : QMap<QString, bool>
+  - isPowerOn : bool
+  - selectedGroupIndex : int
+  - selectedSessionIndex : int
+  - elapsedSessionTime : int
+  - timerId : int
+  - earClipsAreConnected : bool
+  - currentIntensity : int 
+  - highestIntensity : int
+  + changeBattery(Battery *) : void
+  - handleSelectClicked() : void
+  - handlePowerClicked() : void
+  - handlePowerPressed() : void
+  - handleEarClipsChanged(int) : void
+  - handleEarClipsPluggedIn(int) : void
+  - handleDownClicked() : void
+  - handleUpClicked() : void
+  - timerEvent(QTimerEvent *) : void
+  - getContext(QString) : bool
+  - setContext(QString) : bool
+  - resetContext() : void
+  - connectionTest() : void
+  - stopSession() : void
+  - stopRecordPrompt(bool) : void
+  - togglePower() : void
+  - pauseSession() : void
+  - resetShutDownTimer() : void
 }
 
 Group --> "0..4" Session : " - sessions"
 class Group {
   - name: QString
+  + getName() : QString
+  + getSession(int) : Session*
+  + size() : int
+  + containsSessionType(SessionType) : bool
 }
 
-Session --> "1" SessionType : " - sessionType"
+Session --> "1" SessionType : " - type"
 class Session {
-  - pulseType : bool 
-  - frequency : int
-  - duration : int
+  - shortPulse : bool 
+  - frequency : float
+  - presetDurationSeconds : int
+  + isShortPulse() : bool
+  + getFrequency() : float
+  + getPresetDurationSeconds() : int
+  + getType() : SessionType
 }
 
 Record --> "1" SessionType : " - sessionType"
 class Record {
-  - duration : int
-  - intensityLevel: int
+  - startTime : QDateTime
+  - durationSeconds: int
+  - intensity : int 
+  + getStartTime() : QDateTime
+  + getDurationSeconds() : int
+  + getIntensity() : int 
+  + getSessionType() : SessionType
 }
 
 enum SessionType {
@@ -55,12 +121,20 @@ QObject <|-- Battery
 class Battery {
   - percentage : int
   + deplete(int) : void
+  + getBatteryLevel() : int
+  + isLow() : bool
+  + isCriticallyLow() : bool
 }
 
 QObject <|-- EarClips
 class EarClips {
-  - isLeftClipConnected : bool
-  - isRightClipConnected : bool
+  - leftEarClipConnection : int
+  - rightEarClipConnection : int
+  + minConnectionLevel() : int 
+  + isLeftConnected() : bool
+  + isRightConnected() : bool
+  - handleLeftEarClipSlider(int) : void
+  - handleRightEarClipSlider(int) : void
 }
 
 @enduml
