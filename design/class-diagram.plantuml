@@ -12,7 +12,7 @@ MainWindow --> "*" QLabel : " - numberLabels"
 namespace Ui {
 }
 
-MainWindow --o Ui
+MainWindow o-- Ui
 
 class MainWindow {
   - groupWidgets : QMap<QString, QWidget *>
