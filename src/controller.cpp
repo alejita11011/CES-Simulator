@@ -4,9 +4,9 @@
 
 int Controller::IDLE_TIMEOUT_MS = 30000;
 
-Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QObject(parent)
+Controller::Controller(Battery *b, QList<Group *> groups, EarClips *earClips, QObject *parent) : QObject(parent)
 {
-    earClips                = nullptr;
+    this->earClips          = earClips;
     currentBattery          = b;
     isPowerOn               = false;
     this->groups            = groups;
@@ -22,7 +22,6 @@ Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QOb
     this->context["sessionSelection"]    = false;
     this->context["connectionTest"]      = false;
     this->context["activeSession"]       = false;
-    this->context["pausedSession"]       = false;
     this->context["promptRecordSession"] = false;
 
     // Timers
@@ -43,6 +42,8 @@ Controller::~Controller()
     {
         delete group;
     }
+    delete currentBattery;
+    delete earClips;
 }
 
 bool Controller::getContext(QString context)
@@ -107,14 +108,7 @@ void Controller::handleSelectClicked()
 
         elapsedSessionTime = 0;
 
-        setContext("connectionTest");
-        int temp = earClips->earClipConnectionTest();
-        while (temp <= 0 || !earClipsAreConnected)
-        {
-            delayMs(500);
-            temp = earClips->earClipConnectionTest();
-        }
-        setContext("activeSession");
+        connectionTest();
 
         emit sessionProgress(currentSession->getPresetDurationSeconds(), currentSession->getType(), currentBattery->getBatteryLevel());
     }
@@ -193,7 +187,7 @@ void Controller::timerEvent(QTimerEvent *event)
         SessionType sessionType = currentSession->getType();
 
         //Battery depletes every second scaled by intensity level and ear clip connection level
-        currentBattery->deplete(((currentIntensity + 1)/2) + earClips->earClipConnectionTest());
+        currentBattery->deplete(((currentIntensity + 1)/2) + earClips->minConnectionLevel());
 
         emit sessionProgress(remainingSeconds, sessionType, currentBattery->getBatteryLevel());
 
@@ -240,24 +234,23 @@ void Controller::stopRecordPrompt(bool shouldRecord)
         emit newRecord(record);
     }
 
-    delete currentSession;
     currentSession = nullptr;
 
     if(currentBattery->isCriticallyLow())
     {
         emit batteryShutDown();
         togglePower();
-    }else{
+    }
+    else
+    {
         //Set next context
         setContext("sessionSelection");
-        qDebug() << "HERE IN USESELECTION"; // FOR TESTING
         emit useSelectionContext();
         selectedGroupIndex   = 0;
         selectedSessionIndex = 0;
         emit selectGroup(groups[selectedGroupIndex]);
         emit selectSession(selectedSessionIndex, groups[selectedGroupIndex]->getSession(selectedSessionIndex));
     }
-
 }
 
 void Controller::handlePowerClicked()
@@ -334,86 +327,81 @@ void Controller::togglePower(){
     }
 }
 
-void Controller::setEarClips(EarClips *e)
-{
-    if (earClips != nullptr)
-    {
-        delete earClips;
-    }
-    earClips = e;
-    // handle connectionLevel signal from EarClips
-    connect(earClips, SIGNAL(connectionLevel(int, bool, bool)), this, SLOT(handleEarClipConnectionLevel(int, bool, bool)));
-}
-
 void Controller::changeBattery(Battery *b)
 {
     delete currentBattery;
     currentBattery = b;
 }
 
-void Controller::handleEarClipConnectionLevel(int level, bool isLeftDisconnected, bool isRightDisconnected)
+void Controller::connectionTest()
 {
+    setContext("connectionTest");
 
-    if (!earClipsAreConnected)
+    int connectionTestValue = earClipsAreConnected ? earClips->minConnectionLevel() : 0;
+
+    // Notify that the connection test is starting by blinking CES light
+    emit connectionModeLight(currentSession->isShortPulse());
+
+    // Ends either through ear clips being fixed or shutting down through timeout
+    while (connectionTestValue <= 0)
     {
-        level = 0;
-    }
-    if (getContext("connectionTest"))
-    {
-        // the line below is the line we want to run but for now it
-        // crashes the app since we have no currentSession
-        connectionModeLight(currentSession->isShortPulse());
-        sendEarClipConnection(level, false, false);
-
-    }
-    else if (getContext("activeSession") && level == 0)
-    {
-        // blink no connection (number 7 and 8) on CES
-        // could send a different signal to be recieved by MainWinow
-        // that will blink the numbers and the R or L depending on
-        // which earclip was disconnected.
-        connectionModeLight(currentSession->isShortPulse());
-        sendEarClipConnection(level, isLeftDisconnected, isRightDisconnected);
-        setContext("pausedSession");
-        pausedSession();
-    }
-    else if(getContext("pausedSession"))
-    {
-        sendEarClipConnection(level, isLeftDisconnected, isRightDisconnected);
-    }
-
-
-}
-
-void Controller::handleEarClipConnection(int index)
-{
-    earClipsAreConnected = index;
-    earClips->earClipConnectionTest();
-}
-
-void Controller::pausedSession()
-{
-    if (getContext("pausedSession"))
-    {
-        int temp = earClips->earClipConnectionTest();
-        for (int i = 0; i < 10; i++)
+        if (!shutDownTimer->isActive())
         {
-            if (temp > 0 && earClipsAreConnected)
-            {
-                setContext("activeSession");
-                for (int j = currentIntensity; j > 0; j--)
-                {
-                    handleDownClicked();
-                    delayMs(200);
-                }
-                resetShutDownTimer();
-                return;
-            }
-            delayMs(500);
-            temp = earClips->earClipConnectionTest();
+            return;
         }
-        stopSession();
+
+        if (earClipsAreConnected)
+        {
+            emit sendEarClipConnection(connectionTestValue, earClips->isLeftConnected(), earClips->isRightConnected());
+        }
+        else
+        {
+            // Send true meaning earClips are connected (even though we don't know if they are)
+            // so that the lights don't flash
+            emit sendEarClipConnection(connectionTestValue, true, true);
+        }
+        connectionTestValue = earClipsAreConnected ? earClips->minConnectionLevel() : 0;
     }
+
+    emit sendEarClipConnection(connectionTestValue, true, true);
+
+    setContext("activeSession");
+}
+
+void Controller::handleEarClipsChanged(int level)
+{
+    if (getContext("activeSession"))
+    {
+        int connectionTestValue = earClipsAreConnected ? earClips->minConnectionLevel() : 0;
+        if (connectionTestValue <= 0)
+        {
+            pauseSession();
+        }
+    }
+}
+
+void Controller::handleEarClipsPluggedIn(int selectionIndex)
+{
+    // selectionIndex 0 means disconnected
+    earClipsAreConnected = selectionIndex;
+
+    handleEarClipsChanged(0);
+}
+
+void Controller::pauseSession()
+{
+    qDebug() << "paused";
+
+    connectionTest();
+
+    for (int i = currentIntensity; i > 0; i--)
+    {
+        handleDownClicked();
+        delayMs(400);
+    }
+    resetShutDownTimer();
+
+    qDebug() << "resumed";
 }
 
 void Controller::resetShutDownTimer()
@@ -421,6 +409,5 @@ void Controller::resetShutDownTimer()
     if (isPowerOn)
     {
         shutDownTimer->start(IDLE_TIMEOUT_MS);
-
     }
 }

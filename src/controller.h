@@ -20,10 +20,9 @@ class Controller : public QObject
 {
     Q_OBJECT
 public:
-    explicit Controller(Battery *b, QList<Group *> groups, QObject *parent = nullptr);
+    explicit Controller(Battery *b, QList<Group *> groups, EarClips *earClips, QObject *parent = nullptr);
     ~Controller();
 
-    void setEarClips(EarClips *);
     void changeBattery(Battery *);
 
     static int IDLE_TIMEOUT_MS;
@@ -47,8 +46,8 @@ private slots:
     void handleSelectClicked();
     void handlePowerClicked();
     void handlePowerPressed();
-    void handleEarClipConnectionLevel(int, bool, bool);
-    void handleEarClipConnection(int);
+    void handleEarClipsChanged(int);
+    void handleEarClipsPluggedIn(int);
     void handleDownClicked();
     void handleUpClicked();
 
@@ -91,10 +90,11 @@ private:
      */
     void resetContext();
 
+    void connectionTest();
     void stopSession();
     void stopRecordPrompt(bool shouldRecord);
     void togglePower();
-    void pausedSession();
+    void pauseSession();
     void resetShutDownTimer();
 
 };
