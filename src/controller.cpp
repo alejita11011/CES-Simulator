@@ -338,6 +338,10 @@ void Controller::connectionTest()
     setContext("connectionTest");
 
     int connectionTestValue = earClipsAreConnected ? earClips->minConnectionLevel() : 0;
+
+    // Notify that the connection test is starting by blinking CES light
+    emit connectionModeLight(currentSession->isShortPulse());
+
     // Ends either through ear clips being fixed or shutting down through timeout
     while (connectionTestValue <= 0)
     {
