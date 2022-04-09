@@ -109,7 +109,10 @@ void Controller::handleSelectClicked()
         elapsedSessionTime = 0;
 
         connectionTest();
-
+        if (!shutDownTimer->isActive())
+        {
+            return;
+        }
         emit sessionProgress(currentSession->getPresetDurationSeconds(), currentSession->getType(), currentBattery->getBatteryLevel());
     }
     else if (getContext("promptRecordSession"))
