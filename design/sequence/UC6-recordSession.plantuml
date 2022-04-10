@@ -1,0 +1,54 @@
+@startuml UC6-recordSession
+
+title <size:32>**UC6:** Record a Session
+
+participant "controller: \nController" as controller
+participant "mainWindow :\nMainWindow" as window
+participant "listWidget :\nQListWidget" as display
+actor       "User" as user
+participant "powerButton :\nQPushButton" as powerButton
+participant "selectButton :\nQPushButton" as selectButton
+
+controller -> window ++: sessionEnds()
+window -> window ++: handleEndedSession()
+window -> display : setText("Do you want to record the session?\nPress check mark/power")
+deactivate window
+user -> user ++ : sees the prompt
+
+alt User wants to record the session
+    user -> selectButton ++: Click
+    selectButton -> controller ++: clicked()
+    deactivate selectButton
+    controller -> controller : handlePowerClicked()
+    alt getContext("promptRecordSession") == true
+        controller -> controller : stopRecordPrompt(true)
+        controller -> window : newRecord(record)
+        window -> window: handleNewRecord(record)
+    else
+        note over controller: Stop Execution
+    end
+
+else User does not want to record the session
+    user -> powerButton ++: Click
+    powerButton -> controller : clicked()
+    deactivate powerButton
+    controller -> controller : handlePowerClicked()
+    alt getContext("promptRecordSession") == true
+        controller -> controller : stopRecordPrompt(false)
+        controller -> window : useSelectionContext()
+        window -> window: handleResetDisplay()
+    else
+        note over controller: Stop Execution
+    end
+
+else User does nothing
+
+   note over controller, selectButton
+   Turn off after 30 seconds of inactivity
+   end note
+
+end
+
+
+
+@enduml
