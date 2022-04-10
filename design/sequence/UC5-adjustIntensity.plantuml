@@ -1,0 +1,46 @@
+@startuml UC5-adjustIntensity
+
+title <size:32>**UC5:** Adjust Intensity
+
+actor       User as user
+participant "intensityUp: \nQPushButton" as upButton
+participant "intensityDown: \nQPushButton" as downButton
+participant "controller: \nController" as controller
+participant "mainWindow: \nMainWindow" as mainWindow
+participant "numbersLayout: \nQVBoxLayout" as graph
+
+alt Intensity up
+
+    user -> upButton ++ : Click
+    upButton -> controller ++ : clicked()
+    controller -> controller ++ : getContext("activeSession")
+    alt getContext("activeSession") == true
+        alt currentIntensity < 8
+            note over controller: <size:10>currentIntensity += 1 \n<size:10>highestIntensity = max(currentIntensity, highestIntensity)
+        end
+    else 
+        note over controller: <size:10>Stop Execution
+    end
+
+
+
+else Intensity down
+
+    user -> downButton ++ : Click
+    upButton -> controller ++ : clicked()
+    controller -> controller -- : getContext("activeSession")
+    alt getContext("activeSession") == true
+        alt currentIntensity > 1
+            note over controller: <size:10>currentIntensity -= 1
+        end
+    else
+        note over controller: <size:10>Stop Execution
+    end
+
+end
+
+controller -> mainWindow ++ : adjustSessionIntensity(currentIntensity)
+mainWindow -> mainWindow ++ : setLitUp({currentIntensity})
+mainWindow -> numbersLayout : setStyleSheet(backgroundColor);
+
+@enduml
