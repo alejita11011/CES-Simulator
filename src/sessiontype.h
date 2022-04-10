@@ -1,9 +1,11 @@
 #ifndef SESSIONTYPE_H
 #define SESSIONTYPE_H
 
+// The four supported session types by this device
 enum SessionType { SUB_DELTA, DELTA, THETA, ALPHA };
 
 // https://stackoverflow.com/questions/5093460
+// Converts the given SessionType enum to a string representation
 inline const char* ToString(SessionType sessionType)
 {
     switch (sessionType)

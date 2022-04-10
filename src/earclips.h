@@ -17,11 +17,9 @@ class EarClips : public QObject
     Q_OBJECT
 public:
     explicit EarClips(QObject *parent = nullptr);
-    /**
-     * @brief runs the ear clip connection test, 2 = excellent, 1 = okay, 0 = no connection
-     * @return minimum of the vablues in variables rightEarClipConnection and leftEarClipConnection
-     */
-    int minConnectionLevel();
+    // runs the ear clip connection test, 2 = excellent, 1 = okay, 0 = no connection
+    // returns minimum of the vablues in variables rightEarClipConnection and leftEarClipConnection   
+    int minConnectionLevel(); 
     bool isLeftConnected();
     bool isRightConnected();
 
