@@ -1,0 +1,50 @@
+@startuml UC6-recordSession
+
+title <size:32>**UC6:** Record a Session
+
+participant "controller: \nController" as controller
+participant "mainWindow :\nMainWindow" as window
+participant "record :\nQListWidgetItem" as record
+participant "display :\nQLabel" as display
+participant "listWidget :\nQListWidget" as listWidget
+actor       "User" as user
+participant "powerButton :\nQPushButton" as powerButton
+participant "selectButton :\nQPushButton" as selectButton
+
+controller -> window ++: sessionEnds()
+window -> display : setText("Do you want to record the session?\nPress check mark/power")
+deactivate window
+user -> user ++ : sees the prompt
+
+alt User wants to record the session
+    user -> selectButton ++: Click
+    selectButton -> controller ++: clicked()
+    deactivate selectButton
+    controller -> controller ++: getContext("promptRecordSession")
+    return true
+    controller -> controller ++: stopRecordPrompt(true)
+    controller -> window ++: newRecord(record)
+    window -> window ++--: handleNewRecord(record)
+    window -> record **: new
+    deactivate window
+    deactivate controller
+    deactivate controller
+
+else User does not want to record the session
+    user -> powerButton ++: Click
+    deactivate user
+    powerButton -> controller ++: clicked()
+    deactivate powerButton
+    controller -> controller ++: getContext("promptRecordSession")
+    return true
+    controller -> controller ++: stopRecordPrompt(false)
+    deactivate window
+end
+
+note over controller: currentSession = nullptr
+controller -> controller : setContext("sessionSelection")
+controller -> window ++: displayRecords()
+window -> listWidget : raise()
+deactivate window
+
+@enduml

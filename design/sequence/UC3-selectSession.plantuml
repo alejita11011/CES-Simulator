@@ -1,0 +1,76 @@
+@startuml UC3-selectSession
+
+title <size:32>**UC3:** Select a Session
+
+actor       User as user
+participant "powerButton :\nQPushButton" as powerButton
+participant "upButton :\nQPushButton" as upButton
+' participant "downButton :\nQPushButton" as downButton
+participant "controller :\nController" as controller
+participant "powerHoldTimer :\nQTimer" as powerHoldTimer
+participant "mainWindow :\nQMainWindow" as mainWindow
+participant "selectedSession :\nSession" as selectedSession
+participant "selectedGroupWidget :\nQWidget" as selectedGroupWidget
+participant "otherGroupWidgets :\nQWidget" as otherGroupWidgets
+participant "availableSessionWidgets :\nQWidget" as availableSessionWidgets
+participant "otherSessionWidgets :\nQWidget" as otherSessionWidgets
+participant "selectedNumberLabel :\nQLabel" as selectedNumberLabel
+participant "otherNumberLabels :\nQLabel" as otherNumberLabels
+participant "shortPulse :\QWidget" as shortPulse
+participant "longPulse :\QWidget" as longPulse
+
+note over controller: <size:10>isPowerOn = true\n<size:10>context = "sessionSelection"\n<size:10>selectedGroupIndex = 0
+
+loop Until user selects the right group
+    user -> powerButton ++ : Press
+    powerButton -> controller ++-- : pressed()
+    controller -> powerHoldTimer -- : start(2000)
+
+    user -> powerButton ++ : Release
+    powerButton -> controller ++-- : clicked()
+    controller -> powerHoldTimer ++ : isActive()
+    return true
+    controller -> powerHoldTimer : stop()
+    controller -> controller ++ : getContext("sessionSelection")
+    return true
+    note over controller: <size:10>selectedGroupIndex += 1\n<size:10>selectedGroupIndex %= 3
+
+    controller -> mainWindow ++ : selectGroup(groups[selectedGroupIndex])
+    mainWindow -> mainWindow ++ : setLitUp(selectedGroupWidget, true)
+    mainWindow -> selectedGroupWidget -- : setStyleSheet("border-image: /on/<widget>.png")
+    mainWindow -> mainWindow ++ : setLitUp(otherGroupWidgets, true)
+    mainWindow -> otherGroupWidgets -- : setStyleSheet("border-image: /off/<widget>.png")
+    mainWindow -> mainWindow ++ : setLitUp(availableSessionWidgets, true)
+    mainWindow -> availableSessionWidgets -- : setStyleSheet("border-image: /on/<widget>.png")
+    mainWindow -> mainWindow ++ : setLitUp(otherSessionWidgets, true)
+    mainWindow -> otherSessionWidgets -- : setStyleSheet("border-image: /off/<widget>.png")
+    return
+    controller --
+    controller --
+end ref
+
+loop Until user selects the right session
+    user -> upButton ++ : Click (press + release)
+    upButton -> controller ++-- : clicked()
+
+    controller -> controller ++ : getContext("sessionSelection")
+    return true
+    note over controller: <size:10>selectedSessionIndex += 1\n<size:10>selectedSessionIndex %= 4
+
+    controller -> mainWindow ++ : selectSession(selectedSessionIndex, selectedSession)
+    mainWindow -> mainWindow ++ : setLitUp({selectedSessionIndex + 1})
+    mainWindow -> selectedNumberLabel : setStyleSheet(\n  "background-color:rgb(249, 166, 0)"\n)
+    mainWindow -> otherNumberLabels -- : setStyleSheet(\n  "background-color:rgb(130, 130, 130)"\n)
+
+    mainWindow -> selectedSession ++ : isShortPulse()
+    return true
+
+    mainWindow -> mainWindow ++ : setLitUp(shortPulse, true)
+    mainWindow -> shortPulse -- : setStyleSheet("border-image: /on/shortPulse.png")
+    mainWindow -> mainWindow ++ : setLitUp(longPulse, false)
+    mainWindow -> longPulse -- : setStyleSheet("border-image: /off/longPulse.png")
+    return
+    controller --
+end ref
+
+@enduml

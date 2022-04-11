@@ -1,0 +1,104 @@
+@startuml UC4-activateSession
+
+title <size:32>**UC4:** Start the session
+
+actor       User as user
+participant "leftEarClipSlider :\nQSlider" as leftSlider
+participant "rightEarClipSlider :\nQSlider" as rightSlider
+participant "earClipDropdown :\nQComboBox" as dropdown
+' TODO
+participant "selectButton :\nQPushButton" as check
+participant "earClips :\nEarClips" as earClips
+participant "controller :\nController" as controller
+participant "currentSession :\nSession" as session
+participant "battery :\nBattery" as battery
+participant "mainWindow :\nQMainWindow" as mainWindow
+participant "display :\nQLabel" as display
+
+note over earClips: <size:10>leftEarClipConnection = 0 \n<size:10>rightEarClipConnection = 0
+
+user -> user ++--: Dampens earlobes
+user -> leftSlider ++ : Connect to ear
+leftSlider -> earClips : handleLeftEarClipSlider(2)
+note over earClips: <size:10>leftEarClipConnection = 2
+leftSlider -> controller ++ : handleEarClipsChanged(2)
+controller -> controller ++ : getContext("activeSession")
+return false
+return
+leftSlider --
+
+user -> rightSlider ++ : Connect to ear
+rightSlider -> earClips : handleRightEarClipSlider(2)
+note over earClips: <size:10>rightEarClipConnection = 2
+rightSlider -> controller ++ : handleEarClipsChanged(2)
+controller -> controller ++ : getContext("activeSession")
+return false
+return
+rightSlider --
+
+' TODO user connect earclips to device
+user -> dropdown ++ : Connect ear clips to device
+dropdown -> controller: currentIndexChanged(1)
+note over controller: <size:10>earClipsAreConnected = 1
+deactivate dropdown
+
+' user clicks checkmark
+user -> check ++ : Click
+check -> controller ++ : handleSelectClicked()
+controller -> controller ++ : getContext("sessionSelection")
+return true
+controller -> controller ++ : connectionTest()
+controller -> controller : setContext("connectionTest")
+controller -> earClips ++: minConnectionLevel()
+return 2
+note over controller: <size:10>connectionTestValue = 2
+controller -> session ++: isShortPulse()
+return true
+controller -> mainWindow ++: connectionModeLight(isShortPulse = true)
+deactivate mainWindow
+controller -> mainWindow ++: sendEarClipConnection(2, true, true)
+deactivate mainWindow
+controller -> controller : setContext("activeSession")
+deactivate controller
+controller -> session ++: getPresetDurationSeconds()
+return 20
+controller -> session ++: getType()
+return SessionType::ALPHA
+controller -> battery ++: getBatteryLevel()
+return 100
+controller -> mainWindow ++: sessionProgress(20, SessionType::ALPHA, 100)
+deactivate mainWindow
+deactivate controller
+deactivate check
+
+...Session starts...
+
+loop getContext("activeSession") == true
+    controller -> controller ++: timerEvent()
+    note over controller: <size:10>elapsedSessionTime++
+    controller -> earClips ++: minConnectionLevel()
+    return 2
+    controller -> battery: deplete(((currentIntensity + 1) / 2) + 2)
+    controller -> session ++: getPresetDurationSeconds()
+    return 20
+    controller -> session ++: getType()
+    return SessionType::ALPHA
+    controller -> battery ++: getBatteryLevel()
+    return batteryLevel
+    controller -> mainWindow ++: sessionProgress(20, SessionType::ALPHA, batteryLevel)
+    deactivate mainWindow
+    controller -> session ++: getPresetDurationSeconds()
+    return presetDurationSeconds
+
+    alt presetDurationSeconds - elapsedSessionTime == 0
+        controller -> controller ++: stopSession()
+        controller -> mainWindow ++: sessionEnds()
+        mainWindow -> display --: setText("Do you want to record the session?\nPress check mark/power")
+        deactivate mainWindow
+        controller -> controller ++-- : setContext("promptRecordSession")
+        deactivate controller
+        deactivate controller
+    end
+end
+
+@enduml
