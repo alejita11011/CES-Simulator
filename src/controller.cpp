@@ -185,13 +185,13 @@ void Controller::timerEvent(QTimerEvent *event)
     {
         // Increment elapsed time
         elapsedSessionTime++;
-        // Emit progress of active session
-        int remainingSeconds = currentSession->getPresetDurationSeconds() - elapsedSessionTime;
-        SessionType sessionType = currentSession->getType();
 
         //Battery depletes every second scaled by intensity level and ear clip connection level
         currentBattery->deplete(((currentIntensity + 1)/2) + earClips->minConnectionLevel());
 
+        // Emit progress of active session
+        int remainingSeconds = currentSession->getPresetDurationSeconds() - elapsedSessionTime;
+        SessionType sessionType = currentSession->getType();
         emit sessionProgress(remainingSeconds, sessionType, currentBattery->getBatteryLevel());
 
         if (currentBattery->isCriticallyLow())
