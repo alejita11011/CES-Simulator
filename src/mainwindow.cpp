@@ -268,8 +268,7 @@ void MainWindow::handleBatteryShutDown()
     ui->textValues->raise();
     ui->textValues->setText("Battery critically low\nShutting down");
     ui->SelectButton->setDisabled(true);
-    setLitUp({1});
-    delayMs(2000);
+    flash({1}, 3, 200);
 
 }
 

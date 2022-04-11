@@ -9,6 +9,5 @@
 :User: -- (UC5: Adjust Intensity)
 :User: -- (UC6: Record a session)
 (UC4: Start the session) ..> (UC6: Record a session): <<includes>>
-:User: -- (UC7: View recorded sessions)
 
 @enduml

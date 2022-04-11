@@ -359,9 +359,8 @@ void Controller::connectionTest()
         }
         else
         {
-            // Send true meaning earClips are connected (even though we don't know if they are)
-            // so that the lights don't flash
-            emit sendEarClipConnection(connectionTestValue, true, true);
+            // Turn on the L and R lights since both ear clips are not connected to the device
+            emit sendEarClipConnection(connectionTestValue, false, false);
         }
         connectionTestValue = earClipsAreConnected ? earClips->minConnectionLevel() : 0;
     }
