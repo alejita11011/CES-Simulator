@@ -22,8 +22,6 @@ alt Intensity up
     end
     deactivate controller
 
-
-
 else Intensity down
 
     user -> downButton ++ : Click
