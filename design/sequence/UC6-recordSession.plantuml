@@ -5,7 +5,8 @@ title <size:32>**UC6:** Record a Session
 participant "controller: \nController" as controller
 participant "mainWindow :\nMainWindow" as window
 participant "record :\nQListWidgetItem" as record
-participant "listWidget :\nQListWidget" as display
+participant "display :\nQLabel" as display
+participant "listWidget :\nQListWidget" as listWidget
 actor       "User" as user
 participant "powerButton :\nQPushButton" as powerButton
 participant "selectButton :\nQPushButton" as selectButton
@@ -43,9 +44,7 @@ end
 note over controller: currentSession = nullptr
 controller -> controller : setContext("sessionSelection")
 controller -> window ++: displayRecords()
-window -> display : raise()
+window -> listWidget : raise()
 deactivate window
-
-
 
 @enduml
