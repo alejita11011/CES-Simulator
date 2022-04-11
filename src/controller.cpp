@@ -4,17 +4,19 @@
 
 int Controller::IDLE_TIMEOUT_MS = 30000;
 
-Controller::Controller(Battery *b, QList<Group *> groups, QObject *parent) : QObject(parent)
+Controller::Controller(Battery *b, QList<Group *> groups, EarClips *earClips, QObject *parent) : QObject(parent)
 {
-    earClips                = nullptr;
+    this->earClips          = earClips;
     currentBattery          = b;
     isPowerOn               = false;
     this->groups            = groups;
     currentSession          = nullptr;
     elapsedSessionTime      = 0;
     earClipsAreConnected    = false;
-    currentIntensity = 0;
-    highestIntensity = 0;
+    currentIntensity        = 0;
+    highestIntensity        = 0;
+    selectedGroupIndex      = 0;
+    selectedSessionIndex    = 0;
 
     // Initialize context
     this->context["sessionSelection"]    = false;
@@ -40,6 +42,8 @@ Controller::~Controller()
     {
         delete group;
     }
+    delete currentBattery;
+    delete earClips;
 }
 
 bool Controller::getContext(QString context)
@@ -91,7 +95,12 @@ void Controller::handleSelectClicked()
 
     if (getContext("sessionSelection"))
     {
-        currentSession = new Session(true, 0.5, 20, SessionType::SUB_DELTA); // HARDCODED SELECTED SESSION
+        if (groups[selectedGroupIndex]->size() == 0)
+        {
+            return;
+        }
+
+        currentSession = groups[selectedGroupIndex]->getSession(selectedSessionIndex);
         //All sessions by default will be at intensity level 1
         currentIntensity = 1;
         highestIntensity = 1;
@@ -99,16 +108,12 @@ void Controller::handleSelectClicked()
 
         elapsedSessionTime = 0;
 
-        setContext("connectionTest");
-        int temp = earClips->earClipConnectionTest();
-        while (temp <= 0 || !earClipsAreConnected)
+        connectionTest();
+        if (!shutDownTimer->isActive())
         {
-            delayMs(500);
-            temp = earClips->earClipConnectionTest();
+            return;
         }
-        setContext("activeSession");
-
-        emit sessionProgress(currentSession->getPresetDurationSeconds(), currentSession->getType());
+        emit sessionProgress(currentSession->getPresetDurationSeconds(), currentSession->getType(), currentBattery->getBatteryLevel());
     }
     else if (getContext("promptRecordSession"))
     {
@@ -120,7 +125,20 @@ void Controller::handleDownClicked()
 {
     resetShutDownTimer();
 
-    if (getContext("activeSession"))
+    if (getContext("sessionSelection"))
+    {
+        qDebug() << selectedSessionIndex;
+        if (groups[selectedGroupIndex]->size() > 0)
+        {
+            selectedSessionIndex = ((selectedSessionIndex - 1) + groups[selectedGroupIndex]->size()) % groups[selectedGroupIndex]->size();
+            emit selectSession(selectedSessionIndex, groups[selectedGroupIndex]->getSession(selectedSessionIndex));
+        }
+        else
+        {
+            emit selectSession(selectedSessionIndex, nullptr);
+        }
+    }
+    else if (getContext("activeSession"))
     {
 
         if (currentIntensity > 1)
@@ -136,7 +154,19 @@ void Controller::handleUpClicked()
 {
     resetShutDownTimer();
 
-    if (getContext("activeSession"))
+    if (getContext("sessionSelection"))
+    {
+        if (groups[selectedGroupIndex]->size() > 0)
+        {
+            selectedSessionIndex = (selectedSessionIndex + 1) % groups[selectedGroupIndex]->size();
+            emit selectSession(selectedSessionIndex, groups[selectedGroupIndex]->getSession(selectedSessionIndex));
+        }
+        else
+        {
+            emit selectSession(selectedSessionIndex, nullptr);
+        }
+    }
+    else if (getContext("activeSession"))
     {
         if (currentIntensity < 8)
         {
@@ -158,12 +188,11 @@ void Controller::timerEvent(QTimerEvent *event)
         // Emit progress of active session
         int remainingSeconds = currentSession->getPresetDurationSeconds() - elapsedSessionTime;
         SessionType sessionType = currentSession->getType();
-        emit sessionProgress(remainingSeconds, sessionType);
 
-        //Battery depletes every second scaled by intensity level
-        currentBattery->deplete((currentIntensity + 1)/2);
+        //Battery depletes every second scaled by intensity level and ear clip connection level
+        currentBattery->deplete(((currentIntensity + 1)/2) + earClips->minConnectionLevel());
 
-        qDebug() << currentBattery->getBatteryLevel(); // FOR TESTING
+        emit sessionProgress(remainingSeconds, sessionType, currentBattery->getBatteryLevel());
 
         if (currentBattery->isCriticallyLow())
         {
@@ -208,27 +237,47 @@ void Controller::stopRecordPrompt(bool shouldRecord)
         emit newRecord(record);
     }
 
-    delete currentSession;
     currentSession = nullptr;
 
     if(currentBattery->isCriticallyLow())
     {
         emit batteryShutDown();
         togglePower();
-    }else{
+    }
+    else
+    {
         //Set next context
         setContext("sessionSelection");
-        qDebug() << "HERE IN USESELECTION"; // FOR TESTING
-        emit useSelectionContext();
+        emit displayRecords();
+        selectedGroupIndex   = 0;
+        selectedSessionIndex = 0;
+        emit selectGroup(groups[selectedGroupIndex]);
+        emit selectSession(selectedSessionIndex, groups[selectedGroupIndex]->getSession(selectedSessionIndex));
     }
-
 }
 
 void Controller::handlePowerClicked()
 {
+    // If timer is not active, the user has hold power button for 2+ seconds. So, we ignore the clicked signal
+    if (!powerPressedTimer->isActive())
+    {
+        return;
+    }
+
+    powerPressedTimer->stop();
     resetShutDownTimer();
 
-    if (getContext("activeSession"))
+    if (getContext("sessionSelection"))
+    {
+        selectedGroupIndex   = (selectedGroupIndex + 1) % groups.size();
+        emit selectGroup(groups[selectedGroupIndex]);
+
+        //Prevent showing inexistent session option by setting index outside 0-3 range (nothing lights up)
+        selectedSessionIndex = groups[selectedGroupIndex]->size() == 0 ? -1 : 0;
+        Session *selectedSession = selectedSessionIndex == -1 ? nullptr : groups[selectedGroupIndex]->getSession(selectedSessionIndex);
+        emit selectSession(selectedSessionIndex, selectedSession);
+    }
+    else if (getContext("activeSession"))
     {
         //The session stops
         stopSession();
@@ -237,10 +286,14 @@ void Controller::handlePowerClicked()
     {
         stopRecordPrompt(false);
     }
-    else
-    {
-        togglePower();
-    }
+}
+
+void Controller::handlePowerPressed()
+{
+    // Toggle power once 2 seconds have passed, and stop timer to prevent it from repeating
+    powerPressedTimer = new QTimer();
+    connect(powerPressedTimer, &QTimer::timeout, [this](){ powerPressedTimer->stop(); togglePower(); });
+    powerPressedTimer->start(2000);
 }
 
 void Controller::togglePower(){
@@ -250,7 +303,6 @@ void Controller::togglePower(){
     if (isPowerOn)
     {
         //Turn on device
-        qDebug() << currentBattery->getBatteryLevel(); // FOR TESTING
 
         if (currentBattery->isCriticallyLow())
         {
@@ -263,6 +315,11 @@ void Controller::togglePower(){
         emit powerOn(currentBattery->getBatteryLevel(), currentBattery->isLow());
         resetShutDownTimer();
         setContext("sessionSelection");
+
+        // Update UI
+        emit selectGroup(groups[selectedGroupIndex]);
+        Session *selectedSession = groups[selectedGroupIndex]->size() == 0 ? nullptr : groups[selectedGroupIndex]->getSession(selectedSessionIndex);
+        emit selectSession(selectedSessionIndex, selectedSession);
     }
     else
     {
@@ -273,54 +330,80 @@ void Controller::togglePower(){
     }
 }
 
-void Controller::setEarClips(EarClips *e)
-{
-    if (earClips != nullptr)
-    {
-        delete earClips;
-    }
-    earClips = e;
-    // handle connectionLevel signal from EarClips
-    connect(earClips, SIGNAL(connectionLevel(int)), this, SLOT(handleEarClipConnectionLevel(int)));
-}
-
 void Controller::changeBattery(Battery *b)
 {
     delete currentBattery;
     currentBattery = b;
 }
 
-void Controller::handleEarClipConnectionLevel(int level)
+void Controller::connectionTest()
 {
+    setContext("connectionTest");
 
-    if (!earClipsAreConnected)
+    int connectionTestValue = earClipsAreConnected ? earClips->minConnectionLevel() : 0;
+
+    // Notify that the connection test is starting by blinking CES light
+    emit connectionModeLight(currentSession->isShortPulse());
+
+    // Ends either through ear clips being fixed or shutting down through timeout
+    while (connectionTestValue <= 0)
     {
-        level = 0;
-    }
-    if (getContext("connectionTest"))
-    {
-        // the line below is the line we want to run but for now it
-        // crashes the app since we have no currentSession
-        // connectionModeLight(currentSession->isShortPulse());
-        connectionModeLight(true); // for testing purposes
-        sendEarClipConnection(level);
+        if (!shutDownTimer->isActive())
+        {
+            return;
+        }
 
-    }
-    else if (getContext("activeSession") && level == 0)
-    {
-        // connectionModeLight(currentSession->isShortPulse());
-        connectionModeLight(true); // for testing purposes
-        sendEarClipConnection(level);
-        stopSession();
+        if (earClipsAreConnected)
+        {
+            emit sendEarClipConnection(connectionTestValue, earClips->isLeftConnected(), earClips->isRightConnected());
+        }
+        else
+        {
+            // Turn on the L and R lights since both ear clips are not connected to the device
+            emit sendEarClipConnection(connectionTestValue, false, false);
+        }
+        connectionTestValue = earClipsAreConnected ? earClips->minConnectionLevel() : 0;
     }
 
+    emit sendEarClipConnection(connectionTestValue, true, true);
 
+    setContext("activeSession");
 }
 
-void Controller::handleEarClipConnection(int index)
+void Controller::handleEarClipsChanged(int level)
 {
-    earClipsAreConnected = index;
-    earClips->earClipConnectionTest();
+    if (getContext("activeSession"))
+    {
+        int connectionTestValue = earClipsAreConnected ? earClips->minConnectionLevel() : 0;
+        if (connectionTestValue <= 0)
+        {
+            pauseSession();
+        }
+    }
+}
+
+void Controller::handleEarClipsPluggedIn(int selectionIndex)
+{
+    // selectionIndex 0 means disconnected
+    earClipsAreConnected = selectionIndex;
+
+    handleEarClipsChanged(0);
+}
+
+void Controller::pauseSession()
+{
+    qDebug() << "paused";
+
+    connectionTest();
+
+    for (int i = currentIntensity; i > 0; i--)
+    {
+        handleDownClicked();
+        delayMs(400);
+    }
+    resetShutDownTimer();
+
+    qDebug() << "resumed";
 }
 
 void Controller::resetShutDownTimer()

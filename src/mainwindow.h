@@ -8,6 +8,7 @@
 #include <QMap>
 #include <QLabel>
 #include <QSet>
+#include <iostream>
 #include "utils.h"
 #include "controller.h"
 #include "record.h"
@@ -43,19 +44,26 @@ private:
 
     void setLitUp(QWidget *widget, bool litUp);
     void setLitUp(QSet<int> numbers);
+    void flash(QWidget *, int, int);
+    void flash(QSet<int> , int, int);
 
 private slots:
     void handleNewRecord(Record* record);  
 
-    void handleGroupSelected(/* Group *group */);
+    void handleGroupSelected(Group *group);
 
-    void handleSessionProgress(int elapsedSeconds, SessionType sessionType);
+    // Lights up the selected session's number in the graph and it's respective pulse light
+    void handleSessionSelected(int selectedSessionIndex, Session *selectedSession);
 
+    void handleSessionProgress(int elapsedSeconds, SessionType sessionType, int batteryPercentage);
+
+    // Handles the adjustSessionIntensity signal and displays
+    // the new intensity level in the UI
     void handleIntensity(int intensity);
 
     void handleEndedSession();
 
-    void handleResetDisplay();
+    void handleRecordsDisplay();
 
     void handleBattery(bool);
 
@@ -65,12 +73,19 @@ private slots:
 
     void handlePowerOn(int, bool);
 
-    void handleConnectionTest(int);
+    // Handles the sendEarClipConnection signal from Controller
+    // displays the connection level in UI and if one or more of the
+    // ear clips are disconnected, lights up the respective icons 
+    void handleConnectionTest(int, bool, bool);
 
+    // Handles the connectionModeLight signal from Controller
+    // lights up the short pulse icon if input parameter is true,
+    // lights up the long pulse icon otherwise 
     void handleModeLight(bool);
 
+    // Handles the change battery button clicked from the MainWindow
+    // by passing the controller a new battery to use
     void handleBatteryChange();
-
 
 };
 #endif // MAINWINDOW_H

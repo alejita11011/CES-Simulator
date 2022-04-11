@@ -2,6 +2,7 @@
 #define EARCLIPS_H
 
 #include <QObject>
+#include <QString>
 
 /**
 * ear clips are set to be disconnected during the initialization
@@ -16,24 +17,19 @@ class EarClips : public QObject
     Q_OBJECT
 public:
     explicit EarClips(QObject *parent = nullptr);
-    /**
-     * @brief runs the ear clip connection test, 2 = excellent, 1 = okay, 0 = no connection
-     * @return minimum of the vablues in variables rightEarClipConnection and leftEarClipConnection
-     */
-    int earClipConnectionTest();
-
-signals:
-    void connectionLevel(int);
-
+    // runs the ear clip connection test, 2 = excellent, 1 = okay, 0 = no connection
+    // returns minimum of the vablues in variables rightEarClipConnection and leftEarClipConnection   
+    int minConnectionLevel(); 
+    bool isLeftConnected();
+    bool isRightConnected();
 
 private slots:
     void handleLeftEarClipSlider(int);
     void handleRightEarClipSlider(int);
 
-
 private:
-    int rightEarClipConnection;
     int leftEarClipConnection;
+    int rightEarClipConnection;
 
 };
 

@@ -49,42 +49,47 @@ MainWindow::MainWindow(QWidget *parent)
 
     //Create battery
     Battery *battery     = new Battery();
-
-    //Create controller
-    controller           = new Controller(battery, groups); // TODO singleton
-
     //Create earClips
     EarClips *earClips   = new EarClips();
-    //for testing
-    controller->setEarClips(earClips);
 
-    connect(controller, SIGNAL(sessionProgress(int, SessionType)), this, SLOT(handleSessionProgress(int, SessionType)));
+    //Create controller
+    controller           = new Controller(battery, groups, earClips);
+
+    connect(controller, SIGNAL(sessionProgress(int, SessionType, int)), this, SLOT(handleSessionProgress(int, SessionType, int)));
     //Adjust Intensity
     connect(controller, SIGNAL(adjustSessionIntensity(int)), this, SLOT(handleIntensity(int)));
     connect(controller, SIGNAL(newRecord(Record *)), this, SLOT(handleNewRecord(Record *)));
     //A session ended
     connect(controller, SIGNAL(sessionEnds()), this, SLOT(handleEndedSession()));
     //reset Display
-    connect(controller, SIGNAL(useSelectionContext()), this, SLOT(handleResetDisplay()));
+    connect(controller, SIGNAL(displayRecords()), this, SLOT(handleRecordsDisplay()));
     //When shutdown timer reaches 0 OR user turns off device
     connect(controller, SIGNAL(powerOff()), this, SLOT(handlePowerOff()));
     //User turns on device
     connect(controller, SIGNAL(powerOn(int, bool)), this, SLOT(handlePowerOn(int, bool)));
     connect(controller, SIGNAL(batteryLevel(bool)), this, SLOT(handleBattery(bool)));
     connect(controller, SIGNAL(batteryShutDown()), this, SLOT(handleBatteryShutDown()));
+    //Handle signals from connection tests
+    connect(controller, SIGNAL(sendEarClipConnection(int, bool, bool)), this, SLOT(handleConnectionTest(int, bool, bool)));
+    //Handle connectionModeLight signals
+    connect(controller, SIGNAL(connectionModeLight(bool)), this, SLOT(handleModeLight(bool)));
+    //Session selection
+    connect(controller, SIGNAL(selectGroup(Group *)), this, SLOT(handleGroupSelected(Group *)));
+    connect(controller, SIGNAL(selectSession(int, Session *)), this, SLOT(handleSessionSelected(int, Session *)));
 
+    //User turns on/off device
     connect(ui->PowerButton, SIGNAL(clicked()), controller, SLOT(handlePowerClicked()));
+    connect(ui->PowerButton, SIGNAL(pressed()), controller, SLOT(handlePowerPressed()));
+    //User selects something
     connect(ui->SelectButton, SIGNAL(clicked()), controller, SLOT(handleSelectClicked()));
     //User connects/disconnects ear clips from device
-    connect(ui->earClipDeviceCCBox, SIGNAL(currentIndexChanged(int)), controller, SLOT(handleEarClipConnection(int)));
+    connect(ui->earClipDeviceCCBox, SIGNAL(currentIndexChanged(int)), controller, SLOT(handleEarClipsPluggedIn(int)));
     //Handle events for left ear clip slider
     connect(ui->leftEarClipSlider, SIGNAL(valueChanged(int)), earClips, SLOT(handleLeftEarClipSlider(int)));
+    connect(ui->leftEarClipSlider, SIGNAL(valueChanged(int)), controller, SLOT(handleEarClipsChanged(int)));
     //Handle events for right ear clip slider
     connect(ui->rightEarClipSlider, SIGNAL(valueChanged(int)), earClips, SLOT(handleRightEarClipSlider(int)));
-    //Handle signals from connection tests
-    connect(controller, SIGNAL(sendEarClipConnection(int)), this, SLOT(handleConnectionTest(int)));
-    //Handle connectionModeLight signals
-    connect(controller,SIGNAL(connectionModeLight(bool)), this, SLOT(handleModeLight(bool)));
+    connect(ui->rightEarClipSlider, SIGNAL(valueChanged(int)), controller, SLOT(handleEarClipsChanged(int)));
     //Handle battery change
     connect(ui->batteryChangeButton, SIGNAL(clicked()), this, SLOT(handleBatteryChange()));
     connect(ui->IntensityDown, SIGNAL(clicked()), controller, SLOT(handleDownClicked()));
@@ -126,22 +131,62 @@ void MainWindow::handleNewRecord(Record *record)
     new QListWidgetItem(itemText, ui->listWidget);
 }
 
-void MainWindow::handleGroupSelected(/* Group *group */) // TODO
+void MainWindow::handleGroupSelected(Group *group)
 {
-    setLitUp(ui->fourtyFiveMinGroup, true);
-    setLitUp(ui->subDeltaSession, true);
-    setLitUp(ui->deltaSession, true);
-    setLitUp(ui->alphaSession, true);
-    setLitUp(ui->thetaSession, true);
+    for (QString groupName : groupWidgets.keys())
+    {
+        if (groupName == group->getName())
+        {
+            setLitUp(groupWidgets[groupName], true);
+        }
+        else
+        {
+            setLitUp(groupWidgets[groupName], false);
+        }
+    }
+
+    for (SessionType sessionType : sessionWidgets.keys())
+    {
+        if (group->containsSessionType(sessionType))
+        {
+            setLitUp(sessionWidgets[sessionType], true);
+        }
+        else
+        {
+            setLitUp(sessionWidgets[sessionType], false);
+        }
+    }
+}
+
+void MainWindow::handleSessionSelected(int selectedSessionIndex, Session *selectedSession)
+{
+    setLitUp({selectedSessionIndex + 1});
+
+    if (selectedSession == nullptr)
+    {
+        setLitUp(ui->shortPulse, false);
+        setLitUp(ui->longPulse, false);
+    }
+    else if (selectedSession->isShortPulse())
+    {
+        setLitUp(ui->shortPulse, true);
+        setLitUp(ui->longPulse, false);
+    }
+    else
+    {
+        setLitUp(ui->shortPulse, false);
+        setLitUp(ui->longPulse, true);
+    }
 }
 
 //Displays session progress on device screen
-void MainWindow::handleSessionProgress(int remainingSeconds, SessionType sessionType)
+void MainWindow::handleSessionProgress(int remainingSeconds, SessionType sessionType, int batteryPercentage)
 {
     setLitUp({});
     ui->sessionProgressValues->raise();
     ui->sessionProgressValues->clear();
     ui->sessionProgressValues->setText(formatSeconds(remainingSeconds) + "\n" + ToString(sessionType));
+    ui->progressBar->setValue(batteryPercentage);
 }
 
 void MainWindow::handleIntensity(int intensity)
@@ -151,6 +196,7 @@ void MainWindow::handleIntensity(int intensity)
 
 void MainWindow::handleEndedSession(){
     //Graphs from 8-1
+    delayMs(500);
     for(int end = 8; end >= 0; end--)
     {
         QSet<int> nums = {};
@@ -222,21 +268,19 @@ void MainWindow::handleBatteryShutDown()
     ui->textValues->raise();
     ui->textValues->setText("Battery critically low\nShutting down");
     ui->SelectButton->setDisabled(true);
-    setLitUp({1});
-    delayMs(2000);
+    flash({1}, 3, 200);
 
 }
 
 // Power on (assuming not critically low)
 void MainWindow::handlePowerOn(int batteryLevel, bool isLow)
 {
-    handleResetDisplay();
-
+    handleRecordsDisplay();
+    ui->progressBar->setValue(batteryLevel);
     ui->SelectButton->setDisabled(false);
     setLitUp(ui->powerLed, true);
 
-    //Display battery level
-    qDebug() << "BATTERY LEVEL" << batteryLevel;
+
     if(isLow){
         //Battery is low
         setLitUp({1,2});
@@ -250,7 +294,7 @@ void MainWindow::handlePowerOn(int batteryLevel, bool isLow)
     setLitUp({});
 }
 
-void MainWindow::handleResetDisplay()
+void MainWindow::handleRecordsDisplay()
 {
     if (ui->listWidget->count() == 0)
     {
@@ -260,8 +304,6 @@ void MainWindow::handleResetDisplay()
     {
         ui->listWidget->raise();
     }
-    setLitUp({});
-    handleGroupSelected();
 }
 
 void MainWindow::handlePowerOff()
@@ -288,19 +330,29 @@ void MainWindow::handlePowerOff()
     ui->powerOffView->raise();
 }
 
-void MainWindow::handleConnectionTest(int level)
+void MainWindow::handleConnectionTest(int level, bool isLeftConnected, bool isRightConnected)
 {
     if (level == 2)
     {
         setLitUp({1,2,3});
+        delayMs(2000);
     }
     else if (level == 1)
     {
         setLitUp({4,5,6});
+        delayMs(2000);
     }
     else
     {
         setLitUp({7,8});
+        setLitUp(ui->leftConnected, !isLeftConnected);
+        setLitUp(ui->rightConnected, !isRightConnected);
+        delayMs(500);
+
+        setLitUp({});
+        setLitUp(ui->leftConnected, false);
+        setLitUp(ui->rightConnected, false);
+        delayMs(500);
     }
 }
 
@@ -308,21 +360,39 @@ void MainWindow::handleModeLight(bool isShortPulse)
 {
     if (isShortPulse)
     {
-        setLitUp(ui->shortPulse, true);
+        flash(ui->shortPulse, 3, 200);
         return;
     }
-    setLitUp(ui->longPulse, true);
+    flash(ui->longPulse, 3, 200);
 }
 
 void MainWindow::handleBatteryChange()
 {
     Battery *b = new Battery();
     controller->changeBattery(b);
-    // let the user know battery has been changed?
-    // display battery level
-    // if this is pressed during active session
-    // the session should be stopped.
+    ui->progressBar->setValue(100);
 }
 
 
 
+void MainWindow::flash(QWidget *widget, int times, int onDurationMs)
+{
+    for (int i = 0; i < times; i++)
+    {
+        setLitUp(widget, true);
+        delayMs(onDurationMs);
+        setLitUp(widget, false);
+        delayMs(onDurationMs);
+    }
+}
+
+void MainWindow::flash(QSet<int> numbers, int times, int onDurationMs)
+{
+    for (int i = 0; i < times; i++)
+    {
+        setLitUp(numbers);
+        delayMs(onDurationMs);
+        setLitUp({});
+        delayMs(onDurationMs);
+    }
+}

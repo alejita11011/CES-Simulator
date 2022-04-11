@@ -6,28 +6,27 @@ EarClips::EarClips(QObject *parent) : QObject(parent)
     leftEarClipConnection   = 0;
 }
 
-int EarClips::earClipConnectionTest()
+int EarClips::minConnectionLevel()
 {
+    return std::min(leftEarClipConnection, rightEarClipConnection);
+}
 
-    if (leftEarClipConnection == 0 || rightEarClipConnection == 0)
-    {
-        emit connectionLevel(0);
-        return 0;
-    }
-    int connectionValue = std::min(leftEarClipConnection, rightEarClipConnection);
-    emit connectionLevel(connectionValue);
-    return connectionValue;
+bool EarClips::isLeftConnected()
+{
+    return leftEarClipConnection != 0;
+}
+
+bool EarClips::isRightConnected()
+{
+    return rightEarClipConnection != 0;
 }
 
 void EarClips::handleLeftEarClipSlider(int val)
 {
     leftEarClipConnection = val;
-    earClipConnectionTest();
 }
 
 void EarClips::handleRightEarClipSlider(int val)
 {
     rightEarClipConnection = val;
-    earClipConnectionTest();
 }
-
