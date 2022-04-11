@@ -13,6 +13,7 @@ participant "controller :\nController" as controller
 participant "currentSession :\nSession" as session
 participant "battery :\nBattery" as battery
 participant "mainWindow :\nQMainWindow" as mainWindow
+participant "display :\nQLabel" as display
 
 note over earClips: <size:10>leftEarClipConnection = 0 \n<size:10>rightEarClipConnection = 0
 
@@ -66,8 +67,38 @@ return SessionType::ALPHA
 controller -> battery ++: getBatteryLevel()
 return 100
 controller -> mainWindow ++: sessionProgress(20, SessionType::ALPHA, 100)
+deactivate mainWindow
+deactivate controller
+deactivate check
+
+...Session starts...
+
 loop getContext("activeSession") == true
-    
+    controller -> controller ++: timerEvent()
+    note over controller: <size:10>elapsedSessionTime++
+    controller -> earClips ++: minConnectionLevel()
+    return 2
+    controller -> battery: deplete(((currentIntensity + 1) / 2) + 2)
+    controller -> session ++: getPresetDurationSeconds()
+    return 20
+    controller -> session ++: getType()
+    return SessionType::ALPHA
+    controller -> battery ++: getBatteryLevel()
+    return batteryLevel
+    controller -> mainWindow ++: sessionProgress(20, SessionType::ALPHA, batteryLevel)
+    deactivate mainWindow
+    controller -> session ++: getPresetDurationSeconds()
+    return presetDurationSeconds
+
+    alt presetDurationSeconds - elapsedSessionTime == 0
+        controller -> controller ++: stopSession()
+        controller -> mainWindow ++: sessionEnds()
+        mainWindow -> display --: setText("Do you want to record the session?\nPress check mark/power")
+        deactivate mainWindow
+        controller -> controller ++-- : setContext("promptRecordSession")
+        deactivate controller
+        deactivate controller
+    end
 end
 
 @enduml
