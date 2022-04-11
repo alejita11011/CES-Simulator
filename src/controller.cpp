@@ -248,7 +248,7 @@ void Controller::stopRecordPrompt(bool shouldRecord)
     {
         //Set next context
         setContext("sessionSelection");
-        emit useSelectionContext();
+        emit displayRecords();
         selectedGroupIndex   = 0;
         selectedSessionIndex = 0;
         emit selectGroup(groups[selectedGroupIndex]);

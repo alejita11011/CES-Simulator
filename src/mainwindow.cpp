@@ -62,7 +62,7 @@ MainWindow::MainWindow(QWidget *parent)
     //A session ended
     connect(controller, SIGNAL(sessionEnds()), this, SLOT(handleEndedSession()));
     //reset Display
-    connect(controller, SIGNAL(useSelectionContext()), this, SLOT(handleResetDisplay()));
+    connect(controller, SIGNAL(displayRecords()), this, SLOT(handleRecordsDisplay()));
     //When shutdown timer reaches 0 OR user turns off device
     connect(controller, SIGNAL(powerOff()), this, SLOT(handlePowerOff()));
     //User turns on device
@@ -276,7 +276,7 @@ void MainWindow::handleBatteryShutDown()
 // Power on (assuming not critically low)
 void MainWindow::handlePowerOn(int batteryLevel, bool isLow)
 {
-    handleResetDisplay();
+    handleRecordsDisplay();
     ui->progressBar->setValue(batteryLevel);
     ui->SelectButton->setDisabled(false);
     setLitUp(ui->powerLed, true);
@@ -295,7 +295,7 @@ void MainWindow::handlePowerOn(int batteryLevel, bool isLow)
     setLitUp({});
 }
 
-void MainWindow::handleResetDisplay()
+void MainWindow::handleRecordsDisplay()
 {
     if (ui->listWidget->count() == 0)
     {
