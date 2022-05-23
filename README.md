@@ -6,17 +6,18 @@ The device comes with a set of clips, which the user clips to their earlobes. Th
 The application can be run directly on your computer. See the [releases](https://github.com/alejita11011/COMP3004-PROJECT/releases) page and download the executable file built for your operating system. Once downloaded, double-click the executable to run the application.
 
 ## Screenshots
-#### Device Powered On
+### Device Powered On
 ![](./screenshots/on.jpg)
 
-#### During a Session
+### During a Session
 ![](./screenshots/session.jpg)
 
-#### Recorded Session
+### Recorded Session
 ![](./screenshots/record.jpg)
 
 ## Development
 All design and implementation was completed by the team:
+
 [![][sebastian-img]][sebastian] [![][alejita-img]][alejita] <a href="https://github.com/tharindu-h"><img width=50 src="https://github.com/tharindu-h.png" /></a> [![][liao-img]][liao]
 
 [alejita]: https://github.com/alejita11011
