@@ -1,113 +1,31 @@
-# COMP3004 OASIS Final Project
+# Electrical Stimulation Device Emulator
+A graphical desktop application created to emulate the [OASIS Pro](https://mindalive.com/products/oasis-pro) Cranio-Electro Stimulation (CES) device.
+The device comes with a set of clips, which the user clips to their earlobes. The user can then use the device to select one of many available electro stimulation therapy sessions. An additional feature present in the emulator is the ability to record sessions which the user has selected to be recorded.
 
-## Team 2
- - Alejandra Tobar Garzon (101131004)
- - Sebastian Navas Chaparro (101116283)
- - David Liao (101103455)
- - Tharindu Hatharasinghage (101109324)
+## Running the App
+The application can be run directly on your computer. See the [releases](https://github.com/alejita11011/COMP3004-PROJECT/releases) page and download the executable file built for your operating system. Once downloaded, double-click the executable to run the application.
 
-## Task Assignment
+## Screenshots
+#### Device Powered On
+![](./screenshots/on.jpg)
 
-### Design Documentation
- - Use cases: ALL TEAM MEMBERS
- - Use case diagram: ALL TEAM MEMBERS
- - Class diagram: ALL TEAM MEMBERS
- - Traceability Matrix: ALL TEAM MEMBERS
- - Sequence diagrams: ALL TEAM MEMBERS
+#### During a Session
+![](./screenshots/session.jpg)
 
-### Implementation
- - Initially creating the classes
-   - EarClips + Battery: Tharindu
-   - Session + Group: Sebastian
-   - Controller: Alejandra
-   - SessionType + Record : David
- - Additional setup
-    - Adding resource icons: David
-    - Power on/off idle timers: Alejandra
-	- Adding the hardware background to the UI: Tharindu
-	- Implement context-related methods and variables: Sebastian
- - Core functionality
-    - Turn on/off: Alejandra
-    - Select a session: Sebastian
-    - Activate a session: David + Alejandra
-    - Record a session: David
-    - Connection test: Tharindu
- - Additional functionality
-    - Add sliders to represent ear clips: Tharindu
-    - Add progress bar to show battery percentage: Tharindu
-    - Add detection of holding down the power button: Sebastian + David
-    - Exhaustive quality assurance: Sebastian
-    - Create a central text display widget: Alejandra + Tharindu
-    - Add LED power light button: David
-    - When device turned on, show battery level: Alejandra
-    - Reset shutDownTimer: Alejandra + David
-    - Add comments to document the code: ALL TEAM MEMBERS
+#### Recorded Session
+![](./screenshots/record.jpg)
 
-## File organization:
-```
-├── README.md
-├── design
-│   ├── class-diagram.plantuml
-│   ├── class-diagram.png
-│   ├── use-case-diagram.plantuml
-│   ├── use-case-diagram.png
-│   └── Use Cases.pdf
-└── src
-    ├── battery.cpp
-    ├── battery.h
-    ├── controller.cpp
-    ├── controller.h
-    ├── earclips.cpp
-    ├── earclips.h
-    ├── group.cpp
-    ├── group.h
-    ├── main.cpp
-    ├── mainwindow.cpp
-    ├── mainwindow.h
-    ├── mainwindow.ui
-    ├── oasis.pro
-    ├── record.cpp
-    ├── record.h
-    ├── resources.qrc
-    ├── session.cpp
-    ├── session.h
-    ├── sessiontype.h
-    ├── utils.h
-    ├── images
-    │   ├── CES.png
-    │   ├── downButton.jpg
-    │   ├── powerButton.jpg
-    │   ├── selectButton.jpg
-    │   ├── upButton.jpg
-    │   ├── off
-    │   │   ├── 20.png
-    │   │   ├── 45.png
-    │   │   ├── alpha.png
-    │   │   ├── delta.png
-    │   │   ├── longpulse.png
-    │   │   ├── L.png
-    │   │   ├── power.png
-    │   │   ├── R.png
-    │   │   ├── shortpulse.png
-    │   │   ├── subdelta.png
-    │   │   ├── theta.png
-    │   │   └── ud.png
-    │   ├── on
-    │   │   ├── 20.png
-    │   │   ├── 45.png
-    │   │   ├── alpha.png
-    │   │   ├── delta.png
-    │   │   ├── longpulse.png
-    │   │   ├── L.png
-    │   │   ├── power.png
-    │   │   ├── R.png
-    │   │   ├── shortpulse.png
-    │   │   ├── subdelta.png
-    │   │   ├── theta.png
-    │   │   └── ud.png
-```
+## Development
+All design and implementation was completed by the team:
+[![][sebastian-img]][sebastian] [![][alejita-img]][alejita] <a href="https://github.com/tharindu-h"><img width=50 src="https://github.com/tharindu-h.png" /></a> [![][liao-img]][liao]
 
-# Tested scenarios
-All requirements were tested and are working as required.
+[alejita]: https://github.com/alejita11011
+[alejita-img]: https://github.com/alejita11011.png?size=50
+[liao]: https://github.com/liaocanada
+[liao-img]: https://github.com/liaocanada.png?size=50
+[sebastian]: https://github.com/sebastiann3
+[sebastian-img]: https://github.com/sebastiann3.png?size=50
 
-**Note**: The user-designated group will not allow the user to run a session as the DAVID Session Editor is sold separately. 
+The [Qt C++](https://www.qt.io/product/qt-for-desktop) framework was used for its development.
+
+This project was created for the COMP 3004 Object-Oriented Software Engineering course at Carleton University.
