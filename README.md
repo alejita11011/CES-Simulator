@@ -1,4 +1,4 @@
-# Electrical Stimulation Device Emulator
+# Electrical Stimulation Device Simulator
 A graphical desktop application created to emulate the [OASIS Pro](https://mindalive.com/products/oasis-pro) Cranio-Electro Stimulation (CES) device.
 The device comes with a set of clips, which the user clips to their earlobes. The user can then use the device to select one of many available electro stimulation therapy sessions. An additional feature present in the emulator is the ability to record sessions which the user has selected to be recorded.
 
